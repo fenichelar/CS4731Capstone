@@ -1,8 +1,8 @@
-#game-container {
-    width: 100%;
-    text-align: center;
+.game-container {
+  width: 100%;
+  text-align: center;
 }
 
-#game-container canvas {
-    margin: 0 auto;
+.game-container canvas {
+  margin: 0 auto;
 }
