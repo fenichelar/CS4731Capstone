@@ -3,3 +3,6 @@
 .Spotlight-V100
 .Trashes
 Thumbs.db
+
+dist/*
+!dist/phaser.min.js

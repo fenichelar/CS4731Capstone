@@ -14,7 +14,8 @@
     "typings/browser.d.ts"
   ],
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
   "compileOnSave": true,
   "buildOnSave": false,
