@@ -5,7 +5,11 @@ if ((location.protocol != "https:") && (location.hostname == "capstone.fenichela
 }
 
 window.onload = function() {
-  var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+  var game = new Phaser.Game({
+    width: 800,
+    height: 600,
+    renderer: Phaser.AUTO,
+    parent: 'game-container',
     create: create,
     preload: preload,
     render: render,
