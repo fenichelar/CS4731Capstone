@@ -1,35 +1,31 @@
 module Game {
   export class TitleScreen extends Phaser.State {
     create() {
-      // Insert Better Name Here:
-      var title: string = "Inordinate Space Conflicts";
-      var textStyle: any = {
-        font: '50px Titillium Web',
+      const titleText: string = "Game Title";
+      let title: any = this.game.add.text(0, 0, titleText, {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
         fill: "#fff",
-        boundsAlignH: "center",
-        boundsAlignV: "middle"
+        font: "50px Titillium Web"
+      });
+      title.x = Math.round((this.game.width - title.width) * 0.5);
+      title.y = Math.round((this.game.height * 0.5 - title.height) * 0.5);
 
-      };
-      var text: any = this.game.add.text(0, 0, title, textStyle);
-      text.x = Math.round((this.game.width - text.width) * 0.5);
-      text.y = Math.round((this.game.height * 0.5 - text.height) * 0.5);
-      // display prompt string:
-      var title: string = "Press any key to start.";
-      textStyle = {
-        font: '20px Titillium Web',
-        fill: "#ff0",
+      const pressKeyText: string = "Press any key to start...";
+      let pressKey: any = this.game.add.text(0, 0, pressKeyText, {
         boundsAlignH: "center",
-        boundsAlignV: "middle"
-      };
-      text = this.game.add.text(0, 0, title, textStyle);
-      text.x = Math.round((this.game.width - text.width) * 0.5);
-      text.y = Math.round((this.game.height * 0.75 - text.height) * 0.5);
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "20px Titillium Web"
+      });
+      pressKey.x = Math.round((this.game.width - pressKey.width) * 0.5);
+      pressKey.y = Math.round((this.game.height * 0.75 - pressKey.height) * 0.5);
 
       this.input.onDown.addOnce(this.startMainMenu, this);
     }
 
     startMainMenu() {
-      this.game.state.start('MainMenu');
+      this.game.state.start("MainMenu");
     }
   }
 }

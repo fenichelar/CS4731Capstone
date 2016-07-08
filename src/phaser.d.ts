@@ -1,3 +1,4 @@
+/* tslint:disable */
 /// <reference path="pixi.d.ts" />
 /// <reference path="p2.d.ts" />
 
@@ -5536,7 +5537,7 @@ declare module Phaser {
     bulletFrame: string;
     bulletFrameCycle: boolean;
     bulletFrameRandom: boolean;
-    bulletFrames:  any[];
+    bulletFrames: any[];
     bulletGravity: Phaser.Point;
     bulletInheritSpriteSpeed: boolean;
     bulletKey: string;

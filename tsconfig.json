@@ -14,8 +14,7 @@
     "typings/browser.d.ts"
   ],
   "compilerOptions": {
-    "outFile": "./dist/game.js",
-    "rootDir": "./src"
+    "outFile": "./dist/game.js"
   },
   "compileOnSave": true,
   "buildOnSave": true,

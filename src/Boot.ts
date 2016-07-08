@@ -2,7 +2,7 @@ module Game {
   export class Boot extends Phaser.State {
 
     preload() {
-      this.load.image('preloadBar', 'assets/loader.png');
+      this.load.image("preloadBar", "assets/loader.png");
     }
 
     create() {
@@ -15,7 +15,7 @@ module Game {
         // Mobile settings
       }
 
-      this.game.state.start('Preloader', true, false);
+      this.game.state.start("Preloader", true, false);
 
     }
 

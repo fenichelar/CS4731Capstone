@@ -1,3 +1,4 @@
+/* tslint:disable */
 // Type definitions for PIXI with Phaser Deviations.
 
 declare module PIXI {
