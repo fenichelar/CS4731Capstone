@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/fenichelar/CS4731Capstone.svg)](./LICENSE.md)
 
 ## About
-This is the capstone project for CS 4731 at Georgia Tech, by @fenichelar [@fenichelar](https://github.com/fenichelar), [@captaincrutches](https://github.com/captaincrutches), and [@BenTheElder](https://github.com/BenTheElder).
+This is the capstone project for CS 4731 at Georgia Tech, by [@fenichelar](https://github.com/fenichelar), [@captaincrutches](https://github.com/captaincrutches), and [@BenTheElder](https://github.com/BenTheElder).
 
 ## License
 `CS4731Capstone` is distributed under the [Apache License 2.0](./LICENSE.md).
