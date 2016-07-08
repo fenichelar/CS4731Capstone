@@ -1,0 +1,26 @@
+{
+  "name": "capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "lint": "./lint.sh",
+    "test": "tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fenichelar/CS4731Capstone.git"
+  },
+  "author": "",
+  "license": "Apache License 2.0",
+  "bugs": {
+    "url": "https://github.com/fenichelar/CS4731Capstone/issues"
+  },
+  "homepage": "https://capstone.fenichelar.com/",
+  "dependencies": {
+    "csslint": "^0.10.0",
+    "jsonlint": "^1.6.2",
+    "tslint": "^3.13.0",
+    "typescript": "^1.8.10"
+  }
+}

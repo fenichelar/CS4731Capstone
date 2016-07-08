@@ -5,18 +5,19 @@ node_js:
 
 sudo: false
 
+cache:
+  directories:
+    - node_modules
+
 before_install:
   - npm config set spin false
   - npm install -g npm@^2
 
 install:
-  - npm install -g typescript
-  - npm install -g tslint
-  - npm install -g csslint
-  - npm install -g jsonlint
+  - npm install
 
 before_script:
-  - ./lint.sh
+  - npm lint
 
 script:
-  - tsc -p tsconfig.json
+  - npm test
