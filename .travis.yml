@@ -17,7 +17,7 @@ install:
   - npm install
 
 before_script:
-  - npm lint
+  - npm run lint
 
 script:
   - npm test
