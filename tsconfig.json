@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "moduleResolution": "node",
+    "moduleResolution": "None",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -14,7 +14,7 @@
     "typings/browser.d.ts"
   ],
   "compilerOptions": {
-    "outDir": "./dist",
+    "outFile": "./dist/game.js",
     "rootDir": "./src"
   },
   "compileOnSave": true,
