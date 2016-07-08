@@ -9,10 +9,14 @@ before_install:
   - npm config set spin false
   - npm install -g npm@^2
 
-before_script:
+install:
   - npm install -g typescript
   - npm install -g tslint
   - npm install -g csslint
+  - npm install -g jsonlint
+
+before_script:
+  - ./lint.sh
 
 script:
-  - ./lint.sh
+  - tsc -p tsconfig.json
