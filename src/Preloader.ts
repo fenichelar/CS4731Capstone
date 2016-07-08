@@ -32,6 +32,8 @@ module Game {
         fill: "#ff0",
         font: "20px Titillium Web"
       });
+      this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, "preloadBar");
+      this.preloadBar.anchor.setTo(0.5, 0.5);
       pressKey.anchor.setTo(0.5, 0.5);
 
       this.input.onDown.addOnce(this.startMainMenu, this);
