@@ -23,7 +23,7 @@ module Game {
     }
 
     create() {
-      const pressKeyText: string = "Press any key to start...";
+      const pressKeyText: string = "Click anywhere to start...";
       const pressKeyX: number = this.game.world.centerX;
       const pressKeyY: number = this.game.world.centerY + this.game.height * 0.25;
       let pressKey: any = this.game.add.text(pressKeyX, pressKeyY, pressKeyText, {
