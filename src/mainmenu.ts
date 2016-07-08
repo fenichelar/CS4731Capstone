@@ -2,21 +2,28 @@ module Game {
   export class MainMenu extends Phaser.State {
 
     create() {
-      const menuText: string = "Game Title";
-      let menu: any = this.game.add.text(0, 0, menuText, {
+      const titleText: string = "Game Title";
+      const titleX: number = this.game.world.centerX;
+      const titleY: number = this.game.world.centerY - this.game.height * 0.25;
+      let title: any = this.game.add.text(titleX, titleY, titleText, {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#fff",
         font: "50px Titillium Web"
       });
-      menu.x = Math.round((this.game.width - menu.width) * 0.5);
-      menu.y = Math.round((this.game.height * 0.5 - menu.height) * 0.5);
+      title.anchor.setTo(0.5, 0.5);
 
-      this.input.onDown.addOnce(this.startGame, this);
-    }
+      const menuText: string = "Main Menu";
+      const menuX: number = this.game.world.centerX;
+      const menuY: number = this.game.world.centerY + this.game.height * 0.25;
+      let menu: any = this.game.add.text(menuX, menuY, menuText, {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "20px Titillium Web"
+      });
+      menu.anchor.setTo(0.5, 0.5);
 
-    startGame() {
-      console.log("Starting the game");
     }
 
   }
