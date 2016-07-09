@@ -7,4 +7,3 @@ Thumbs.db
 node_modules
 
 dist/*
-!dist/phaser.min.js
