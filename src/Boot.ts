@@ -7,7 +7,7 @@
 
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
-module Game {
+namespace Game {
   export class Boot extends Phaser.State {
 
     preload() {
