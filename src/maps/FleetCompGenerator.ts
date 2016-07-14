@@ -11,9 +11,8 @@ namespace Game {
   export class FleetCompGenerator {
     private params: IFleetCompParams;
 
-    /** Just feed this {} if you don't have any params */
-    public constructor(params: IFleetCompParams) {
-      this.params = params;
+    public constructor(params?: IFleetCompParams) {
+      this.params = params || {};
     }
 
     /**
