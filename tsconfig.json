@@ -8,13 +8,16 @@
     "removeComments": false,
     "noImplicitAny": false
   },
-  "exclude": [
-    "node_modules",
-    "typings/browser",
-    "typings/browser.d.ts"
+  "files": [
+    "node_modules/phaser/typescript/phaser.d.ts"
+  ],
+  "filesGlob": [
+    "node_modules/phaser/typescript/phaser.d.ts",
+    "src/**"
   ],
   "compilerOptions": {
-    "outFile": "./dist/game.js"
+    "rootDir": "src",
+    "outFile": "dist/game.js"
   },
   "compileOnSave": true,
   "buildOnSave": true,
