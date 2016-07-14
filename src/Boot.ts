@@ -12,6 +12,7 @@ namespace Game {
 
     preload() {
       this.load.image("preloadBar", "assets/loader.png");
+      this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     }
 
     create() {

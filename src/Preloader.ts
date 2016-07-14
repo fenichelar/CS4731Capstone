@@ -18,7 +18,7 @@ namespace Game {
       this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, "preloadBar");
       this.preloadBar.anchor.setTo(0.5, 0.5);
       this.load.setPreloadSprite(this.preloadBar);
-
+      this.preloadBar.scale.setTo(4, 4);
       // Load assets here
     }
 
@@ -30,10 +30,11 @@ namespace Game {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
-        font: "20px Titillium Web"
+        font: "80px Titillium Web"
       });
       this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, "preloadBar");
       this.preloadBar.anchor.setTo(0.5, 0.5);
+      this.preloadBar.scale.setTo(4, 4);
       pressKey.anchor.setTo(0.5, 0.5);
 
       this.input.onDown.addOnce(this.startMainMenu, this);

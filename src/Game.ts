@@ -11,7 +11,7 @@ namespace Game {
   export class Game extends Phaser.Game {
 
     constructor() {
-      super(800, 600, Phaser.AUTO, "game-container", null);
+      super(2560, 1440, Phaser.AUTO, "game-container", null);
 
       this.state.add("Boot", Boot, false);
       this.state.add("Preloader", Preloader, false);
