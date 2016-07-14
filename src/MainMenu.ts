@@ -20,7 +20,7 @@ namespace Game {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
-        font: "20px Titillium Web"
+        font: "80px Titillium Web"
       });
       menu.anchor.setTo(0.5, 0.5);
 

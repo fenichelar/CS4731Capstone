@@ -1,5 +1,8 @@
 body {
   font-family: 'Titillium Web';
+  background-color: darkgray;
+  margin: 0 0;
+  padding: 0 0;
 }
 
 .game-container {
