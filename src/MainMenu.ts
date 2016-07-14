@@ -24,6 +24,11 @@ namespace Game {
       });
       menu.anchor.setTo(0.5, 0.5);
 
+      this.input.onDown.addOnce(this.startBattle, this);
+    }
+
+    startBattle() {
+      this.game.state.start("Battle");
     }
 
   }
