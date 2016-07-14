@@ -16,7 +16,7 @@ namespace Game {
       boundsAlignH: "center",
       boundsAlignV: "middle",
       fill: "#fff",
-      font: "50px Titillium Web"
+      font: "140px Titillium Web"
     });
     title.anchor.setTo(0.5, 0.5);
     return title;
