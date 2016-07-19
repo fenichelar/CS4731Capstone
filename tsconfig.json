@@ -8,9 +8,10 @@
     "removeComments": false,
     "noImplicitAny": false
   },
-  "files": [
+  "filesGlob": [
     "node_modules/phaser/typescript/phaser.d.ts",
-    "node_modules/phaser/typescript/p2.d.ts"
+    "node_modules/phaser/typescript/p2.d.ts",
+    "src/**/*.ts*"
   ],
   "compilerOptions": {
     "rootDir": "src",
