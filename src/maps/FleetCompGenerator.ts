@@ -23,8 +23,8 @@ namespace Game {
      * Generates a fleet composition from the current params and returns it
      * as a list of ships (which should have positions), for now
      */
-    public generateFleet(): Array<any> {
-      return [];
+    public generateFleet(): Array<Game.Ship> {
+      return new Array<Game.Ship>();
     }
 
     public setParams(newParams: IFleetCompParams): void {
