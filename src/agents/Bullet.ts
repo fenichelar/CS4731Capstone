@@ -5,8 +5,6 @@
  * @license {@link https://github.com/fenichelar/CS4731Capstone/blob/master/LICENSE.md|Apache License 2.0}
  */
 
-/// <reference path="../../node_modules/phaser/typescript/phaser.d.ts" />
-
 namespace Game {
   export class Bullet extends PhysicsObject {
     public update(): void {
