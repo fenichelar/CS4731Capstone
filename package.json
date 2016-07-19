@@ -20,7 +20,7 @@
   "dependencies": {
     "csslint": "^0.10.0",
     "jsonlint": "^1.6.2",
-    "phaser": "^2.6.0",
+    "phaser": "^2.6.1",
     "tslint": "^3.13.0",
     "typescript": "^1.8.10"
   }
