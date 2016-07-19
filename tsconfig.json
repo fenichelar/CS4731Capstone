@@ -9,11 +9,8 @@
     "noImplicitAny": false
   },
   "files": [
-    "node_modules/phaser/typescript/phaser.d.ts"
-  ],
-  "filesGlob": [
     "node_modules/phaser/typescript/phaser.d.ts",
-    "src/**"
+    "node_modules/phaser/typescript/p2.d.ts"
   ],
   "compilerOptions": {
     "rootDir": "src",
