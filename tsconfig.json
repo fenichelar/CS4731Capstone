@@ -1,21 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "moduleResolution": "None",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false
-  },
-  "filesGlob": [
-    "node_modules/phaser/typescript/phaser.d.ts",
-    "node_modules/phaser/typescript/p2.d.ts",
-    "src/**/*.ts*"
-  ],
-  "compilerOptions": {
     "rootDir": "src",
-    "outFile": "dist/game.js"
+    "outFile": "dist/js/game.js"
   },
   "compileOnSave": true,
   "buildOnSave": true,

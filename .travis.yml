@@ -12,6 +12,7 @@ branches:
 cache:
   directories:
     - node_modules
+    - typings
 
 before_install:
   - npm config set spin false
@@ -24,4 +25,7 @@ before_script:
   - npm run lint
 
 script:
-  - npm test
+  - npm run build
+
+after_script:
+  - echo "Deploy"

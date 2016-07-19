@@ -5,5 +5,6 @@
 Thumbs.db
 
 node_modules
+typings
 
-dist/*
+dist/js/*.js
