@@ -7,7 +7,8 @@
 
 namespace Game {
   export class Ship extends PhysicsObject {
-    public constructor(public sprite: Phaser.Sprite, public health: number, public team: number) {
+    public constructor(public sprite: Phaser.Sprite,
+                      public health: number, public team: number) {
       super(health);
     }
 
