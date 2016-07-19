@@ -19,7 +19,7 @@ before_install:
   - npm install -g npm@^2
 
 install:
-  - npm install
+  - npm run setup
 
 before_script:
   - npm run lint
