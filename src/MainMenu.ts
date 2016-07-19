@@ -10,23 +10,26 @@ namespace Game {
 
     create() {
       makeTitle(this.game);
+      this.addDifficultyText("Play Easy", Difficulty.Easy, this.game.world.centerX, this.game.world.centerY - 60);
+      this.addDifficultyText("Play Medium", Difficulty.Medium, this.game.world.centerX, this.game.world.centerY + 140);
+      this.addDifficultyText("Play Hard", Difficulty.Hard, this.game.world.centerX, this.game.world.centerY + 340);
+    }
 
-      const menuText: string = "Main Menu";
-      const menuX: number = this.game.world.centerX;
-      const menuY: number = this.game.world.centerY + this.game.height * 0.25;
-      let menu: any = this.game.add.text(menuX, menuY, menuText, {
+    startBattle(diff: Difficulty) {
+      Battle.Difficulty = diff;
+      this.game.state.start("Battle");
+    }
+
+    addDifficultyText(prompt: string, diff: Difficulty, x: number, y: number) {
+      let promptText: Phaser.Text = this.game.add.text(x, y, prompt, {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
-        font: "80px Titillium Web"
+        font: "bold 100px Titillium Web"
       });
-      menu.anchor.setTo(0.5, 0.5);
-
-      this.input.onDown.addOnce(this.startBattle, this);
-    }
-
-    startBattle() {
-      this.game.state.start("Battle");
+      promptText.anchor.setTo(0.5, 0.5);
+      promptText.inputEnabled = true;
+      promptText.events.onInputDown.addOnce(function() { this.startBattle(diff) }, this);
     }
 
   }
