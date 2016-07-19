@@ -9,9 +9,10 @@
     "lint:html": "htmlhint dist",
     "lint:json": "find . -path ./node_modules -prune -o -name \"*.json\" -exec echo {} \\; -exec jsonlint {} -q \\;",
     "lint": "npm run lint:ts && npm run lint:css && npm run lint:html && npm run lint:json",
+    "build:d": "typings install",
     "build:ts": "tsc -p tsconfig.json",
     "build:js": "cp node_modules/phaser/build/phaser.min.js dist/js/phaser.min.js && cp node_modules/phaser/build/p2.min.js dist/js/p2.min.js",
-    "build": "npm run build:ts && npm run build:js"
+    "build": "typings install && npm run build:ts && npm run build:js"
   },
   "repository": {
     "type": "git",

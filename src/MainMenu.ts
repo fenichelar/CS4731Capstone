@@ -29,7 +29,9 @@ namespace Game {
       });
       promptText.anchor.setTo(0.5, 0.5);
       promptText.inputEnabled = true;
-      promptText.events.onInputDown.addOnce(function() { this.startBattle(diff) }, this);
+      promptText.events.onInputDown.addOnce(function() {
+        this.startBattle(diff);
+      }, this);
     }
 
   }
