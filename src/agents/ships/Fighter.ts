@@ -10,7 +10,7 @@ namespace Game {
     public static FIGHTER_BASE_HEALTH: number = 50;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(teamToFighterSprite(game, x, y, team), Fighter.FIGHTER_BASE_HEALTH, team);
+      super(game, teamToFighterSprite(game, x, y, team), Fighter.FIGHTER_BASE_HEALTH, team);
     }
   }
 
