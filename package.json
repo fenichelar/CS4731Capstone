@@ -14,6 +14,7 @@
     "build:ts": "tsc -p tsconfig.json",
     "build:js": "cp node_modules/phaser/build/phaser.min.js dist/js/phaser.min.js && cp node_modules/phaser/build/p2.min.js dist/js/p2.min.js && cp node_modules/phaser/build/pixi.min.js dist/js/pixi.min.js",
     "build": "npm run build:ts && npm run build:js",
+    "server": "node server.js",
     "test": "npm run setup && npm run lint && npm run build"
   },
   "repository": {
@@ -30,6 +31,7 @@
     "csslint": "^0.10.0",
     "htmlhint": "^0.9.13",
     "jsonlint": "^1.6.2",
+    "node-static": "^0.7.7",
     "phaser": "^2.6.1",
     "tslint": "^3.13.0",
     "typescript": "^1.8.10",
