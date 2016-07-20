@@ -30,6 +30,8 @@ namespace Game {
       let centralBattleship: Battleship = new Battleship(this.game, 100, 100, this.params.teamNumber);
       let fleet: Array<Ship> = this.createGroup(centralBattleship);
 
+      console.log(fleet);
+
       return fleet;
     }
 
@@ -43,12 +45,12 @@ namespace Game {
 
       for (let i: number = 0; i < supportGroups.length; i++) {
         // Put a random number of this type of ships around us, up to the maximum
-        let numSupportShips: number = HelperMethods.randomIntInInterval(0, supportGroups[i].maxNumber);
+        let numSupportShips: number = this.game.rnd.integerInRange(0, supportGroups[i].maxNumber);
 
         for (let j: number = 0; j < numSupportShips; j++) {
           // Put the ship at a random distance and angle from us, up to the maximum distance
-          let radius: number = HelperMethods.randomIntInInterval(0, supportGroups[i].maxDistance);
-          let angleDeg: number = HelperMethods.randomIntInInterval(0, 360);
+          let radius: number = this.game.rnd.integerInRange(0, supportGroups[i].maxDistance);
+          let angleDeg: number = this.game.rnd.integerInRange(0, 360);
           let angleRad: number = angleDeg * Math.PI / 180;
 
           // Turn the polar coordinates into real ones
@@ -63,7 +65,7 @@ namespace Game {
           let newGroup: Array<Ship> = this.createGroup(newShip);
 
           // Add the new group to the full fleet
-          fleet = fleet.concat(fleet, newGroup);
+          fleet = fleet.concat(newGroup);
         }
       }
 
