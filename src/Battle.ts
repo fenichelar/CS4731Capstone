@@ -12,7 +12,6 @@ namespace Game {
     Hard = 100
   }
 
-  // TODO: better PCG, switch to using https://github.com/fenichelar/CS4731Capstone/pull/16
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
