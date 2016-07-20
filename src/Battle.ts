@@ -32,5 +32,9 @@ namespace Game {
       this.EnemyFleetGenerator = new FleetCompGenerator(this.game);
       this.enemies = this.EnemyFleetGenerator.generateFleet();
     }
+
+    create() {
+      this.game.physics.startSystem(Phaser.Physics.P2JS);
+    }
   }
 }
