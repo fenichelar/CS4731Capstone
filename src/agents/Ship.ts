@@ -6,6 +6,16 @@
  */
 
 namespace Game {
+  export interface IShipSubclass {
+    new (game: Game, x: number, y: number, team: number): Ship;
+  }
+
+  export interface ISupportGroup {
+    shipType: IShipSubclass;
+    maxDistance: number;
+    maxNumber: number;
+  }
+
   export class Ship extends PhysicsObject {
     public constructor(public sprite: Phaser.Sprite, public health: number, public team: number) {
       super(health);
@@ -20,6 +30,10 @@ namespace Game {
       if (!(otherThing instanceof Ship)) {
         super.collide(otherThing);
       }
+    }
+
+    public getSupportGroups(): Array<ISupportGroup> {
+      return [];
     }
   }
 }

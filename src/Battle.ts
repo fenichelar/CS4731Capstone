@@ -21,7 +21,7 @@ namespace Game {
     preload() {
       // Seed RNG with known seed.
       this.game.rnd.sow([Battle.Seed]);
-      this.EnemyFleetGenerator = new FleetCompGenerator();
+      this.EnemyFleetGenerator = new FleetCompGenerator(this.game);
       this.enemies = this.EnemyFleetGenerator.generateFleet();
     }
   }

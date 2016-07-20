@@ -12,6 +12,14 @@ namespace Game {
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(teamToCruiserSprite(game, x, y, team), Cruiser.CRUISER_BASE_HEALTH, team);
     }
+
+    public getSupportGroups(): Array<ISupportGroup> {
+      return [{
+        maxDistance: 200,
+        maxNumber: 10,
+        shipType: Fighter
+      }];
+    }
   }
 
   function teamToCruiserSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {

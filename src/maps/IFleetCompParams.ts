@@ -9,5 +9,6 @@ namespace Game {
   export interface IFleetCompParams {
     // Any parameters go here, TBD
     resources: number;
+    teamNumber: number;
   }
 }
