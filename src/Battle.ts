@@ -19,6 +19,8 @@ namespace Game {
     private enemies: Array<Game.Ship>;
 
     preload() {
+      // enable p2 physics
+      this.game.physics.startSystem(Phaser.Physics.P2JS);
       // Seed RNG with known seed.
       let element = new Image();
       Object.defineProperty(element, "id", {
@@ -31,10 +33,6 @@ namespace Game {
       this.game.rnd.sow([Battle.Seed]);
       this.EnemyFleetGenerator = new FleetCompGenerator(this.game);
       this.enemies = this.EnemyFleetGenerator.generateFleet();
-    }
-
-    create() {
-      this.game.physics.startSystem(Phaser.Physics.P2JS);
     }
   }
 }
