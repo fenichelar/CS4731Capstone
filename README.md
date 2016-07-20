@@ -17,3 +17,6 @@ This is the capstone project for CS 4731 at Georgia Tech, by [@fenichelar](https
 
 ## Testing
 * `npm test`
+
+## Contributions
+Thanks to Kenney Vleugels [(www.kenney.nl)](http://www.kenney.nl) for the assets!
