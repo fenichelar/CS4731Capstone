@@ -21,6 +21,7 @@ namespace Game {
     preload() {
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
+      this.game.physics.p2.setImpactEvents(true);
       // Seed RNG with known seed.
       let element = new Image();
       Object.defineProperty(element, "id", {
