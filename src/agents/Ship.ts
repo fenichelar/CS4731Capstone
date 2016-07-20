@@ -17,12 +17,13 @@ namespace Game {
   }
 
   export class Ship extends PhysicsObject {
-    public constructor(game: Game.Game, sprite: Phaser.Sprite, public health: number, public team: number) {
+    public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
     }
 
     public update(): void {
       // Do stuff
+      this.state = this.state.update(this);
     }
 
     public collide(otherThing: PhysicsObject): void {
