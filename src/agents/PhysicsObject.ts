@@ -10,7 +10,7 @@ namespace Game {
     public body: Phaser.Physics.P2.Body;
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
       game.physics.p2.enableBody(sprite, false);
-      this.body = game.physics.p2.getBody(sprite);
+      this.body = sprite.body;
       this.body.clearShapes();
       // TODO: add correct shape for object...
     }
