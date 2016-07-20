@@ -11,9 +11,9 @@ This is the capstone project for CS 4731 at Georgia Tech, by [@fenichelar](https
 `CS4731Capstone` is distributed under the [Apache License 2.0](./LICENSE.md).
 
 ## Setup
-`git clone https://github.com/fenichelar/CS4731Capstone.git && cd CS4731Capstone`
-`npm run setup`
-`npm run build`
+* `git clone https://github.com/fenichelar/CS4731Capstone.git && cd CS4731Capstone`
+* `npm run setup`
+* `npm run build`
 
 ## Testing
-`npm test`
+* `npm test`
