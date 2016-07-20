@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "setup": "npm install && typings install",
-    "lint:ts": "tslint -c tslint.json \"src/**/*.ts*\"",
+    "lint:ts": "tslint -c tslint.json \"src/**/*.ts\"",
     "lint:css": "csslint dist",
     "lint:html": "htmlhint dist",
     "lint:json": "find . -path ./node_modules -prune -o -name \"*.json\" -exec echo {} \\; -exec jsonlint {} -q \\;",
