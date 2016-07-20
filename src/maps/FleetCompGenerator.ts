@@ -27,7 +27,7 @@ namespace Game {
       this.resourcesRemaining = this.params.resources;
 
       // Test, just make a random group around a BS
-      let centralBattleship: Battleship = new Battleship(this.game, 100, 100, this.params.teamNumber);
+      let centralBattleship: Battleship = new Battleship(this.game, 1000, 700, this.params.teamNumber);
       let fleet: Array<Ship> = this.createGroup(centralBattleship);
 
       console.log(fleet);
