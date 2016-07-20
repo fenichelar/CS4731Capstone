@@ -24,4 +24,4 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: rsync -a --no-perms --omit-dir-times --delete -e 'ssh -i deploy_key -p $SCP_PORT -o stricthostkeychecking=no' dist/ $SCP_USER@$SCP_IP:/var/www/html/capstone/
+  script: rsync -r --omit-dir-times --delete -e 'ssh -i deploy_key -p $SCP_PORT -o stricthostkeychecking=no' dist/ $SCP_USER@$SCP_IP:/var/www/html/capstone/
