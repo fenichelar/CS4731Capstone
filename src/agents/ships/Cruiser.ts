@@ -10,7 +10,7 @@ namespace Game {
     public static CRUISER_BASE_HEALTH: number = 250;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToCruiserSprite(game, x, y, team), Cruiser.CRUISER_BASE_HEALTH, team);
+      super(game, teamToCruiserSprite(game, x, y, team), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
     }
 
     public getSupportGroups(): Array<ISupportGroup> {

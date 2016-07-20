@@ -10,7 +10,7 @@ namespace Game {
     public static BATTLESHIP_BASE_HEALTH: number = 1000;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToBattleshipSprite(game, x, y, team), Battleship.BATTLESHIP_BASE_HEALTH, team);
+      super(game, teamToBattleshipSprite(game, x, y, team), new State(), Battleship.BATTLESHIP_BASE_HEALTH, team);
     }
 
     public getSupportGroups(): Array<ISupportGroup> {
