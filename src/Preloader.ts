@@ -18,6 +18,21 @@ namespace Game {
       this.load.setPreloadSprite(this.preloadBar);
       this.preloadBar.scale.setTo(4, 4);
       // Load assets here
+      // fighters
+      this.load.image("fighter_0", "assets/playerShip1_blue.png");
+      this.load.image("fighter_1", "assets/playerShip1_red.png");
+      this.load.image("fighter_2", "assets/playerShip1_green.png");
+      this.load.image("fighter_3", "assets/playerShip1_orange.png");
+      // cruisers
+      this.load.image("cruiser_0", "assets/playerShip2_blue.png");
+      this.load.image("cruiser_1", "assets/playerShip2_red.png");
+      this.load.image("cruiser_2", "assets/playerShip2_green.png");
+      this.load.image("cruiser_3", "assets/playerShip2_orange.png");
+      // battleships
+      this.load.image("battleship_0", "assets/playerShip3_blue.png");
+      this.load.image("battleship_1", "assets/playerShip3_red.png");
+      this.load.image("battleship_2", "assets/playerShip3_green.png");
+      this.load.image("battleship_3", "assets/playerShip3_orange.png");
     }
 
     create() {

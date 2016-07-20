@@ -9,8 +9,13 @@ namespace Game {
   export class Cruiser extends Ship {
     public static CRUISER_BASE_HEALTH: number = 250;
 
-    public constructor(public team: number) {
-      super(Cruiser.CRUISER_BASE_HEALTH, team);
+    public constructor(game: Game.Game, x: number, y: number, public team: number) {
+      super(teamToCruiserSprite(game, x, y, team), Cruiser.CRUISER_BASE_HEALTH, team);
     }
+  }
+
+  function teamToCruiserSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
+    let spriteKey: string = "cruiser_" + team;
+    return game.add.sprite(x, y, spriteKey);
   }
 }
