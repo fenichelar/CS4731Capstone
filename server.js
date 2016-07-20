@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var static = require("node-static");
 
 var server = new static.Server("./dist");
