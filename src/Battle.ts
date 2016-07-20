@@ -20,6 +20,14 @@ namespace Game {
 
     preload() {
       // Seed RNG with known seed.
+      let element = new Image();
+      Object.defineProperty(element, "id", {
+        get: function() {
+          Battle.Seed = parseInt(prompt("Enter a seed value", Battle.Seed.toString()), 10);
+        }
+      });
+      console.log("%cTesting if console is open.", element);
+      console.log("Using seed: %i.", Battle.Seed);
       this.game.rnd.sow([Battle.Seed]);
       this.EnemyFleetGenerator = new FleetCompGenerator();
       this.enemies = this.EnemyFleetGenerator.generateFleet();
