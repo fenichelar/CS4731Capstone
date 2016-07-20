@@ -7,7 +7,7 @@
 
 namespace Game {
   export interface IShipSubclass {
-    new (position: IPosition, team: number): Ship;
+    new (game: Game, x: number, y: number, team: number): Ship;
   }
 
   export interface ISupportGroup {
@@ -17,8 +17,7 @@ namespace Game {
   }
 
   export class Ship extends PhysicsObject {
-    public constructor(public sprite: Phaser.Sprite,
-                      public health: number, public team: number) {
+    public constructor(public sprite: Phaser.Sprite, public health: number, public team: number) {
       super(health);
     }
 

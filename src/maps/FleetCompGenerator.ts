@@ -15,7 +15,7 @@ namespace Game {
       teamNumber: 2
     };
 
-    public constructor(params?: IFleetCompParams) {
+    public constructor(private game: Game, params?: IFleetCompParams) {
       this.params = params || this.defaultParams;
     }
 
@@ -27,7 +27,7 @@ namespace Game {
       this.resourcesRemaining = this.params.resources;
 
       // Test, just make a random group around a BS
-      let centralBattleship: Battleship = new Battleship({ x: 100, y: 100 }, this.params.teamNumber);
+      let centralBattleship: Battleship = new Battleship(this.game, 100, 100, this.params.teamNumber);
       let fleet: Array<Ship> = this.createGroup(centralBattleship);
 
       return fleet;
@@ -55,13 +55,11 @@ namespace Game {
           let dx: number = radius * Math.cos(angleRad);
           let dy: number = radius * Math.sin(angleRad);
 
-          let newPosition: IPosition = {
-            x: centralShip.position.x + dx,
-            y: centralShip.position.y + dy
-          };
+          let newX: number = centralShip.sprite.x + dx;
+          let newY: number = centralShip.sprite.y + dy;
 
           // Create the new ship and give it a group if applicable
-          let newShip: Ship = new supportGroups[i].shipType(newPosition, this.params.teamNumber);
+          let newShip: Ship = new supportGroups[i].shipType(this.game, newX, newY, this.params.teamNumber);
           let newGroup: Array<Ship> = this.createGroup(newShip);
 
           // Add the new group to the full fleet
