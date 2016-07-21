@@ -34,6 +34,6 @@ namespace Game {
     let s2Y: number  = ship2.sprite.body.y;
     let dx: number = s1X - s2X;
     let dy: number = s1Y - s2Y;
-    return Math.sqrt(dx**2 + dy**2);
+    return Math.sqrt(dx ** 2 + dy ** 2);
   }
 }
