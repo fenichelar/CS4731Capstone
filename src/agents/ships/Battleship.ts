@@ -24,6 +24,8 @@ namespace Game {
 
   function teamToBattleshipSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
     let spriteKey: string = "battleship_" + team;
-    return game.add.sprite(x, y, spriteKey);
+    let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
+    sprite.scale.setTo(2, 2);
+    return sprite;
   }
 }
