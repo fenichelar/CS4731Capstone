@@ -21,6 +21,21 @@ namespace Game {
   export class Ship extends PhysicsObject {
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
+
+      // Super constructor enables body
+      // Set orientation based on team
+      let angle: number = 0;
+      switch (team) {
+        case 1:
+          angle = 90;
+          break;
+        case 2:
+          angle = -90;
+          break;
+        default: angle = 0;
+      }
+
+      this.sprite.body.angle = angle;
     }
 
     public update(): void {
