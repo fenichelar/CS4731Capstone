@@ -141,7 +141,7 @@ namespace Game {
         this.stopRotating();
       }*/
       this.sprite.body.fixedRotation = false;
-      //this.sprite.body.rotation = angle;
+      // this.sprite.body.rotation = angle;
       this.sprite.rotation = angle;
       this.sprite.body.fixedRotation = true;
     }
