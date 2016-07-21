@@ -40,4 +40,9 @@ namespace Game {
       return null;
     }
   }
+
+  export function teamToShipSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number): Phaser.Sprite {
+    let spriteKey: string = spritePrefix + String(team);
+    return game.add.sprite(x, y, spriteKey);
+  }
 }

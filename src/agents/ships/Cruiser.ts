@@ -10,7 +10,7 @@ namespace Game {
     public static CRUISER_BASE_HEALTH: number = 250;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToCruiserSprite(game, x, y, team), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
+      super(game, teamToShipSprite(game, x, y, "cruiser_", team), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
     }
 
     public getType(): IShipSubclass {
@@ -28,10 +28,5 @@ namespace Game {
         shipType: Fighter
       }];
     }
-  }
-
-  function teamToCruiserSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
-    let spriteKey: string = "cruiser_" + team;
-    return game.add.sprite(x, y, spriteKey);
   }
 }

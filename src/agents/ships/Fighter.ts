@@ -10,7 +10,7 @@ namespace Game {
     public static FIGHTER_BASE_HEALTH: number = 50;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToFighterSprite(game, x, y, team), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
+      super(game, teamToShipSprite(game, x, y, "fighter_", team), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
     }
 
     public getType(): IShipSubclass {
@@ -24,10 +24,5 @@ namespace Game {
     public static getSupportGroups(): Array<ISupportGroup> {
       return [];
     }
-  }
-
-  function teamToFighterSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
-    let spriteKey: string = "fighter_" + team;
-    return game.add.sprite(x, y, spriteKey);
   }
 }
