@@ -12,6 +12,18 @@ namespace Game {
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToFighterSprite(game, x, y, team), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
     }
+
+    public getType(): IShipSubclass {
+      return Fighter;
+    }
+
+    ///// Static stuff used by fleet generation /////
+
+    public static RESOURCE_COST: number = 5;
+
+    public static getSupportGroups(): Array<ISupportGroup> {
+      return [];
+    }
   }
 
   function teamToFighterSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {

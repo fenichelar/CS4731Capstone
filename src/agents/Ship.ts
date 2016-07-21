@@ -8,6 +8,8 @@
 namespace Game {
   export interface IShipSubclass {
     new (game: Game, x: number, y: number, team: number): Ship;
+    getSupportGroups(): Array<ISupportGroup>;
+    RESOURCE_COST: number;
   }
 
   export interface ISupportGroup {
@@ -33,8 +35,9 @@ namespace Game {
       }
     }
 
-    public getSupportGroups(): Array<ISupportGroup> {
-      return [];
+    public getType(): IShipSubclass {
+      // Ship isn't a ship subclass, we'll never instantiate it directly
+      return null;
     }
   }
 }

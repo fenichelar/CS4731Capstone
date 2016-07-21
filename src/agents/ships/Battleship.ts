@@ -13,7 +13,15 @@ namespace Game {
       super(game, teamToBattleshipSprite(game, x, y, team), new State(), Battleship.BATTLESHIP_BASE_HEALTH, team);
     }
 
-    public getSupportGroups(): Array<ISupportGroup> {
+    public getType(): IShipSubclass {
+      return Battleship;
+    }
+
+    ///// Static stuff used by fleet generation /////
+
+    public static RESOURCE_COST: number = 100;
+
+    public static getSupportGroups(): Array<ISupportGroup> {
       return [{
         maxDistance: 500,
         maxNumber: 3,

@@ -13,7 +13,15 @@ namespace Game {
       super(game, teamToCruiserSprite(game, x, y, team), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
     }
 
-    public getSupportGroups(): Array<ISupportGroup> {
+    public getType(): IShipSubclass {
+      return Cruiser;
+    }
+
+    ///// Static stuff used by fleet generation /////
+
+    public static RESOURCE_COST: number = 25;
+
+    public static getSupportGroups(): Array<ISupportGroup> {
       return [{
         maxDistance: 200,
         maxNumber: 10,

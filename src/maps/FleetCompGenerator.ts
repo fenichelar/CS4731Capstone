@@ -31,14 +31,38 @@ namespace Game {
       let fleet: Array<Ship> = this.createGroup(centralBattleship);
 
       console.log(fleet);
+      console.log(this.getMaxGroupCost(centralBattleship.getType()));
 
       return fleet;
     }
 
+    /**
+     * Recursively calculate the maximum cost of a battle group
+     * for a given ship type, including itself.
+     */
+    private getMaxGroupCost(centralShipType: IShipSubclass): number {
+      let cost: number = centralShipType.RESOURCE_COST;
+      let supportGroups: Array<ISupportGroup> = centralShipType.getSupportGroups();
+      if (supportGroups.length === 0) {
+        return cost;
+      }
+
+      for (let i: number = 0; i < supportGroups.length; i++) {
+        cost += supportGroups[i].maxNumber * this.getMaxGroupCost(supportGroups[i].shipType);
+      }
+
+      return cost;
+    }
+
+    /**
+     * Place support ships around a central unit,
+     * and then recursively place support around each of those.
+     * Effectively builds a battle group out from a single unit.
+     */
     private createGroup(centralShip: Ship): Array<Ship> {
       // If there's no support for this ship type, return just this ship
       let fleet: Array<Ship> = [centralShip];
-      let supportGroups: Array<ISupportGroup> = centralShip.getSupportGroups();
+      let supportGroups: Array<ISupportGroup> = centralShip.getType().getSupportGroups();
       if (supportGroups.length === 0) {
         return fleet;
       }
