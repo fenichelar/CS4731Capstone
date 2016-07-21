@@ -8,7 +8,7 @@
 namespace Game {
   // these map to the enemy resource amount in FleetCompGenerator
   export enum Difficulty {
-    Easy = 500,
+    Easy = 100,
     Medium = 1500,
     Hard = 5000
   }

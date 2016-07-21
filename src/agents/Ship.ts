@@ -128,6 +128,7 @@ namespace Game {
       let dy: number = other.sprite.y - this.sprite.y;
       let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
       // TODO: use something like the code below to do physics based rotation
+      //
       /*
       let angleDelta: number = angle - this.sprite.body.rotation;
       if (angleDelta > 0) {
@@ -136,7 +137,8 @@ namespace Game {
         this.rotate(-this.maxTurnSpeed);
       } else {
         this.stopRotating();
-      }*/
+      }
+      */
       this.sprite.body.rotation = angle;
     }
   }
