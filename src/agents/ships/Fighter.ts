@@ -10,12 +10,19 @@ namespace Game {
     public static FIGHTER_BASE_HEALTH: number = 50;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToFighterSprite(game, x, y, team), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
+      super(game, teamToShipSprite(game, x, y, "fighter_", team, 1), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
     }
-  }
 
-  function teamToFighterSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
-    let spriteKey: string = "fighter_" + team;
-    return game.add.sprite(x, y, spriteKey);
+    public getType(): IShipSubclass {
+      return Fighter;
+    }
+
+    ///// Static stuff used by fleet generation /////
+
+    public static RESOURCE_COST: number = 5;
+
+    public static getSupportGroups(): Array<ISupportGroup> {
+      return [];
+    }
   }
 }

@@ -10,22 +10,23 @@ namespace Game {
     public static CRUISER_BASE_HEALTH: number = 250;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToCruiserSprite(game, x, y, team), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
+      super(game, teamToShipSprite(game, x, y, "cruiser_", team, 1.5), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
     }
 
-    public getSupportGroups(): Array<ISupportGroup> {
-      return [{
-        maxDistance: 200,
-        maxNumber: 10,
-        shipType: Fighter
-      }];
+    public getType(): IShipSubclass {
+      return Cruiser;
     }
-  }
 
-  function teamToCruiserSprite(game: Game.Game, x: number, y: number, team: number): Phaser.Sprite {
-    let spriteKey: string = "cruiser_" + team;
-    let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
-    sprite.scale.setTo(2, 2);
-    return sprite;
-  }
+    ///// Static stuff used by fleet generation /////
+
+    public static RESOURCE_COST: number = 25;
+
+    public static getSupportGroups(): Array<ISupportGroup> {
+          return [{
+            maxDistance: 200,
+            maxNumber: 10,
+            shipType: Fighter
+          }];
+        }
+      }
 }

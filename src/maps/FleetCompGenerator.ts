@@ -10,13 +10,50 @@ namespace Game {
     private params: IFleetCompParams;
     private resourcesRemaining: number;
 
-    private defaultParams: IFleetCompParams = {
-      resources: 500,
-      teamNumber: 2
-    };
+    // These hold group cost information for each ship type.
+    // Built on creation to save time during generation.
+    private groupCosts: Map<IShipSubclass, number> = new Map<IShipSubclass, number>();
+    private typesOrderedByCost: Array<IShipSubclass> = new Array<IShipSubclass>();
 
     public constructor(private game: Game, params?: IFleetCompParams) {
-      this.params = params || this.defaultParams;
+      this.params = params || this.getDefaultParams();
+
+      // Build the group cost info, including a list of all types
+      // in descending order by group cost
+      let unorderedTypes: Array<IShipSubclass> = [Fighter, Cruiser, Battleship];
+      for (let i: number = 0; i < unorderedTypes.length; i++) {
+        // First get the cost
+        let aType: IShipSubclass = unorderedTypes[i];
+        let cost: number = this.getMaxGroupCost(aType);
+
+        // Cache the cost value and insertion-sort the type
+        this.groupCosts.set(aType, cost);
+        let inserted = false;
+        for (let j: number = 0; j < this.typesOrderedByCost.length; j++) {
+          if (cost > this.groupCosts.get(this.typesOrderedByCost[j])) {
+            this.typesOrderedByCost.splice(j, 0, aType);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) {
+          this.typesOrderedByCost.push(aType);
+        }
+      }
+
+      console.log(this.groupCosts);
+      console.log(this.typesOrderedByCost);
+    }
+
+    private getDefaultParams(): IFleetCompParams {
+      return {
+        maxX: this.game.world.bounds.width,
+        maxY: this.game.world.bounds.height,
+        minX: this.game.world.bounds.width / 2,
+        minY: 0,
+        resources: 500,
+        teamNumber: 2
+      };
     }
 
     /**
@@ -25,20 +62,58 @@ namespace Game {
      */
     public generateFleet(): Array<Ship> {
       this.resourcesRemaining = this.params.resources;
+      let fleet: Array<Ship> = new Array<Ship>();
 
-      // Test, just make a random group around a BS
-      let centralBattleship: Battleship = new Battleship(this.game, 1000, 700, this.params.teamNumber);
-      let fleet: Array<Ship> = this.createGroup(centralBattleship);
+      // Naive implementation: Make as many of the biggest groups as we can first
+      for (let i: number = 0; i < this.typesOrderedByCost.length; i++) {
+        let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
-      console.log(fleet);
+        while (this.resourcesRemaining >= this.groupCosts.get(currentType)) {
+          let x: number = this.game.rnd.integerInRange(this.params.minX, this.params.maxX);
+          let y: number = this.game.rnd.integerInRange(this.params.minY, this.params.maxY);
+          let centralShip: Ship = new currentType(this.game, x, y, this.params.teamNumber);
+          fleet = fleet.concat(this.createGroup(centralShip));
+        }
+      }
 
       return fleet;
     }
 
+    /**
+     * Recursively calculate the maximum cost of a battle group
+     * for a given ship type, including itself.
+     */
+    private getMaxGroupCost(centralShipType: IShipSubclass): number {
+      // If we have a cached value for this type, use it
+      if (this.groupCosts.get(centralShipType)) {
+        return this.groupCosts.get(centralShipType);
+      }
+
+      let cost: number = centralShipType.RESOURCE_COST;
+      let supportGroups: Array<ISupportGroup> = centralShipType.getSupportGroups();
+
+      for (let i: number = 0; i < supportGroups.length; i++) {
+        cost += supportGroups[i].maxNumber * this.getMaxGroupCost(supportGroups[i].shipType);
+      }
+
+      return cost;
+    }
+
+    /**
+     * Place support ships around a central unit,
+     * and then recursively place support around each of those.
+     * Effectively builds a battle group out from a single unit.
+     */
     private createGroup(centralShip: Ship): Array<Ship> {
+      // If we can't afford this ship... oops. Do nothing
+      if (this.resourcesRemaining < centralShip.getType().RESOURCE_COST) {
+        return [];
+      }
+
       // If there's no support for this ship type, return just this ship
       let fleet: Array<Ship> = [centralShip];
-      let supportGroups: Array<ISupportGroup> = centralShip.getSupportGroups();
+      this.resourcesRemaining -= centralShip.getType().RESOURCE_COST;
+      let supportGroups: Array<ISupportGroup> = centralShip.getType().getSupportGroups();
       if (supportGroups.length === 0) {
         return fleet;
       }

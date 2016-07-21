@@ -34,6 +34,10 @@ namespace Game {
       console.log("Using seed: %i.", Battle.Seed);
       this.game.rnd.sow([Battle.Seed]);
       let params: IFleetCompParams = {
+        maxX: this.game.world.bounds.width,
+        maxY: this.game.world.bounds.height,
+        minX: this.game.world.bounds.width / 2,
+        minY: 0,
         resources: Battle.Difficulty,
         teamNumber: 2,
       };
