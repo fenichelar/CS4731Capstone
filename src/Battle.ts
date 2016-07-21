@@ -57,5 +57,18 @@ namespace Game {
       this.fleetGenerator.setParams(params);
       this.allies = this.fleetGenerator.generateFleet();
     }
+
+    update() {
+      for (let enemy of this.enemies) {
+        if (enemy.health > 0) {
+          enemy.update();
+        }
+      }
+      for (let ally of this.allies) {
+        if (ally.health > 0) {
+          ally.update();
+        }
+      }
+    }
   }
 }
