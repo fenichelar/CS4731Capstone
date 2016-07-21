@@ -69,7 +69,7 @@ namespace Game {
         let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
         while (this.resourcesRemaining >= this.groupCosts.get(currentType)) {
-          // Buffer the central ship from the edges of bounds by its support radius
+          // Buffer the central ship from the edges of fleet bounds by its support radius
           // Makes it less likely for fleets to overlap
           let radius: number = 0;
           for (let j = 0; j < currentType.getSupportGroups().length; j++) {
