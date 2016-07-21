@@ -4,8 +4,8 @@
     "outFile": "dist/js/game.js",
     "target": "es6"
   },
-  "compileOnSave": true,
-  "buildOnSave": true,
+  "compileOnSave": false,
+  "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false,
     "formatOnSave": true
