@@ -12,7 +12,7 @@ namespace Game {
       if (!ship.isAlive || ship.sprite == null || ship.sprite.body == null) {
         return;
       }
-      //if (this.target == null || this.target.isAlive) {
+      // if (this.target == null || this.target.isAlive) {
       // select a new target
       // TODO
       this.target = null;
@@ -30,7 +30,7 @@ namespace Game {
           }
         }
       }
-      //}
+      // }
       if (this.target != null) {
         ship.turnTowards(this.target);
         ship.thrust(ship.maxThrustSpeed);
