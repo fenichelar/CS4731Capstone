@@ -105,10 +105,10 @@ namespace Game {
       let now: number = game.time.totalElapsedSeconds();
       if ((now - this.lastFireTime) >= this.fireDelay) {
         let offsetScale: number = Math.max(this.sprite.width, this.sprite.height);
-        let angle: number = this.sprite.body.rotation - (Math.PI / 2);
+        let angle: number = this.sprite.rotation - (Math.PI / 2);
         let x: number = this.sprite.body.x + Math.cos(angle) * offsetScale;
         let y: number = this.sprite.body.y + Math.sin(angle) * offsetScale;
-        new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.body.angle, x, y, Bullet.DefaultVelocity);
+        new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.rotation, x, y, Bullet.DefaultVelocity);
         this.lastFireTime = now;
       }
     }
