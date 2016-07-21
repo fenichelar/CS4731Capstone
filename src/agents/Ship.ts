@@ -104,5 +104,9 @@ namespace Game {
         new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.body.angle, x, y, Bullet.DefaultVelocity);
       }
     }
+
+    public turnTowards(other: Ship) {
+      // TODO
+    }
   }
 }
