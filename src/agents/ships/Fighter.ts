@@ -10,7 +10,7 @@ namespace Game {
     public static FIGHTER_BASE_HEALTH: number = 50;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToSprite(game, x, y, "fighter_", team, 1), new State(), Fighter.FIGHTER_BASE_HEALTH, team);
+      super(game, teamToSprite(game, x, y, "fighter_", team, 1), new ChaseAndShoot(), Fighter.FIGHTER_BASE_HEALTH, team);
     }
 
     public getType(): IShipSubclass {
