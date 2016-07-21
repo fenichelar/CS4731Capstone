@@ -9,11 +9,11 @@ namespace Game {
     export class ChaseAndShoot extends State {
         private target: Ship = null;
         public update(ship: Ship): State {
-            if (target == null || target.health <= 0) {
+            if (this.target == null || this.target.health <= 0) {
                 // select a new target
                 // TODO
             }
-            ship.turnTowards(target);
+            ship.turnTowards(this.target);
             ship.thrust(ship.maxThrustSpeed);
             ship.fire();
             return this;
