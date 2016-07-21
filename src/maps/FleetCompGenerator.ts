@@ -56,14 +56,19 @@ namespace Game {
      */
     public generateFleet(): Array<Ship> {
       this.resourcesRemaining = this.params.resources;
+      let fleet: Array<Ship> = new Array<Ship>();
 
-      // Test, just make a random group around a BS
-      let centralBattleship: Battleship = new Battleship(this.game, 1000, 700, this.params.teamNumber);
-      let fleet: Array<Ship> = this.createGroup(centralBattleship);
+      // Naive implementation: Make as many of the biggest groups as we can first
+      for (let i: number = 0; i < this.typesOrderedByCost.length; i++) {
+        let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
-      console.log("--- Fleet generation ---");
-      console.log(fleet);
-      console.log(this.getMaxGroupCost(centralBattleship.getType()));
+        while (this.resourcesRemaining >= this.groupCosts.get(currentType)) {
+          let x: number = (i + 1) * 100;
+          let y: number = (i + 1) * 100;
+          let centralShip: Ship = new currentType(this.game, x, y, this.params.teamNumber);
+          fleet = fleet.concat(this.createGroup(centralShip));
+        }
+      }
 
       return fleet;
     }
@@ -94,8 +99,14 @@ namespace Game {
      * Effectively builds a battle group out from a single unit.
      */
     private createGroup(centralShip: Ship): Array<Ship> {
+      // If we can't afford this ship... oops. Do nothing
+      if (this.resourcesRemaining < centralShip.getType().RESOURCE_COST) {
+        return [];
+      }
+
       // If there's no support for this ship type, return just this ship
       let fleet: Array<Ship> = [centralShip];
+      this.resourcesRemaining -= centralShip.getType().RESOURCE_COST;
       let supportGroups: Array<ISupportGroup> = centralShip.getType().getSupportGroups();
       if (supportGroups.length === 0) {
         return fleet;
