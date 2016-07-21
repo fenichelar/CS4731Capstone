@@ -56,8 +56,10 @@ namespace Game {
     }
   }
 
-  export function teamToShipSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number): Phaser.Sprite {
+  export function teamToShipSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number, scale: number): Phaser.Sprite {
     let spriteKey: string = spritePrefix + String(team);
-    return game.add.sprite(x, y, spriteKey);
+    let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
+    sprite.scale.setTo(scale, scale);
+    return sprite
   }
 }

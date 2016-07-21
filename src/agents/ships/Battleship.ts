@@ -10,7 +10,7 @@ namespace Game {
     public static BATTLESHIP_BASE_HEALTH: number = 1000;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToShipSprite(game, x, y, "battleship_", team), new State(), Battleship.BATTLESHIP_BASE_HEALTH, team);
+      super(game, teamToShipSprite(game, x, y, "battleship_", team, 2), new State(), Battleship.BATTLESHIP_BASE_HEALTH, team);
     }
 
     public getType(): IShipSubclass {

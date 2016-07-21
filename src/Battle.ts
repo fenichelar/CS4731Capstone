@@ -6,10 +6,11 @@
  */
 
 namespace Game {
+  // these map to the enemy resource amount in FleetCompGenerator
   export enum Difficulty {
-    Easy = 10,
-    Medium = 50,
-    Hard = 100
+    Easy = 500,
+    Medium = 1500,
+    Hard = 5000
   }
 
   export class Battle extends Phaser.State {
@@ -21,6 +22,7 @@ namespace Game {
     preload() {
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
+      this.game.physics.p2.setImpactEvents(true);
       // Seed RNG with known seed.
       let element = new Image();
       Object.defineProperty(element, "id", {
@@ -31,7 +33,15 @@ namespace Game {
       console.log("%cTesting if console is open.", element);
       console.log("Using seed: %i.", Battle.Seed);
       this.game.rnd.sow([Battle.Seed]);
-      this.EnemyFleetGenerator = new FleetCompGenerator(this.game);
+      let params: IFleetCompParams = {
+        maxX: this.game.world.bounds.width,
+        maxY: this.game.world.bounds.height,
+        minX: this.game.world.bounds.width / 2,
+        minY: 0,
+        resources: Battle.Difficulty,
+        teamNumber: 2,
+      };
+      this.EnemyFleetGenerator = new FleetCompGenerator(this.game, params);
       this.enemies = this.EnemyFleetGenerator.generateFleet();
     }
   }
