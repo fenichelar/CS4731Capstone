@@ -22,7 +22,7 @@ namespace Game {
     // TODO: rotation speed's unit doesn't seem to be defined in the docs.
     // We need to determine reasonable values for this.
     // Also, ship types should probably rotate at different speeds.
-    public maxTurnSpeed: number = 10;
+    public maxTurnSpeed: number = 50;
     // TODO: determine a good value for this, should be in pixels/s
     public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
@@ -66,16 +66,24 @@ namespace Game {
 
     // positive rotates left, negative rotates right
     public rotate(speed: number) {
-      if (speed < 0) {
+      if (speed === 0) {
+        this.stopRotating();
+      } else if (speed < 0) {
         speed = -speed;
         if (speed > this.maxTurnSpeed) {
           speed = this.maxTurnSpeed;
         }
         this.sprite.body.rotateRight(speed);
-      } else if (speed > this.maxTurnSpeed) {
-        speed = this.maxTurnSpeed;
+      } else {
+        if (speed > this.maxTurnSpeed) {
+          speed = this.maxTurnSpeed;
+        }
+        this.sprite.body.rotateLeft(speed);
       }
-      this.sprite.body.rotateLeft(speed);
+    }
+
+    public stopRotating() {
+      this.sprite.body.setZeroRotation();
     }
 
     // positive moves forward, negative moves backwards
@@ -113,10 +121,6 @@ namespace Game {
       }
     }
 
-    public stopRotating() {
-      this.sprite.body.setZeroRotation();
-    }
-
     public turnTowards(other: Ship) {
       if (other == null || other.sprite == null || other.sprite.body == null) {
         return;
@@ -132,9 +136,9 @@ namespace Game {
 
       let angleDelta: number = angle - this.sprite.body.rotation;
       if (angleDelta > Math.PI / 8) {
-        this.rotate(this.maxTurnSpeed);
+        this.rotate(this.maxTurnSpeed * angleDelta);
       } else if (angleDelta < -Math.PI / 8) {
-        this.rotate(-this.maxTurnSpeed);
+        this.rotate(-this.maxTurnSpeed * angleDelta);
       } else {
         this.stopRotating();
       }
