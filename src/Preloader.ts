@@ -18,6 +18,7 @@ namespace Game {
       this.load.setPreloadSprite(this.preloadBar);
       this.preloadBar.scale.setTo(4, 4);
       // Load assets here
+      this.load.image("background", "assets/Backgrounds/darkPurple.png");
       // fighters
       this.load.image("fighter_0", "assets/playerShip1_blue.png");
       this.load.image("fighter_1", "assets/playerShip1_red.png");

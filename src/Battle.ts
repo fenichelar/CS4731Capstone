@@ -23,6 +23,7 @@ namespace Game {
     public allies: Array<Game.Ship>;
 
     preload() {
+      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       Battle.CurrentBattle = this;
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
