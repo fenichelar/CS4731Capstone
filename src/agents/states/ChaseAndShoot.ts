@@ -28,11 +28,11 @@ namespace Game {
           }
         }
       }
-      console.log(this.target);
+      // console.log(this.target);
       if (this.target != null) {
         ship.turnTowards(this.target);
-        ship.thrust(ship.maxThrustSpeed);
-        ship.fire();
+        // ship.thrust(ship.maxThrustSpeed);
+        // ship.fire();
       }
       return this;
     }

@@ -24,9 +24,9 @@ namespace Game {
     // Also, ship types should probably rotate at different speeds.
     public maxTurnSpeed: number = 1;
     // TODO: determine a good value for this, should be in pixels/s
-    public maxThrustSpeed: number = 3;
+    public maxThrustSpeed: number = 0;
     // TODO: determine a good value for this.
-    public fireDelay: number = 5;
+    public fireDelay: number = 5000;
     private lastFireTime: number;
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
@@ -116,11 +116,14 @@ namespace Game {
       // T R I G B O I S
       // In Phaser, angle 0 is straight up because ~reasons~
       let angle: number = Math.atan(dy / dx); // in radians
+      /*
       if (dx < 0) {
         angle = -angle;
       }
 
       this.sprite.body.rotation = angle;
+      */
+      this.rotate(this.sprite.body.rotation - angle);
     }
   }
 }
