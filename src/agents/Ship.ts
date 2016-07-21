@@ -22,9 +22,9 @@ namespace Game {
     // TODO: rotation speed's unit doesn't seem to be defined in the docs.
     // We need to determine reasonable values for this.
     // Also, ship types should probably rotate at different speeds.
-    public maxTurnSpeed: number = 1;
+    public maxTurnSpeed: number = 50;
     // TODO: determine a good value for this, should be in pixels/s
-    public maxThrustSpeed: number = 1;
+    public maxThrustSpeed: number = 20;
     // TODO: determine a good value for this.
     public fireDelay: number = 5;
     private lastFireTime: number;
@@ -105,25 +105,25 @@ namespace Game {
       }
     }
 
+    public stopRotating() {
+      this.sprite.body.setZeroRotation();
+    }
+
     public turnTowards(other: Ship) {
       if (other == null) {
         return;
       }
-
       let dx: number = other.sprite.body.x - this.sprite.body.x;
       let dy: number = other.sprite.body.y - this.sprite.body.y;
-
-      // T R I G B O I S
-      // In Phaser, angle 0 is straight up because ~reasons~
-      let angle: number = Math.atan(dy / dx); // in radians
-      /*
-      if (dx < 0) {
-        angle = -angle;
+      let angle: number = Math.atan2(dy, dx); // in radians
+      let angle_delta: number = this.sprite.body.rotation - angle;
+      if (angle_delta > 0) {
+        this.rotate(this.maxTurnSpeed);
+      } else if (angle_delta < 0) {
+        this.rotate(-this.maxTurnSpeed);
+      } else {
+        this.stopRotating();
       }
-
-      this.sprite.body.rotation = angle;
-      */
-      this.rotate(this.sprite.body.rotation - angle);
     }
   }
 }
