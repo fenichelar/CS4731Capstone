@@ -7,12 +7,19 @@
 
 namespace Game {
   export class PhysicsObject {
-    public body: Phaser.Physics.P2.Body;
+    static AllObjectsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
+    public body: any; // not: Phaser.Physics.P2.Body; because we need to add a field
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
       game.physics.p2.enableBody(sprite, false);
       this.body = sprite.body;
       this.body.clearShapes();
       // TODO: add correct shape for object...
+      if (PhysicsObject.AllObjectsCollisionGroup == null) {
+        PhysicsObject.AllObjectsCollisionGroup = game.physics.p2.createCollisionGroup();
+      }
+      this.body.setCollisionGroup(PhysicsObject.AllObjectsCollisionGroup);
+      this.body.collides(PhysicsObject.AllObjectsCollisionGroup, collideBodies, null);
+      this.body.physicsObject = this;
     }
 
     public update(): void {
@@ -39,6 +46,17 @@ namespace Game {
 
     public die(): void {
       // Do stuff
+      this.body.sprite.destroy();
     }
+  }
+
+  function collideBodies(body1: any, body2: any) {
+    if (body1 == null || body2 == null) {
+      return;
+    }
+    if (!("physicsObject" in body1) || !("physicsObject" in body2)) {
+      return;
+    }
+    body1.physicsObject.collide(body2.physicsObject);
   }
 }
