@@ -19,8 +19,8 @@ namespace Game {
     static FLEET_BOUNDS_PADDING: number = 20;
 
     private fleetGenerator: FleetCompGenerator;
-    private enemies: Array<Game.Ship>;
-    private allies: Array<Game.Ship>;
+    public enemies: Array<Game.Ship>;
+    public allies: Array<Game.Ship>;
 
     preload() {
       // enable p2 physics
