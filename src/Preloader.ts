@@ -32,7 +32,7 @@ namespace Game {
       this.load.image("battleship_0", "assets/playerShip3_blue.png");
       this.load.image("battleship_1", "assets/playerShip3_red.png");
       this.load.image("battleship_2", "assets/playerShip3_green.png");
-      //this.load.image("battleship_3", "assets/playerShip3_orange.png");
+      // this.load.image("battleship_3", "assets/playerShip3_orange.png");
       // bullets
       this.load.image("bullet_0", "assets/Lasers/laserBlue03.png");
       this.load.image("bullet_1", "assets/Lasers/laserRed03.png");
