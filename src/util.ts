@@ -19,4 +19,11 @@ namespace Game {
     title.anchor.setTo(0.5, 0.5);
     return title;
   }
+
+  export function teamToSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number, scale: number): Phaser.Sprite {
+    let spriteKey: string = spritePrefix + String(team);
+    let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
+    sprite.scale.setTo(scale, scale);
+    return sprite;
+  }
 }
