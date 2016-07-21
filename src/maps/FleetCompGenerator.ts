@@ -69,8 +69,15 @@ namespace Game {
         let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
         while (this.resourcesRemaining >= this.groupCosts.get(currentType)) {
-          let x: number = this.game.rnd.integerInRange(this.params.minX, this.params.maxX);
-          let y: number = this.game.rnd.integerInRange(this.params.minY, this.params.maxY);
+          // Buffer the central ship from the edges of bounds by its support radius
+          // Makes it less likely for fleets to overlap
+          let radius: number = 0;
+          for (let j = 0; j < currentType.getSupportGroups().length; j++) {
+            radius = Math.max(currentType.getSupportGroups()[j].maxDistance, radius);
+          }
+
+          let x: number = this.game.rnd.integerInRange(this.params.minX + radius, this.params.maxX - radius);
+          let y: number = this.game.rnd.integerInRange(this.params.minY + radius, this.params.maxY - radius);
           let centralShip: Ship = new currentType(this.game, x, y, this.params.teamNumber);
           fleet = fleet.concat(this.createGroup(centralShip));
         }
