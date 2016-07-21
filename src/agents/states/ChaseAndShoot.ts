@@ -15,12 +15,12 @@ namespace Game {
         this.target = null;
         if (Battle.CurrentBattle != null) {
           let enemies: Array<Game.Ship> = Battle.CurrentBattle.enemies;
-          let is_ally: boolean = ship.team == Battle.CurrentBattle.enemies[0].team;
-          if (!is_ally) {
+          let isAlly: boolean = ship.team === Battle.CurrentBattle.enemies[0].team;
+          if (!isAlly) {
             enemies = Battle.CurrentBattle.allies;
           }
-          let enemies_sorted: Array<Game.Ship> = enemies.sort((e1, e2) => shipDist(e1, ship) - shipDist(e2, ship));
-          for (let enemy of enemies_sorted) {
+          let enemiesSorted: Array<Game.Ship> = enemies.sort((e1, e2) => shipDist(e1, ship) - shipDist(e2, ship));
+          for (let enemy of enemiesSorted) {
             if (enemy != null && enemy.health > 0) {
               this.target = enemy;
               break;

@@ -126,7 +126,7 @@ namespace Game {
         this.stopRotating();
       }
       */
-      this.sprite.body.rotation = angle - (Math.PI/2);
+      this.sprite.body.rotation = angle - (Math.PI / 2);
     }
   }
 }
