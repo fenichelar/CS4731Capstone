@@ -10,18 +10,13 @@ namespace Game {
     private params: IFleetCompParams;
     private resourcesRemaining: number;
 
-    private defaultParams: IFleetCompParams = {
-      resources: 500,
-      teamNumber: 2
-    };
-
     // These hold group cost information for each ship type.
     // Built on creation to save time during generation.
     private groupCosts: Map<IShipSubclass, number> = new Map<IShipSubclass, number>();
     private typesOrderedByCost: Array<IShipSubclass> = new Array<IShipSubclass>();
 
     public constructor(private game: Game, params?: IFleetCompParams) {
-      this.params = params || this.defaultParams;
+      this.params = params || this.getDefaultParams();
 
       // Build the group cost info, including a list of all types
       // in descending order by group cost
@@ -50,6 +45,17 @@ namespace Game {
       console.log(this.typesOrderedByCost);
     }
 
+    private getDefaultParams(): IFleetCompParams {
+      return {
+        maxX: this.game.world.bounds.width,
+        maxY: this.game.world.bounds.height,
+        minX: this.game.world.bounds.width / 2,
+        minY: 0,
+        resources: 500,
+        teamNumber: 2
+      };
+    }
+
     /**
      * Generates a fleet composition from the current params and returns it
      * as a list of ships (which should have positions), for now
@@ -63,8 +69,8 @@ namespace Game {
         let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
         while (this.resourcesRemaining >= this.groupCosts.get(currentType)) {
-          let x: number = (i + 1) * 100;
-          let y: number = (i + 1) * 100;
+          let x: number = this.game.rnd.integerInRange(this.params.minX, this.params.maxX);
+          let y: number = this.game.rnd.integerInRange(this.params.minY, this.params.maxY);
           let centralShip: Ship = new currentType(this.game, x, y, this.params.teamNumber);
           fleet = fleet.concat(this.createGroup(centralShip));
         }
