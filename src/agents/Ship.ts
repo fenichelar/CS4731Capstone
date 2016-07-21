@@ -19,6 +19,12 @@ namespace Game {
   }
 
   export class Ship extends PhysicsObject {
+    // TODO: rotation speed's unit doesn't seem to be defined in the docs.
+    // We need to determine reasonable values for this.
+    // Also, ship types should probably rotate at different speeds.
+    public maxTurnSpeed: number = 1;
+    // TODO: determine a good value for this, should be in pixels/s
+    public maxThrustSpeed: number = 3;
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
 
@@ -53,6 +59,36 @@ namespace Game {
     public getType(): IShipSubclass {
       // Ship isn't a ship subclass, we'll never instantiate it directly
       return null;
+    }
+
+    // positive rotates left, negative rotates right
+    public rotate(speed: number) {
+      if (speed < 0) {
+        speed = -speed;
+        if (speed > this.maxTurnSpeed) {
+          speed = this.maxTurnSpeed;
+        }
+        this.sprite.body.rotateRight(speed);
+      } else if (speed > this.maxTurnSpeed) {
+        speed = this.maxTurnSpeed;
+      }
+      this.sprite.body.rotateLeft(speed);
+    }
+
+    // positive moves forward, negative moves backwards
+    public thrust(speed: number) {
+      if (speed < 0) {
+        speed = -speed;
+        if (speed > this.maxThrustSpeed) {
+          speed = this.maxThrustSpeed;
+        }
+        this.sprite.body.reverse(speed);
+      } else {
+        if (speed > this.maxThrustSpeed) {
+          speed = this.maxThrustSpeed;
+        }
+        this.sprite.body.thrust(speed);
+      }
     }
   }
 
