@@ -15,7 +15,7 @@ namespace Game {
         this.target = null;
         if (Battle.CurrentBattle != null) {
           let enemies: Array<Game.Ship> = Battle.CurrentBattle.enemies;
-          let isAlly: boolean = ship.team === Battle.CurrentBattle.enemies[0].team;
+          let isAlly: boolean = ship.team === Battle.CurrentBattle.allies[0].team;
           if (!isAlly) {
             enemies = Battle.CurrentBattle.allies;
           }
@@ -28,7 +28,6 @@ namespace Game {
           }
         }
       }
-      // console.log(this.target);
       if (this.target != null) {
         ship.turnTowards(this.target);
         ship.thrust(ship.maxThrustSpeed);
