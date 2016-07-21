@@ -60,6 +60,6 @@ namespace Game {
     let spriteKey: string = spritePrefix + String(team);
     let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
     sprite.scale.setTo(scale, scale);
-    return sprite
+    return sprite;
   }
 }
