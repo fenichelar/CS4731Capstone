@@ -6,19 +6,41 @@
  */
 
 namespace Game {
+  interface IOurPhysicsBody extends Phaser.Physics.P2.Body {
+    physicsObject: PhysicsObject;
+  }
+
   export class PhysicsObject {
-    static AllObjectsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
-    public body: any; // not: Phaser.Physics.P2.Body; because we need to add a field
+    // Collision groups - one for ships and one for everything else
+    static shipsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
+    static nonShipsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
+
+    public body: IOurPhysicsBody; // not: Phaser.Physics.P2.Body; because we need to add a field
+
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
       game.physics.p2.enableBody(sprite, false);
       this.body = sprite.body;
       // TODO: add correct shape for object...
       // this.body.clearShapes();
-      if (PhysicsObject.AllObjectsCollisionGroup == null) {
-        PhysicsObject.AllObjectsCollisionGroup = game.physics.p2.createCollisionGroup();
+
+      // Initialize collision groups if needed
+      if (PhysicsObject.shipsCollisionGroup == null) {
+        PhysicsObject.shipsCollisionGroup = game.physics.p2.createCollisionGroup();
       }
-      this.body.setCollisionGroup(PhysicsObject.AllObjectsCollisionGroup);
-      this.body.collides(PhysicsObject.AllObjectsCollisionGroup, collideBodies, null);
+      if (PhysicsObject.nonShipsCollisionGroup == null) {
+        PhysicsObject.nonShipsCollisionGroup = game.physics.p2.createCollisionGroup();
+      }
+
+      // Ships don't collide with other ships
+      if (this instanceof Ship) {
+        this.body.setCollisionGroup(PhysicsObject.shipsCollisionGroup);
+      } else {
+        this.body.setCollisionGroup(PhysicsObject.nonShipsCollisionGroup);
+        this.body.collides(PhysicsObject.shipsCollisionGroup, collideBodies, null);
+      }
+
+      // Everything collides with non-ships
+      this.body.collides(PhysicsObject.nonShipsCollisionGroup, collideBodies, null);
       this.body.physicsObject = this;
     }
 
@@ -49,11 +71,8 @@ namespace Game {
     }
   }
 
-  function collideBodies(body1: any, body2: any) {
+  function collideBodies(body1: IOurPhysicsBody, body2: IOurPhysicsBody) {
     if (body1 == null || body2 == null) {
-      return;
-    }
-    if (!("physicsObject" in body1) || !("physicsObject" in body2)) {
       return;
     }
     body1.physicsObject.collide(body2.physicsObject);
