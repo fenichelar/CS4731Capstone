@@ -10,7 +10,7 @@ namespace Game {
     public static CRUISER_BASE_HEALTH: number = 250;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToShipSprite(game, x, y, "cruiser_", team, 1.5), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
+      super(game, teamToSprite(game, x, y, "cruiser_", team, 1.5), new State(), Cruiser.CRUISER_BASE_HEALTH, team);
     }
 
     public getType(): IShipSubclass {

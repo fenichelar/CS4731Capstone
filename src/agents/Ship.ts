@@ -25,8 +25,12 @@ namespace Game {
     public maxTurnSpeed: number = 1;
     // TODO: determine a good value for this, should be in pixels/s
     public maxThrustSpeed: number = 3;
+    // TODO: determine a good value for this.
+    public fireDelay: number = 5;
+    private lastFireTime: number;
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
+      this.lastFireTime = game.time.totalElapsedSeconds();
 
       // Super constructor enables body
       // Set orientation based on team
@@ -90,9 +94,19 @@ namespace Game {
         this.sprite.body.thrust(speed);
       }
     }
+
+    public fire() {
+      let game: Game.Game = this.sprite.game;
+      let now: number = game.time.totalElapsedSeconds();
+      if ((now - this.lastFireTime) >= this.fireDelay) {
+        let x: number = this.sprite.body.x;
+        let y: number = this.sprite.body.y;
+        new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.body.angle, x, y, Bullet.DefaultVelocity);
+      }
+    }
   }
 
-  export function teamToShipSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number, scale: number): Phaser.Sprite {
+  export function teamToSprite(game: Game.Game, x: number, y: number, spritePrefix: string, team: number, scale: number): Phaser.Sprite {
     let spriteKey: string = spritePrefix + String(team);
     let sprite: Phaser.Sprite = game.add.sprite(x, y, spriteKey);
     sprite.scale.setTo(scale, scale);
