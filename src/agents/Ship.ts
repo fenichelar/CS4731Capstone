@@ -44,10 +44,7 @@ namespace Game {
           break;
         default: angle = 0;
       }
-      this.sprite.body.fixedRotation = false;
       this.sprite.body.angle = angle;
-      this.sprite.angle = angle;
-      this.sprite.body.fixedRotation = true;
     }
 
     public update(): void {
@@ -140,10 +137,7 @@ namespace Game {
       } else {
         this.stopRotating();
       }*/
-      this.sprite.body.fixedRotation = false;
-      // this.sprite.body.rotation = angle;
-      this.sprite.rotation = angle;
-      this.sprite.body.fixedRotation = true;
+      this.sprite.body.rotation = angle;
     }
   }
 }
