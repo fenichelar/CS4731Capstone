@@ -17,12 +17,13 @@ namespace Game {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
     static FLEET_BOUNDS_PADDING: number = 20;
-
+    static CurrentBattle: Battle = null;
     private fleetGenerator: FleetCompGenerator;
-    private enemies: Array<Game.Ship>;
-    private allies: Array<Game.Ship>;
+    public enemies: Array<Game.Ship>;
+    public allies: Array<Game.Ship>;
 
     preload() {
+      Battle.CurrentBattle = this;
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);
@@ -55,6 +56,19 @@ namespace Game {
       params.maxX = this.game.world.bounds.width / 2 - Battle.FLEET_BOUNDS_PADDING;
       this.fleetGenerator.setParams(params);
       this.allies = this.fleetGenerator.generateFleet();
+    }
+
+    update() {
+      for (let enemy of this.enemies) {
+        if (enemy.health > 0) {
+          enemy.update();
+        }
+      }
+      for (let ally of this.allies) {
+        if (ally.health > 0) {
+          ally.update();
+        }
+      }
     }
   }
 }

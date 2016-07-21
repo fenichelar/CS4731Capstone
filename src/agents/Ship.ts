@@ -22,11 +22,11 @@ namespace Game {
     // TODO: rotation speed's unit doesn't seem to be defined in the docs.
     // We need to determine reasonable values for this.
     // Also, ship types should probably rotate at different speeds.
-    public maxTurnSpeed: number = 1;
+    public maxTurnSpeed: number = 20;
     // TODO: determine a good value for this, should be in pixels/s
-    public maxThrustSpeed: number = 3;
+    public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
-    public fireDelay: number = 5;
+    public fireDelay: number = 1;
     private lastFireTime: number;
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
@@ -44,8 +44,10 @@ namespace Game {
           break;
         default: angle = 0;
       }
-
+      this.sprite.body.fixedRotation = false;
       this.sprite.body.angle = angle;
+      this.sprite.angle = angle;
+      this.sprite.body.fixedRotation = true;
     }
 
     public update(): void {
@@ -81,6 +83,9 @@ namespace Game {
 
     // positive moves forward, negative moves backwards
     public thrust(speed: number) {
+      if (this == null || this.sprite == null || this.sprite.body == null) {
+        return;
+      }
       if (speed < 0) {
         speed = -speed;
         if (speed > this.maxThrustSpeed) {
@@ -96,13 +101,49 @@ namespace Game {
     }
 
     public fire() {
+      if (this == null || this.sprite == null || this.sprite.body == null) {
+        return;
+      }
       let game: Game.Game = this.sprite.game;
       let now: number = game.time.totalElapsedSeconds();
       if ((now - this.lastFireTime) >= this.fireDelay) {
-        let x: number = this.sprite.body.x;
-        let y: number = this.sprite.body.y;
+        let offsetScale: number = Math.max(this.sprite.width, this.sprite.height);
+        let angle: number = this.sprite.body.rotation - (Math.PI / 2);
+        let x: number = this.sprite.body.x + Math.cos(angle) * offsetScale;
+        let y: number = this.sprite.body.y + Math.sin(angle) * offsetScale;
         new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.body.angle, x, y, Bullet.DefaultVelocity);
+        this.lastFireTime = now;
       }
+    }
+
+    public stopRotating() {
+      this.sprite.body.setZeroRotation();
+    }
+
+    public turnTowards(other: Ship) {
+      if (other == null || other.sprite == null || other.sprite.body == null) {
+        return;
+      }
+      if (this == null || this.sprite == null || this.sprite.body == null) {
+        return;
+      }
+      let dx: number = other.sprite.x - this.sprite.x;
+      let dy: number = other.sprite.y - this.sprite.y;
+      let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
+      // TODO: use something like the code below to do physics based rotation
+      /*
+      let angleDelta: number = angle - this.sprite.body.rotation;
+      if (angleDelta > 0) {
+        this.rotate(this.maxTurnSpeed);
+      } else if (angleDelta < 0) {
+        this.rotate(-this.maxTurnSpeed);
+      } else {
+        this.stopRotating();
+      }*/
+      this.sprite.body.fixedRotation = false;
+      // this.sprite.body.rotation = angle;
+      this.sprite.rotation = angle;
+      this.sprite.body.fixedRotation = true;
     }
   }
 }
