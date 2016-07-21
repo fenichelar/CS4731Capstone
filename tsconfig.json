@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outFile": "dist/js/game.js"
+    "outFile": "dist/js/game.js",
+    "target": "es6"
   },
   "compileOnSave": true,
   "buildOnSave": true,
