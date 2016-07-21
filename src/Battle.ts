@@ -16,8 +16,9 @@ namespace Game {
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
-    private EnemyFleetGenerator: FleetCompGenerator;
+    private fleetGenerator: FleetCompGenerator;
     private enemies: Array<Game.Ship>;
+    private allies: Array<Game.Ship>;
 
     preload() {
       // enable p2 physics
@@ -33,6 +34,8 @@ namespace Game {
       console.log("%cTesting if console is open.", element);
       console.log("Using seed: %i.", Battle.Seed);
       this.game.rnd.sow([Battle.Seed]);
+
+      // Generate enemy fleet
       let params: IFleetCompParams = {
         maxX: this.game.world.bounds.width,
         maxY: this.game.world.bounds.height,
@@ -41,8 +44,15 @@ namespace Game {
         resources: Battle.Difficulty,
         teamNumber: 2,
       };
-      this.EnemyFleetGenerator = new FleetCompGenerator(this.game, params);
-      this.enemies = this.EnemyFleetGenerator.generateFleet();
+      this.fleetGenerator = new FleetCompGenerator(this.game, params);
+      this.enemies = this.fleetGenerator.generateFleet();
+
+      // Generate ally fleet
+      params.teamNumber = 1;
+      params.minX = 0;
+      params.maxX = this.game.world.bounds.width / 2;
+      this.fleetGenerator.setParams(params);
+      this.allies = this.fleetGenerator.generateFleet();
     }
   }
 }
