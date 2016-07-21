@@ -17,6 +17,8 @@ namespace Game {
 
     public body: IOurPhysicsBody; // not: Phaser.Physics.P2.Body; because we need to add a field
 
+    public isAlive: boolean = true;
+
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
       game.physics.p2.enableBody(sprite, false);
       this.body = sprite.body;
@@ -52,11 +54,17 @@ namespace Game {
     public collide(otherThing: PhysicsObject) {
       // Interesting concept: Kill the thing with lower health,
       // and subtract that health from the other thing's health
-      if (otherThing.health < this.health) {
+      if (otherThing.health > 0 && otherThing.health < this.health) {
         this.health -= otherThing.health;
+        if (this.health <= 0) {
+          this.die();
+        }
         otherThing.die();
-      } else if (this.health < otherThing.health) {
+      } else if (this.health > 0 && this.health < otherThing.health) {
         otherThing.health -= this.health;
+        if (otherThing.health <= 0) {
+          otherThing.die();
+        }
         this.die();
       } else {
         // If both healths are equal, kill both
@@ -67,7 +75,13 @@ namespace Game {
 
     public die(): void {
       // Do stuff
-      if (this == null || this.body == null || this.body.sprite == null) {
+      // console.log(this);
+      if (this == null) {
+        return;
+      }
+      this.health = 0;
+      this.isAlive = false;
+      if (this.body == null || this.body.sprite == null) {
         return;
       }
       this.body.sprite.destroy();
@@ -75,6 +89,7 @@ namespace Game {
   }
 
   function collideBodies(body1: IOurPhysicsBody, body2: IOurPhysicsBody) {
+    // console.log(body1);
     if (body1 == null || body2 == null) {
       return;
     }

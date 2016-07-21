@@ -8,7 +8,7 @@
 namespace Game {
   export class Bullet extends PhysicsObject {
     static DefaultVelocity: number = 100;
-    static DefaultHealth: number = 10;
+    static DefaultHealth: number = 0.000001;
     public constructor(game: Game.Game, public health: number, public team: number, angle: number, x: number, y: number, velocity: number) {
       super(game, teamToSprite(game, x, y, "bullet_", team, 1), health);
       this.sprite.body.rotation = angle;
