@@ -16,6 +16,8 @@ namespace Game {
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
+    static FLEET_BOUNDS_PADDING: number = 20;
+
     private fleetGenerator: FleetCompGenerator;
     private enemies: Array<Game.Ship>;
     private allies: Array<Game.Ship>;
@@ -37,10 +39,10 @@ namespace Game {
 
       // Generate enemy fleet
       let params: IFleetCompParams = {
-        maxX: this.game.world.bounds.width,
-        maxY: this.game.world.bounds.height,
-        minX: this.game.world.bounds.width / 2,
-        minY: 0,
+        maxX: this.game.world.bounds.width - Battle.FLEET_BOUNDS_PADDING,
+        maxY: this.game.world.bounds.height - Battle.FLEET_BOUNDS_PADDING,
+        minX: this.game.world.bounds.width / 2 + Battle.FLEET_BOUNDS_PADDING,
+        minY: Battle.FLEET_BOUNDS_PADDING,
         resources: Battle.Difficulty,
         teamNumber: 2,
       };
@@ -49,8 +51,8 @@ namespace Game {
 
       // Generate ally fleet
       params.teamNumber = 1;
-      params.minX = 0;
-      params.maxX = this.game.world.bounds.width / 2;
+      params.minX = Battle.FLEET_BOUNDS_PADDING;
+      params.maxX = this.game.world.bounds.width / 2 - Battle.FLEET_BOUNDS_PADDING;
       this.fleetGenerator.setParams(params);
       this.allies = this.fleetGenerator.generateFleet();
     }
