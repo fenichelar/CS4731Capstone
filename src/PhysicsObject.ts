@@ -67,6 +67,9 @@ namespace Game {
 
     public die(): void {
       // Do stuff
+      if (this == null || this.body == null || this.body.sprite == null) {
+        return;
+      }
       this.body.sprite.destroy();
     }
   }

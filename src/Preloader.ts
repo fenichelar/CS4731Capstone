@@ -36,7 +36,7 @@ namespace Game {
       // bullets
       this.load.image("bullet_0", "assets/Lasers/laserBlue03.png");
       this.load.image("bullet_1", "assets/Lasers/laserRed03.png");
-      this.load.image("bullet_2", "assets/Lasers/laserGreen03.png");
+      this.load.image("bullet_2", "assets/Lasers/laserGreen05.png");
       // NOTE: orange lasers do not exist currently...
       // this.load.image("bullet_3", "assets/Lasers/laserOrange03.png");
     }

@@ -31,7 +31,7 @@ namespace Game {
       if (this.target != null) {
         ship.turnTowards(this.target);
         ship.thrust(ship.maxThrustSpeed);
-        // ship.fire();
+        ship.fire();
       }
       return this;
     }
