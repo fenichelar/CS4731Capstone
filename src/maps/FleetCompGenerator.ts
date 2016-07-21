@@ -15,8 +15,39 @@ namespace Game {
       teamNumber: 2
     };
 
+    // These hold group cost information for each ship type.
+    // Built on creation to save time during generation.
+    private groupCosts: Map<IShipSubclass, number> = new Map<IShipSubclass, number>();
+    private typesOrderedByCost: Array<IShipSubclass> = new Array<IShipSubclass>();
+
     public constructor(private game: Game, params?: IFleetCompParams) {
       this.params = params || this.defaultParams;
+
+      // Build the group cost info, including a list of all types
+      // in descending order by group cost
+      let unorderedTypes: Array<IShipSubclass> = [Fighter, Cruiser, Battleship];
+      for (let i: number = 0; i < unorderedTypes.length; i++) {
+        // First get the cost
+        let aType: IShipSubclass = unorderedTypes[i];
+        let cost: number = this.getMaxGroupCost(aType);
+
+        // Cache the cost value and insertion-sort the type
+        this.groupCosts.set(aType, cost);
+        let inserted = false;
+        for (let j: number = 0; j < this.typesOrderedByCost.length; j++) {
+          if (cost > this.groupCosts.get(this.typesOrderedByCost[j])) {
+            this.typesOrderedByCost.splice(j, 0, aType);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) {
+          this.typesOrderedByCost.push(aType);
+        }
+      }
+
+      console.log(this.groupCosts);
+      console.log(this.typesOrderedByCost);
     }
 
     /**
@@ -30,6 +61,7 @@ namespace Game {
       let centralBattleship: Battleship = new Battleship(this.game, 1000, 700, this.params.teamNumber);
       let fleet: Array<Ship> = this.createGroup(centralBattleship);
 
+      console.log("--- Fleet generation ---");
       console.log(fleet);
       console.log(this.getMaxGroupCost(centralBattleship.getType()));
 
@@ -41,11 +73,13 @@ namespace Game {
      * for a given ship type, including itself.
      */
     private getMaxGroupCost(centralShipType: IShipSubclass): number {
+      // If we have a cached value for this type, use it
+      if (this.groupCosts.get(centralShipType)) {
+        return this.groupCosts.get(centralShipType);
+      }
+
       let cost: number = centralShipType.RESOURCE_COST;
       let supportGroups: Array<ISupportGroup> = centralShipType.getSupportGroups();
-      if (supportGroups.length === 0) {
-        return cost;
-      }
 
       for (let i: number = 0; i < supportGroups.length; i++) {
         cost += supportGroups[i].maxNumber * this.getMaxGroupCost(supportGroups[i].shipType);
