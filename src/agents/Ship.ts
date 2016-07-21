@@ -24,9 +24,9 @@ namespace Game {
     // Also, ship types should probably rotate at different speeds.
     public maxTurnSpeed: number = 1;
     // TODO: determine a good value for this, should be in pixels/s
-    public maxThrustSpeed: number = 0;
+    public maxThrustSpeed: number = 1;
     // TODO: determine a good value for this.
-    public fireDelay: number = 5000;
+    public fireDelay: number = 5;
     private lastFireTime: number;
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
