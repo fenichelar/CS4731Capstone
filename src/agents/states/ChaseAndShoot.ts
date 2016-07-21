@@ -6,23 +6,30 @@
  */
 
 namespace Game {
-    export class ChaseAndShoot extends State {
-        private target: Ship = null;
-        public update(ship: Ship): State {
-            if (this.target == null || this.target.health <= 0) {
-                // select a new target
-                // TODO
-                if (Battle.CurrentBattle != null) {
-                  let enemies: Array<Game.Ship> = Battle.CurrentBattle.enemies;
-                  // TODO: sort and select by distance
-                }
+  export class ChaseAndShoot extends State {
+    private target: Ship = null;
+    public update(ship: Ship): State {
+      if (this.target == null || this.target.health <= 0) {
+        // select a new target
+        // TODO
+        this.target = null;
+        if (Battle.CurrentBattle != null) {
+          let enemies: Array<Game.Ship> = Battle.CurrentBattle.enemies.sort((e1, e2) => shipDist(e1, ship) - shipDist(e2, ship));
+          for (let enemy of enemies) {
+            if (enemy != null && enemy.health > 0) {
+              this.target = enemy;
+              break;
             }
-            if (this.target != null) {
-              ship.turnTowards(this.target);
-              ship.thrust(ship.maxThrustSpeed);
-              ship.fire();
-            }
-            return this;
+          }
         }
+      }
+      console.log(this.target);
+      if (this.target != null) {
+        ship.turnTowards(this.target);
+        ship.thrust(ship.maxThrustSpeed);
+        ship.fire();
+      }
+      return this;
     }
+  }
 }
