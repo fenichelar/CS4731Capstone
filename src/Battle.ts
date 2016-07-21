@@ -17,12 +17,13 @@ namespace Game {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
     static FLEET_BOUNDS_PADDING: number = 20;
-
+    static CurrentBattle: Battle = null;
     private fleetGenerator: FleetCompGenerator;
     public enemies: Array<Game.Ship>;
     public allies: Array<Game.Ship>;
 
     preload() {
+      Battle.CurrentBattle = this;
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);
