@@ -106,7 +106,21 @@ namespace Game {
     }
 
     public turnTowards(other: Ship) {
-      // TODO
+      if (other == null) {
+        return;
+      }
+
+      let dx: number = other.sprite.body.x - this.sprite.body.x;
+      let dy: number = other.sprite.body.y - this.sprite.body.y;
+
+      // T R I G B O I S
+      // In Phaser, angle 0 is straight up because ~reasons~
+      let angle: number = Math.atan(dy / dx); // in radians
+      if (dx < 0) {
+        angle = -angle;
+      }
+
+      this.sprite.body.rotation = angle;
     }
   }
 }
