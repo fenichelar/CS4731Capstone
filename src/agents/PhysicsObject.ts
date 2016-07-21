@@ -12,8 +12,8 @@ namespace Game {
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
       game.physics.p2.enableBody(sprite, false);
       this.body = sprite.body;
-      this.body.clearShapes();
       // TODO: add correct shape for object...
+      // this.body.clearShapes();
       if (PhysicsObject.AllObjectsCollisionGroup == null) {
         PhysicsObject.AllObjectsCollisionGroup = game.physics.p2.createCollisionGroup();
       }
@@ -30,7 +30,6 @@ namespace Game {
     public collide(otherThing: PhysicsObject) {
       // Interesting concept: Kill the thing with lower health,
       // and subtract that health from the other thing's health
-
       if (otherThing.health < this.health) {
         this.health -= otherThing.health;
         otherThing.die();
