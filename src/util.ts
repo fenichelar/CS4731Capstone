@@ -28,10 +28,18 @@ namespace Game {
   }
 
   export function shipDist(ship1: Ship, ship2: Ship): number {
+    // If either ship is dead, return INFINITY
+    if (!ship1 || ship1.health < 0 || !ship1.sprite || !ship1.sprite.body) {
+      return Number.POSITIVE_INFINITY;
+    }
+    if (!ship2 || ship2.health < 0 || !ship2.sprite || !ship2.sprite.body) {
+      return Number.POSITIVE_INFINITY;
+    }
+
     let s1X: number = ship1.sprite.body.x;
     let s1Y: number = ship1.sprite.body.y;
-    let s2X: number  = ship2.sprite.body.x;
-    let s2Y: number  = ship2.sprite.body.y;
+    let s2X: number = ship2.sprite.body.x;
+    let s2Y: number = ship2.sprite.body.y;
     let dx: number = s1X - s2X;
     let dy: number = s1Y - s2Y;
     return Math.sqrt(dx ** 2 + dy ** 2);

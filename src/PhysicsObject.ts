@@ -55,9 +55,19 @@ namespace Game {
       if (otherThing.health < this.health) {
         this.health -= otherThing.health;
         otherThing.die();
+
+        // If we dropped below 0, die
+        if (this.health <= 0) {
+          this.die();
+        }
       } else if (this.health < otherThing.health) {
         otherThing.health -= this.health;
         this.die();
+
+        // If we dropped below 0, die
+        if (otherThing.health <= 0) {
+          otherThing.die();
+        }
       } else {
         // If both healths are equal, kill both
         otherThing.die();
@@ -67,9 +77,10 @@ namespace Game {
 
     public die(): void {
       // Do stuff
-      if (this == null || this.body == null || this.body.sprite == null) {
+      if (this.body == null || this.body.sprite == null) {
         return;
       }
+      this.health = 0;
       this.body.sprite.destroy();
     }
   }
