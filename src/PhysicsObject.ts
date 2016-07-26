@@ -50,6 +50,10 @@ namespace Game {
 
     // TODO: ensure collide is called
     public collide(otherThing: PhysicsObject) {
+      if (!otherThing) {
+        return;
+      }
+
       // Interesting concept: Kill the thing with lower health,
       // and subtract that health from the other thing's health
       if (otherThing.health < this.health) {
@@ -77,16 +81,16 @@ namespace Game {
 
     public die(): void {
       // Do stuff
-      if (this.body == null || this.body.sprite == null) {
+      if (!this.body || !this.sprite) {
         return;
       }
       this.health = 0;
-      this.body.sprite.destroy();
+      this.sprite.destroy();
     }
   }
 
   function collideBodies(body1: IOurPhysicsBody, body2: IOurPhysicsBody) {
-    if (body1 == null || body2 == null) {
+    if (!body1 || !body2) {
       return;
     }
     body1.physicsObject.collide(body2.physicsObject);

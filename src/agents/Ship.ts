@@ -47,12 +47,17 @@ namespace Game {
           break;
         default: angle = 0;
       }
-      this.sprite.body.angle = angle;
+      this.body.angle = angle;
     }
 
     public update(): void {
       // Do stuff
       this.state = this.state.update(this);
+
+      // Make sure we don't stay alive when we shouldn't
+      if (this.health <= 0) {
+        this.die();
+      }
     }
 
     public collide(otherThing: PhysicsObject): void {
@@ -67,41 +72,32 @@ namespace Game {
       return null;
     }
 
-    // positive rotates left, negative rotates right
+    // positive rotates right, negative rotates left
     public rotate(speed: number) {
-      if (speed < 0) {
-        speed = -speed;
-        if (speed > this.maxTurnSpeed) {
-          speed = this.maxTurnSpeed;
-        }
-        this.sprite.body.rotateRight(speed);
-      } else if (speed > this.maxTurnSpeed) {
+      if (speed > this.maxTurnSpeed) {
         speed = this.maxTurnSpeed;
+      } else if (speed < -this.maxTurnSpeed) {
+        speed = -this.maxTurnSpeed;
       }
-      this.sprite.body.rotateLeft(speed);
+
+      // If speed is negative, this will go left
+      this.body.rotateRight(speed);
     }
 
     // positive moves forward, negative moves backwards
     public thrust(speed: number) {
-      if (this == null || this.sprite == null || this.sprite.body == null) {
-        return;
+      if (speed > this.maxThrustSpeed) {
+        speed = this.maxThrustSpeed;
+      } else if (speed < -this.maxThrustSpeed) {
+        speed = -this.maxThrustSpeed;
       }
-      if (speed < 0) {
-        speed = -speed;
-        if (speed > this.maxThrustSpeed) {
-          speed = this.maxThrustSpeed;
-        }
-        this.sprite.body.reverse(speed);
-      } else {
-        if (speed > this.maxThrustSpeed) {
-          speed = this.maxThrustSpeed;
-        }
-        this.sprite.body.thrust(speed);
-      }
+
+      // If speed is negative, this will go backwards
+      this.body.thrust(speed);
     }
 
     public fire() {
-      if (this == null || this.sprite == null || this.sprite.body == null) {
+      if (!this.sprite || !this.body) {
         return;
       }
       let game: Game.Game = this.sprite.game;
@@ -109,24 +105,22 @@ namespace Game {
       if ((now - this.lastFireTime) >= this.fireDelay) {
         let offsetScale: number = Math.max(this.sprite.width, this.sprite.height);
         let angle: number = this.sprite.rotation - (Math.PI / 2);
-        let x: number = this.sprite.body.x + Math.cos(angle) * offsetScale;
-        let y: number = this.sprite.body.y + Math.sin(angle) * offsetScale;
-        new Bullet(game, Bullet.DefaultHealth, this.team, this.sprite.rotation, x, y, Bullet.DefaultVelocity);
+        let x: number = this.sprite.x + Math.cos(angle) * offsetScale;
+        let y: number = this.sprite.y + Math.sin(angle) * offsetScale;
+        new Bullet(game, Bullet.DefaultHealth, this.team, this.body.rotation, x, y, Bullet.DefaultVelocity);
         this.lastFireTime = now;
       }
     }
 
     public stopRotating() {
-      this.sprite.body.setZeroRotation();
+      this.body.setZeroRotation();
     }
 
     public turnTowards(other: Ship) {
-      if (other == null || other.sprite == null || other.sprite.body == null) {
+      if (!this.sprite || !this.body || !other || !other.sprite || !other.body) {
         return;
       }
-      if (this == null || this.sprite == null || this.sprite.body == null) {
-        return;
-      }
+
       let dx: number = other.sprite.x - this.sprite.x;
       let dy: number = other.sprite.y - this.sprite.y;
       let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
@@ -140,7 +134,7 @@ namespace Game {
       } else {
         this.stopRotating();
       }*/
-      this.sprite.body.rotation = angle;
+      this.body.rotation = angle;
     }
 
     public die(): void {
