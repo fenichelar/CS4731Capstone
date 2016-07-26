@@ -9,24 +9,19 @@ namespace Game {
   export class ChaseAndShoot extends State {
     public update(agent: Ship): State {
       if (!agent.target || agent.target.health <= 0) {
-        // select a new target
-        // TODO
         agent.target = null;
-        if (Battle.CurrentBattle != null) {
-          let enemies: Array<Game.Ship> = Battle.CurrentBattle.enemies;
-          let isAlly: boolean = agent.team === Battle.CurrentBattle.allies[0].team;
-          if (!isAlly) {
-            enemies = Battle.CurrentBattle.allies;
-          }
-          let enemiesSorted: Array<Game.Ship> = enemies.sort((e1, e2) => shipDist(e1, agent) - shipDist(e2, agent));
-          for (let enemy of enemiesSorted) {
-            if (enemy != null && enemy.health > 0) {
-              agent.target = enemy;
-              break;
+        if (Battle.CurrentBattle) {
+          // Find the closest enemy ship to us
+          let closestEnemy: Ship = null;
+          for (let otherShip of Battle.CurrentBattle.allShips) {
+            if (agent.team !== otherShip.team && shipDist(agent, otherShip) < shipDist(agent, closestEnemy)) {
+              closestEnemy = otherShip;
             }
           }
+          agent.target = closestEnemy;
         }
       }
+
       if (agent.target != null) {
         agent.turnTowards(agent.target);
         agent.thrust(agent.maxThrustSpeed);
