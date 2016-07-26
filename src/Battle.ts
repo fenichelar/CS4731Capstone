@@ -19,8 +19,7 @@ namespace Game {
     static FLEET_BOUNDS_PADDING: number = 20;
     static CurrentBattle: Battle = null;
     private fleetGenerator: FleetCompGenerator;
-    public enemies: Array<Game.Ship>;
-    public allies: Array<Game.Ship>;
+    public allShips: Array<Game.Ship>;
 
     preload() {
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
@@ -49,25 +48,22 @@ namespace Game {
         teamNumber: 2,
       };
       this.fleetGenerator = new FleetCompGenerator(this.game, params);
-      this.enemies = this.fleetGenerator.generateFleet();
+      let enemies: Array<Ship> = this.fleetGenerator.generateFleet();
 
       // Generate ally fleet
       params.teamNumber = 1;
       params.minX = Battle.FLEET_BOUNDS_PADDING;
       params.maxX = this.game.world.bounds.width / 2 - Battle.FLEET_BOUNDS_PADDING;
       this.fleetGenerator.setParams(params);
-      this.allies = this.fleetGenerator.generateFleet();
+      let allies: Array<Ship> = this.fleetGenerator.generateFleet();
+
+      this.allShips = allies.concat(enemies);
     }
 
     update() {
-      for (let enemy of this.enemies) {
-        if (enemy.health > 0) {
-          enemy.update();
-        }
-      }
-      for (let ally of this.allies) {
-        if (ally.health > 0) {
-          ally.update();
+      for (let ship of this.allShips) {
+        if (ship.health > 0) {
+          ship.update();
         }
       }
     }

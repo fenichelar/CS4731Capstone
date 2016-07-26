@@ -142,5 +142,19 @@ namespace Game {
       }*/
       this.sprite.body.rotation = angle;
     }
+
+    public die(): void {
+      super.die();
+
+      // Remove ourselves from the list of ships
+      if (Battle.CurrentBattle && Battle.CurrentBattle.allShips) {
+        for (let i: number = 0; i < Battle.CurrentBattle.allShips.length; i++) {
+          if (Battle.CurrentBattle.allShips[i] === this) {
+            Battle.CurrentBattle.allShips.splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
   }
 }
