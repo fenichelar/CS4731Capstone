@@ -28,6 +28,9 @@ namespace Game {
     // TODO: determine a good value for this.
     public fireDelay: number = 1;
     private lastFireTime: number;
+
+    public target: Ship;
+
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
       super(game, sprite, health);
       this.lastFireTime = game.time.totalElapsedSeconds();
