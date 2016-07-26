@@ -150,5 +150,16 @@ namespace Game {
         }
       }
     }
+
+    public selectTargetFrom(allShips: Array<Ship>): Ship {
+      // By default, pick the closest enemy ship
+      let closestEnemy: Ship = null;
+      for (let otherShip of allShips) {
+        if (this.team !== otherShip.team && shipDist(this, otherShip) < shipDist(this, closestEnemy)) {
+          closestEnemy = otherShip;
+        }
+      }
+      return closestEnemy;
+    }
   }
 }
