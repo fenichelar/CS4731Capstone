@@ -11,14 +11,7 @@ namespace Game {
       if (!agent.target || agent.target.health <= 0) {
         agent.target = null;
         if (Battle.CurrentBattle) {
-          // Find the closest enemy ship to us
-          let closestEnemy: Ship = null;
-          for (let otherShip of Battle.CurrentBattle.allShips) {
-            if (agent.team !== otherShip.team && shipDist(agent, otherShip) < shipDist(agent, closestEnemy)) {
-              closestEnemy = otherShip;
-            }
-          }
-          agent.target = closestEnemy;
+          agent.target = agent.selectTargetFrom(Battle.CurrentBattle.allShips);
         }
       }
 
