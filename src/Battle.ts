@@ -62,9 +62,7 @@ namespace Game {
 
     update() {
       for (let ship of this.allShips) {
-        if (ship.health > 0) {
-          ship.update();
-        }
+        ship.update();
       }
     }
   }
