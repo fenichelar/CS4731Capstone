@@ -13,6 +13,7 @@ namespace Game {
   export class PhysicsObject {
     // Collision groups - one for each team, with team 0 being obstacles etc.
     static collisionGroups: Array<Phaser.Physics.P2.CollisionGroup> = null;
+    static objects: Array<PhysicsObject> = null;
     static numCollisionGroups: number = 4;
 
     public body: IOurPhysicsBody; // not: Phaser.Physics.P2.Body; because we need to add a field
@@ -23,12 +24,15 @@ namespace Game {
       // TODO: add correct shape for object...
       // this.body.clearShapes();
 
-      // Initialize collision groups if needed
+      // Initialize groups if needed
       if (PhysicsObject.collisionGroups == null) {
         PhysicsObject.collisionGroups = new Array<Phaser.Physics.P2.CollisionGroup>();
         for (let i: number = 0; i < PhysicsObject.numCollisionGroups; i++) {
           PhysicsObject.collisionGroups.push(game.physics.p2.createCollisionGroup());
         }
+      }
+      if (PhysicsObject.objects == null) {
+        PhysicsObject.objects = new Array<PhysicsObject>();
       }
 
 
@@ -43,6 +47,7 @@ namespace Game {
 
       // store reference to self for access in collide
       this.body.physicsObject = this;
+      PhysicsObject.objects.push(this);
     }
 
     public update(): void {
@@ -84,6 +89,10 @@ namespace Game {
       }
       this.health = 0;
       this.sprite.destroy();
+      let i: number = PhysicsObject.objects.indexOf(this);
+      if (i !== -1) {
+        PhysicsObject.objects.splice(i, 1);
+      }
     }
   }
 
