@@ -9,8 +9,8 @@ namespace Game {
   export class Bullet extends PhysicsObject {
     static DefaultVelocity: number = 100;
     static DefaultHealth: number = 10;
-    public constructor(game: Game.Game, public health: number, public team: number, angle: number, x: number, y: number, velocity: number) {
-      super(game, teamToSprite(game, x, y, "bullet_", team, .5), health);
+    public constructor(game: Game.Game, public health: number, team: number, angle: number, x: number, y: number, velocity: number) {
+      super(game, teamToSprite(game, x, y, "bullet_", team, .5), health, team);
       this.body.rotation = angle;
       let angleR: number = this.body.rotation - (Math.PI / 2);
       this.body.velocity.x = Math.cos(angleR) * velocity;

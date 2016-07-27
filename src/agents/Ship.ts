@@ -31,8 +31,8 @@ namespace Game {
 
     public target: Ship;
 
-    public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
-      super(game, sprite, health);
+    public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, team: number) {
+      super(game, sprite, health, team);
       this.lastFireTime = game.time.totalElapsedSeconds();
 
       // Super constructor enables body
