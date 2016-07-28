@@ -16,7 +16,7 @@ namespace Game {
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
-    static FLEET_BOUNDS_PADDING: number = 20;
+    static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
     private fleetGenerator: FleetCompGenerator;
     public allShips: Array<Game.Ship>;
