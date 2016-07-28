@@ -57,24 +57,21 @@ namespace Game {
       // Interesting concept: Kill the thing with lower health,
       // and subtract that health from the other thing's health
       if (otherThing.health < this.health) {
-        this.health -= otherThing.health;
+        this.takeDamage(otherThing.health);
         otherThing.die();
-
-        // If we dropped below 0, die
-        if (this.health <= 0) {
-          this.die();
-        }
       } else if (this.health < otherThing.health) {
-        otherThing.health -= this.health;
+        otherThing.takeDamage(this.health);
         this.die();
-
-        // If we dropped below 0, die
-        if (otherThing.health <= 0) {
-          otherThing.die();
-        }
       } else {
         // If both healths are equal, kill both
         otherThing.die();
+        this.die();
+      }
+    }
+
+    public takeDamage(amount: number) {
+      this.health -= amount;
+      if (this.health <= 0) {
         this.die();
       }
     }
