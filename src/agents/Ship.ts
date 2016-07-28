@@ -22,7 +22,7 @@ namespace Game {
     // TODO: rotation speed's unit doesn't seem to be defined in the docs.
     // We need to determine reasonable values for this.
     // Also, ship types should probably rotate at different speeds.
-    public maxTurnSpeed: number = 20; // 2 * Math.PI / 180;
+    public maxTurnSpeed: number = 20;
     // TODO: determine a good value for this, should be in pixels/s
     public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
@@ -138,28 +138,13 @@ namespace Game {
         angle -= Math.PI * 2;
       }
       let angleDelta: number = angle - this.sprite.body.rotation;
-      let threshold: number = 0;
-      if (angleDelta > threshold) {
+      if (angleDelta > 0) {
         this.rotate(this.maxTurnSpeed);
-      } else if (angleDelta < -threshold) {
+      } else if (angleDelta < 0) {
         this.rotate(-this.maxTurnSpeed);
       } else {
         this.stopRotating();
-      }/*
-      let rotationAmount: number = angleDelta;
-      if (rotationAmount > this.maxTurnSpeed) {
-        rotationAmount = this.maxTurnSpeed;
-      } else if (rotationAmount < -this.maxTurnSpeed) {
-        rotationAmount = -this.maxTurnSpeed;
       }
-      let newAngle: number = this.body.rotation + rotationAmount;
-      if (newAngle < -Math.PI) {
-        newAngle += Math.PI * 2;
-      } else if (angle > Math.PI) {
-        newAngle -= Math.PI * 2;
-      }
-      this.body.rotation = newAngle;
-      */
     }
 
     public die(): void {
