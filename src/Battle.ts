@@ -21,6 +21,9 @@ namespace Game {
     private fleetGenerator: FleetCompGenerator;
     public allShips: Array<Game.Ship>;
 
+    public started: boolean = false;
+    private playButton: Phaser.Button;
+
     preload() {
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       Battle.CurrentBattle = this;
@@ -69,9 +72,24 @@ namespace Game {
       new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
       new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
       new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
+
+      // Set up a Play button to trigger the fight to start
+      this.playButton = this.game.add.button(this.game.world.centerX, this.game.world.centerY,
+        "play", this.start, this);
+      this.playButton.anchor.setTo(0.5, 0.5);
+      this.playButton.scale.setTo(4, 4);
+    }
+
+    private start(): void {
+      this.started = true;
+      this.playButton.destroy();
     }
 
     update() {
+      if (!this.started) {
+        return;
+      }
+
       if (PhysicsObject.objects) {
         for (let object of PhysicsObject.objects) {
           object.update();
