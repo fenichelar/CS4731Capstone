@@ -23,7 +23,7 @@ namespace Game {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
     static Mode: Mode = Mode.eve;
-    static FLEET_BOUNDS_PADDING: number = 20;
+    static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
     private fleetGenerator1: FleetCompGenerator;
     private fleetGenerator2: FleetCompGenerator;
