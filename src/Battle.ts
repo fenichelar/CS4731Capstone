@@ -61,7 +61,7 @@ namespace Game {
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.Difficulty,
+        resources: Battle.Difficulty * 0.75,
         teamNumber: 1,
       };
 
@@ -80,7 +80,7 @@ namespace Game {
         fleetGenerator.setParams(paramsTeam2);
         enemies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(Battle.Difficulty);
+        this.createShips(paramsTeam2);
       }
 
       // Generate ally fleet if applicable
@@ -89,7 +89,7 @@ namespace Game {
         fleetGenerator.setParams(paramsTeam1);
         allies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(Battle.Difficulty * 0.75);
+        this.createShips(paramsTeam1);
       }
 
       this.allShips = allies.concat(enemies);
@@ -109,7 +109,7 @@ namespace Game {
       this.playButton.scale.setTo(4, 4);
     }
 
-    private createShips(resources: number): void {
+    private createShips(params: IFleetCompParams): void {
       // ToDo
     }
 
