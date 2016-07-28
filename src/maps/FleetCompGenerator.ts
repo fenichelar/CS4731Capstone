@@ -114,24 +114,17 @@ namespace Game {
     private createGroup(centralShip: Ship): Array<Ship> {
       // If we can't afford this ship... oops. Do nothing
       if (this.resourcesRemaining < centralShip.getType().RESOURCE_COST) {
+        centralShip.die();
         return [];
       }
 
-      // If the ship is out of bounds, move it in bounds
-      let bufferFromEdge: number = 5;
-      if (centralShip.sprite.x - centralShip.sprite.offsetX < 0) {
-        centralShip.sprite.x = bufferFromEdge + centralShip.sprite.offsetX;
-      }
-      if (centralShip.sprite.y - centralShip.sprite.offsetY < 0) {
-        centralShip.sprite.y = bufferFromEdge + centralShip.sprite.offsetY;
-      }
-      if (centralShip.sprite.right > this.game.world.bounds.width) {
-        // right = x + width - offsetX, where desiredRight = worldWidth - buffer
-        centralShip.sprite.x = this.game.world.bounds.width - bufferFromEdge - centralShip.sprite.width + centralShip.sprite.offsetX;
-      }
-      if (centralShip.sprite.bottom > this.game.world.bounds.height) {
-        // bottom = y + height - offsetY, where desiredBottom = worldHeight - buffer
-        centralShip.sprite.y = this.game.world.bounds.height - bufferFromEdge - centralShip.sprite.height + centralShip.sprite.offsetY;
+      // Nuclear option: If the ship spawns out of bounds, just kill it
+      if (centralShip.sprite.x - centralShip.sprite.offsetX < 0 ||
+        centralShip.sprite.y - centralShip.sprite.offsetY < 0 ||
+        centralShip.sprite.right > this.game.world.bounds.width ||
+        centralShip.sprite.bottom > this.game.world.bounds.height) {
+        centralShip.die();
+        return [];
       }
 
       // If there's no support for this ship type, return just this ship
