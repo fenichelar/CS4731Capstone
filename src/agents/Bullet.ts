@@ -21,6 +21,7 @@ namespace Game {
     }
 
     update() {
+      // bullets don't spin, but otherwise have proper physics
       this.body.rotation = this.angle;
     }
   }
