@@ -22,11 +22,16 @@ namespace Game {
     // TODO: rotation speed's unit doesn't seem to be defined in the docs.
     // We need to determine reasonable values for this.
     // Also, ship types should probably rotate at different speeds.
-    public maxTurnSpeed: number = 20;
+    public maxTurnSpeed: number = 20; // 2 * Math.PI / 180;
     // TODO: determine a good value for this, should be in pixels/s
     public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
     public fireDelay: number = 1;
+    public roundsPerFire: number = 2;
+    public roundSpacing: number = 5;
+    public roundVelocity: number = Bullet.DefaultVelocity;
+    public roundHealth: number = Bullet.DefaultHealth;
+    public roundScale: number = Bullet.DefaultScale;
     private lastFireTime: number;
 
     public target: Ship;
@@ -103,10 +108,14 @@ namespace Game {
       let game: Game.Game = this.sprite.game;
       let now: number = game.time.totalElapsedSeconds();
       if ((now - this.lastFireTime) >= this.fireDelay) {
-        let angle: number = this.sprite.rotation - (Math.PI / 2);
-        let x: number = this.sprite.x;
-        let y: number = this.sprite.y;
-        new Bullet(game, Bullet.DefaultHealth, this.team, this.body.rotation, x, y, Bullet.DefaultVelocity);
+        let angle: number = this.sprite.rotation - Math.PI;
+        let offsetAmount: number = this.roundsPerFire * this.roundSpacing / 2;
+        for (let i = 0; i < this.roundsPerFire; i++) {
+          let offset: number = offsetAmount + this.roundSpacing * i;
+          let x: number = this.sprite.x + Math.cos(angle) * offset;
+          let y: number = this.sprite.y + Math.sin(angle) * offset;
+          new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
+        }
         this.lastFireTime = now;
       }
     }
@@ -123,17 +132,34 @@ namespace Game {
       let dx: number = other.sprite.x - this.sprite.x;
       let dy: number = other.sprite.y - this.sprite.y;
       let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
-      // TODO: use something like the code below to do physics based rotation
-      /*
+      if (angle < -Math.PI) {
+        angle += Math.PI * 2;
+      } else if (angle > Math.PI) {
+        angle -= Math.PI * 2;
+      }
       let angleDelta: number = angle - this.sprite.body.rotation;
-      if (angleDelta > 0) {
+      let threshold: number = 0;
+      if (angleDelta > threshold) {
         this.rotate(this.maxTurnSpeed);
-      } else if (angleDelta < 0) {
+      } else if (angleDelta < -threshold) {
         this.rotate(-this.maxTurnSpeed);
       } else {
         this.stopRotating();
-      }*/
-      this.body.rotation = angle;
+      }/*
+      let rotationAmount: number = angleDelta;
+      if (rotationAmount > this.maxTurnSpeed) {
+        rotationAmount = this.maxTurnSpeed;
+      } else if (rotationAmount < -this.maxTurnSpeed) {
+        rotationAmount = -this.maxTurnSpeed;
+      }
+      let newAngle: number = this.body.rotation + rotationAmount;
+      if (newAngle < -Math.PI) {
+        newAngle += Math.PI * 2;
+      } else if (angle > Math.PI) {
+        newAngle -= Math.PI * 2;
+      }
+      this.body.rotation = newAngle;
+      */
     }
 
     public die(): void {
