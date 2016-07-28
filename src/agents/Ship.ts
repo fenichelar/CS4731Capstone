@@ -124,21 +124,29 @@ namespace Game {
       this.body.setZeroRotation();
     }
 
-    public turnTowards(other: Ship) {
-      if (!this.sprite || !this.body || !other || !other.sprite || !other.body) {
+    public turnTowardsShip(other: Ship) {
+      if (!other || !other.sprite || !other.body) {
+        return;
+      }
+      this.turnTowards(other.sprite.x, other.sprite.y);
+    }
+    public turnTowards(targetX: number, targetY: number) {
+      if (!this.sprite || !this.body) {
         return;
       }
 
-      let dx: number = other.sprite.x - this.sprite.x;
-      let dy: number = other.sprite.y - this.sprite.y;
+      let dx: number = targetX - this.sprite.x;
+      let dy: number = targetY - this.sprite.y;
       // note: phaser's angles range from -180 to 180 (in degrees)
       // 0 is upwards, therefore we need to map our angles into this range
-      let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
+      let angle: number = fixAngle(Math.atan2(dy, dx) + (Math.PI / 2)); // in radians
+      /*
       if (angle < -Math.PI) {
         angle += Math.PI * 2;
       } else if (angle > Math.PI) {
         angle -= Math.PI * 2;
       }
+      */
       let angleDelta: number = angle - this.sprite.body.rotation;
       if (angleDelta > 0) {
         this.rotate(this.maxTurnSpeed);
