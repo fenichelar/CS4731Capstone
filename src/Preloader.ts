@@ -44,6 +44,8 @@ namespace Game {
       // Walls can be visible or invisible
       this.load.image("red-pixel", "assets/red-pixel.png");
       this.load.image("transparent-pixel", "assets/transparent-pixel.png");
+
+      this.load.image("play", "assets/play.png");
     }
 
     create() {
