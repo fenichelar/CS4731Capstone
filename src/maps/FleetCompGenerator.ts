@@ -114,6 +114,16 @@ namespace Game {
     private createGroup(centralShip: Ship): Array<Ship> {
       // If we can't afford this ship... oops. Do nothing
       if (this.resourcesRemaining < centralShip.getType().RESOURCE_COST) {
+        centralShip.die();
+        return [];
+      }
+
+      // Nuclear option: If the ship spawns out of bounds, just kill it
+      if (centralShip.sprite.x - centralShip.sprite.offsetX < 0 ||
+        centralShip.sprite.y - centralShip.sprite.offsetY < 0 ||
+        centralShip.sprite.right > this.game.world.bounds.width ||
+        centralShip.sprite.bottom > this.game.world.bounds.height) {
+        centralShip.die();
         return [];
       }
 

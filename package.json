@@ -14,7 +14,7 @@
     "build:ts": "tsc -p tsconfig.json",
     "build:js": "cp node_modules/phaser/build/phaser.min.js dist/js/phaser.min.js && cp node_modules/phaser/build/p2.min.js dist/js/p2.min.js && cp node_modules/phaser/build/pixi.min.js dist/js/pixi.min.js",
     "build": "npm run build:ts && npm run build:js",
-    "server": "node server.js",
+    "server": "npm run build && node server.js",
     "test": "npm run setup && npm run lint && npm run build"
   },
   "repository": {
