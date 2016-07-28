@@ -38,11 +38,14 @@ namespace Game {
       console.log("Using seed: %i.", Battle.Seed);
       this.game.rnd.sow([Battle.Seed]);
 
+      const WORLD_WIDTH: number = this.game.world.bounds.width;
+      const WORLD_HEIGHT: number = this.game.world.bounds.height;
+
       // Generate enemy fleet
       let params: IFleetCompParams = {
-        maxX: this.game.world.bounds.width - Battle.FLEET_BOUNDS_PADDING,
-        maxY: this.game.world.bounds.height - Battle.FLEET_BOUNDS_PADDING,
-        minX: this.game.world.bounds.width / 2 + Battle.FLEET_BOUNDS_PADDING,
+        maxX: WORLD_WIDTH - Battle.FLEET_BOUNDS_PADDING,
+        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
+        minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
         resources: Battle.Difficulty,
         teamNumber: 2,
@@ -53,11 +56,19 @@ namespace Game {
       // Generate ally fleet
       params.teamNumber = 1;
       params.minX = Battle.FLEET_BOUNDS_PADDING;
-      params.maxX = this.game.world.bounds.width / 2 - Battle.FLEET_BOUNDS_PADDING;
+      params.maxX = WORLD_WIDTH / 2 - Battle.FLEET_BOUNDS_PADDING;
       this.fleetGenerator.setParams(params);
       let allies: Array<Ship> = this.fleetGenerator.generateFleet();
 
       this.allShips = allies.concat(enemies);
+
+      // Build a wall and make the ships pay for it!
+      // For some reason horizontal walls only go half way across so need to double width
+      let wallWidth: number = 1;
+      new Wall(this.game, 0, 0, WORLD_WIDTH, wallWidth, false);  // Top
+      new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
+      new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
+      new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
     }
 
     update() {

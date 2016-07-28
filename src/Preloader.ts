@@ -40,6 +40,10 @@ namespace Game {
       this.load.image("bullet_2", "assets/Lasers/laserGreen05.png");
       // NOTE: orange lasers do not exist currently...
       // this.load.image("bullet_3", "assets/Lasers/laserOrange03.png");
+
+      // Walls can be visible or invisible
+      this.load.image("red-pixel", "assets/red-pixel.png");
+      this.load.image("transparent-pixel", "assets/transparent-pixel.png");
     }
 
     create() {
