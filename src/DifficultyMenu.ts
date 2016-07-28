@@ -6,7 +6,7 @@
  */
 
 namespace Game {
-  export class MainMenu extends Phaser.State {
+  export class DifficultyMenu extends Phaser.State {
 
     create() {
       makeTitle(this.game);
@@ -15,9 +15,9 @@ namespace Game {
       this.addDifficultyText("Play Hard", Difficulty.Hard, this.game.world.centerX, this.game.world.centerY + 340);
     }
 
-    startBattle(diff: Difficulty) {
-      Battle.Difficulty = diff;
-      this.game.state.start("Battle");
+    setMode(diff: Difficulty) {
+      ModeMenu.Difficulty = diff;
+      this.game.state.start("ModeMenu");
     }
 
     addDifficultyText(prompt: string, diff: Difficulty, x: number, y: number) {
@@ -30,7 +30,7 @@ namespace Game {
       promptText.anchor.setTo(0.5, 0.5);
       promptText.inputEnabled = true;
       promptText.events.onInputDown.addOnce(function() {
-        this.startBattle(diff);
+        this.setMode(diff);
       }, this);
     }
 
