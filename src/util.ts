@@ -6,7 +6,7 @@
  */
 
 namespace Game {
-  export const name: string = "Game Title";
+  export const name: string = "Too Many Lasers";
   export function makeTitle(game: Game.Game): Phaser.Text {
     const titleX: number = game.world.centerX;
     const titleY: number = game.world.centerY - game.height * 0.25;
