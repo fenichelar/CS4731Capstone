@@ -16,13 +16,6 @@ namespace Game {
     public update(agent: Ship): State {
       // select a new target when necessary
       if (!agent.target || agent.target.health <= 0) {
-        agent.target = null;
-        if (Battle.CurrentBattle) {
-          agent.target = agent.selectTargetFrom(Battle.CurrentBattle.allShips);
-        }
-      }
-      // don't do anything else if there are no targets
-      if (!agent.target || !agent.target.sprite || !agent.target.body) {
         return new Idle();
       }
       // otherwise we want to try to stay behind towards the target.
