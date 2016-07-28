@@ -7,10 +7,16 @@
 
 namespace Game {
   export class Cruiser extends Ship {
-    public static CRUISER_BASE_HEALTH: number = 250;
+    public static CRUISER_BASE_HEALTH: number = 500;
+    public static CRUISER_MASS: number = 250;
+    public static CRUISER_TURN_SPEED: number = 30;
+    public static CRUISER_THRUST_SPEED: number = Cruiser.CRUISER_MASS * 50;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "cruiser_", team, .75), new ChaseAndShoot(), Cruiser.CRUISER_BASE_HEALTH, team);
+      this.body.mass = Cruiser.CRUISER_MASS;
+      this.maxTurnSpeed = Cruiser.CRUISER_TURN_SPEED;
+      this.maxThrustSpeed = Cruiser.CRUISER_THRUST_SPEED;
       // these will need tweaking.
       // cruisers fire more rounds, slower, larger, with more health/damage
       this.fireDelay = 1.5;

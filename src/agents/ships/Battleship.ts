@@ -7,10 +7,16 @@
 
 namespace Game {
   export class Battleship extends Ship {
-    public static BATTLESHIP_BASE_HEALTH: number = 1000;
+    public static BATTLESHIP_BASE_HEALTH: number = 1400;
+    public static BATTLESHIP_MASS: number = 500;
+    public static BATTLESHIP_TURN_SPEED: number = 20;
+    public static BATTLESHIP_THRUST_SPEED: number = Battleship.BATTLESHIP_MASS * 30;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "battleship_", team, 1), new ChaseAndShoot(), Battleship.BATTLESHIP_BASE_HEALTH, team);
+      this.body.mass = Battleship.BATTLESHIP_MASS;
+      this.maxTurnSpeed = Battleship.BATTLESHIP_TURN_SPEED;
+      this.maxThrustSpeed = Battleship.BATTLESHIP_THRUST_SPEED;
       // these will need tweaking.
       // battleships fire lots of rounds, slower, larger, with more health/damage
       this.fireDelay = 1.5;
