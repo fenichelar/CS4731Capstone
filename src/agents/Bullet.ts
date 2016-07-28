@@ -10,6 +10,8 @@ namespace Game {
     static DefaultVelocity: number = 100;
     static DefaultHealth: number = 4;
     static DefaultScale: number = .5;
+    public lifespan: number = 1; // 1 second
+    public spawnTime: number;
     public constructor(game: Game.Game, public health: number, team: number, private angle: number, x: number, y: number, velocity: number, public scale: number) {
       super(game, teamToSprite(game, x, y, "bullet_", team, scale), health, team);
       this.body.rotation = angle;
@@ -18,10 +20,17 @@ namespace Game {
       this.body.velocity.y = Math.sin(angleR) * velocity;
       this.body.thrust(velocity);
       this.body.mass = 0.001;
+      this.spawnTime = game.time.totalElapsedSeconds();
     }
 
     update() {
+      let now: number = this.sprite.game.time.totalElapsedSeconds();
+      // bullets don't spin, but otherwise have proper physics
       this.body.rotation = this.angle;
+      // bullets die after they've lived out their lifespawn
+      if ((now - this.spawnTime) > this.lifespan) {
+        this.die();
+      }
     }
   }
 }
