@@ -11,6 +11,7 @@ namespace Game {
     public static CRUISER_MASS: number = 250;
     public static CRUISER_TURN_SPEED: number = 30;
     public static CRUISER_THRUST_SPEED: number = Cruiser.CRUISER_MASS * 50;
+    private fireSound: any;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "cruiser_", team, .75), new Idle(), Cruiser.CRUISER_BASE_HEALTH, team);
@@ -25,10 +26,16 @@ namespace Game {
       this.roundHealth *= 1.5;
       this.roundScale = 0.65;
       this.roundVelocity *= 0.8;
+      // pew pew
+      this.fireSound = game.add.audio("cruiser_fire");
     }
 
     public getType(): IShipSubclass {
       return Cruiser;
+    }
+
+    public playFireSound() {
+      this.fireSound.play();
     }
 
     ///// Static stuff used by fleet generation /////

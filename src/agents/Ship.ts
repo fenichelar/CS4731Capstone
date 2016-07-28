@@ -117,7 +117,12 @@ namespace Game {
           new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
         }
         this.lastFireTime = now;
+        this.playFireSound();
       }
+    }
+
+    public playFireSound() {
+      // override me
     }
 
     public stopRotating() {

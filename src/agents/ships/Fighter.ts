@@ -11,16 +11,23 @@ namespace Game {
     public static FIGHTER_MASS: number = 50;
     public static FIGHTER_TURN_SPEED: number = 160;
     public static FIGHTER_THRUST_SPEED: number = Fighter.FIGHTER_MASS * 350;
+    private fireSound: any;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "fighter_", team, .5), new Idle(), Fighter.FIGHTER_BASE_HEALTH, team);
       this.body.mass = Fighter.FIGHTER_MASS;
       this.maxTurnSpeed = Fighter.FIGHTER_TURN_SPEED;
       this.maxThrustSpeed = Fighter.FIGHTER_THRUST_SPEED;
+      // pew pew
+      this.fireSound = game.add.audio("fighter_fire");
     }
 
     public getType(): IShipSubclass {
       return Fighter;
+    }
+
+    public playFireSound() {
+      this.fireSound.play();
     }
 
     ///// Static stuff used by fleet generation /////
