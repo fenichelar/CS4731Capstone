@@ -125,15 +125,15 @@ namespace Game {
     }
 
     private angleTo(targetX: number, targetY: number): number {
-      let dx: number = targetX - this.sprite.x;
-      let dy: number = targetY - this.sprite.y;
+      let dx: number = targetX - this.sprite.centerX;
+      let dy: number = targetY - this.sprite.centerY;
       // note: phaser's angles range from -180 to 180 (in degrees)
       // 0 is upwards, therefore we need to map our angles into this range
       return fixAngle(Math.atan2(dy, dx) + (Math.PI / 2)); // in radians
     }
 
     private targetInFiringArc(): boolean {
-      let angleToTarget: number = this.angleTo(this.target.sprite.x, this.target.sprite.y);
+      let angleToTarget: number = this.angleTo(this.target.sprite.centerX, this.target.sprite.centerY);
       let angleDelta: number = angleToTarget - this.body.rotation;
 
       return (Math.abs(angleDelta) < this.firingArc);
@@ -173,7 +173,7 @@ namespace Game {
       if (!other || !other.sprite || !other.body) {
         return;
       }
-      this.turnTowards(other.sprite.x, other.sprite.y);
+      this.turnTowards(other.sprite.centerX, other.sprite.centerY);
     }
     public turnTowards(targetX: number, targetY: number) {
       if (!this.sprite || !this.body) {
@@ -181,14 +181,15 @@ namespace Game {
       }
 
       let angle: number = this.angleTo(targetX, targetY);
-      /*
-      if (angle < -Math.PI) {
+      let angleDelta: number = angle - this.sprite.body.rotation;
+
+      if (angleDelta < -Math.PI) {
         angle += Math.PI * 2;
-      } else if (angle > Math.PI) {
+      }
+      if (angleDelta > Math.PI) {
         angle -= Math.PI * 2;
       }
-      */
-      let angleDelta: number = angle - this.sprite.body.rotation;
+
       if (angleDelta > 0) {
         this.rotate(this.maxTurnSpeed);
       } else if (angleDelta < 0) {
