@@ -11,37 +11,43 @@ namespace Game {
   }
 
   export class PhysicsObject {
-    // Collision groups - one for ships and one for everything else
-    static shipsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
-    static nonShipsCollisionGroup: Phaser.Physics.P2.CollisionGroup = null;
+    // Collision groups - one for each team, with team 0 being obstacles etc.
+    static collisionGroups: Array<Phaser.Physics.P2.CollisionGroup> = null;
+    static objects: Array<PhysicsObject> = null;
+    static numCollisionGroups: number = 4;
 
     public body: IOurPhysicsBody; // not: Phaser.Physics.P2.Body; because we need to add a field
 
-    public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number) {
+    public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number, public team: number) {
       game.physics.p2.enableBody(sprite, false);
       this.body = sprite.body;
       // TODO: add correct shape for object...
       // this.body.clearShapes();
 
-      // Initialize collision groups if needed
-      if (PhysicsObject.shipsCollisionGroup == null) {
-        PhysicsObject.shipsCollisionGroup = game.physics.p2.createCollisionGroup();
+      // Initialize groups if needed
+      if (PhysicsObject.collisionGroups == null) {
+        PhysicsObject.collisionGroups = new Array<Phaser.Physics.P2.CollisionGroup>();
+        for (let i: number = 0; i < PhysicsObject.numCollisionGroups; i++) {
+          PhysicsObject.collisionGroups.push(game.physics.p2.createCollisionGroup());
+        }
       }
-      if (PhysicsObject.nonShipsCollisionGroup == null) {
-        PhysicsObject.nonShipsCollisionGroup = game.physics.p2.createCollisionGroup();
-      }
-
-      // Ships don't collide with other ships
-      if (this instanceof Ship) {
-        this.body.setCollisionGroup(PhysicsObject.shipsCollisionGroup);
-      } else {
-        this.body.setCollisionGroup(PhysicsObject.nonShipsCollisionGroup);
-        this.body.collides(PhysicsObject.shipsCollisionGroup, collideBodies, null);
+      if (PhysicsObject.objects == null) {
+        PhysicsObject.objects = new Array<PhysicsObject>();
       }
 
-      // Everything collides with non-ships
-      this.body.collides(PhysicsObject.nonShipsCollisionGroup, collideBodies, null);
+
+      // set collisions
+      this.body.setCollisionGroup(PhysicsObject.collisionGroups[this.team]);
+      for (let i: number = 0; i < PhysicsObject.numCollisionGroups; i++) {
+        // everything collides with obstacles, and every other group besides their own.
+        if (i === 0 || i !== this.team) {
+          this.body.collides(PhysicsObject.collisionGroups[i], collideBodies, null);
+        }
+      }
+
+      // store reference to self for access in collide
       this.body.physicsObject = this;
+      PhysicsObject.objects.push(this);
     }
 
     public update(): void {
@@ -83,6 +89,10 @@ namespace Game {
       }
       this.health = 0;
       this.sprite.destroy();
+      let i: number = PhysicsObject.objects.indexOf(this);
+      if (i !== -1) {
+        PhysicsObject.objects.splice(i, 1);
+      }
     }
   }
 

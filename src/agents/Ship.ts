@@ -27,12 +27,17 @@ namespace Game {
     public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
     public fireDelay: number = 1;
+    public roundsPerFire: number = 2;
+    public roundSpacing: number = 5;
+    public roundVelocity: number = Bullet.DefaultVelocity;
+    public roundHealth: number = Bullet.DefaultHealth;
+    public roundScale: number = Bullet.DefaultScale;
     private lastFireTime: number;
 
     public target: Ship;
 
-    public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, public team: number) {
-      super(game, sprite, health);
+    public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, team: number) {
+      super(game, sprite, health, team);
       this.lastFireTime = game.time.totalElapsedSeconds();
 
       // Super constructor enables body
@@ -103,11 +108,14 @@ namespace Game {
       let game: Game.Game = this.sprite.game;
       let now: number = game.time.totalElapsedSeconds();
       if ((now - this.lastFireTime) >= this.fireDelay) {
-        let offsetScale: number = Math.max(this.sprite.width, this.sprite.height);
-        let angle: number = this.sprite.rotation - (Math.PI / 2);
-        let x: number = this.sprite.x + Math.cos(angle) * offsetScale;
-        let y: number = this.sprite.y + Math.sin(angle) * offsetScale;
-        new Bullet(game, Bullet.DefaultHealth, this.team, this.body.rotation, x, y, Bullet.DefaultVelocity);
+        let angle: number = this.sprite.rotation - Math.PI;
+        let offsetAmount: number = this.roundsPerFire * this.roundSpacing / 2;
+        for (let i = 0; i < this.roundsPerFire; i++) {
+          let offset: number = offsetAmount + this.roundSpacing * i;
+          let x: number = this.sprite.x + Math.cos(angle) * offset;
+          let y: number = this.sprite.y + Math.sin(angle) * offset;
+          new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
+        }
         this.lastFireTime = now;
       }
     }
@@ -123,9 +131,14 @@ namespace Game {
 
       let dx: number = other.sprite.x - this.sprite.x;
       let dy: number = other.sprite.y - this.sprite.y;
+      // note: phaser's angles range from -180 to 180 (in degrees)
+      // 0 is upwards, therefore we need to map our angles into this range
       let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
-      // TODO: use something like the code below to do physics based rotation
-      /*
+      if (angle < -Math.PI) {
+        angle += Math.PI * 2;
+      } else if (angle > Math.PI) {
+        angle -= Math.PI * 2;
+      }
       let angleDelta: number = angle - this.sprite.body.rotation;
       if (angleDelta > 0) {
         this.rotate(this.maxTurnSpeed);
@@ -133,8 +146,7 @@ namespace Game {
         this.rotate(-this.maxTurnSpeed);
       } else {
         this.stopRotating();
-      }*/
-      this.body.rotation = angle;
+      }
     }
 
     public die(): void {

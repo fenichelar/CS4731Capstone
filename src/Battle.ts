@@ -72,8 +72,10 @@ namespace Game {
     }
 
     update() {
-      for (let ship of this.allShips) {
-        ship.update();
+      if (PhysicsObject.objects) {
+        for (let object of PhysicsObject.objects) {
+          object.update();
+        }
       }
     }
   }
