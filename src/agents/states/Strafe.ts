@@ -20,7 +20,7 @@ namespace Game {
       // if the target is not in fighting range, look for a target that is
       if (shipDist(agent, agent.target) > Dogfight.DOGFIGHT_RANGE) {
         let alternateTarget: Ship = agent.selectTargetFrom(Battle.CurrentBattle.allShips);
-        if (shipDist(agent, alternateTarget) < Dogfight.DOGFIGHT_RANGE) {
+        if (Dogfight.inDogfightRange(agent, alternateTarget)) {
           agent.target = alternateTarget;
         }
         nextState = new Dogfight();
@@ -39,11 +39,18 @@ namespace Game {
       let targetAngle: number = Math.atan2(dy, dx) - Math.PI / 2;
       let targetX: number = agent.target.sprite.x + Math.cos(targetAngle) * offset;
       let targetY: number = agent.target.sprite.y + Math.sin(targetAngle) * offset;
-      agent.turnTowards(targetX, targetY);
+      // if our strafing location isn't within the map, just point and shoot,
+      // and switch to dogfighting
+      if (outsideMap(agent.sprite.game, targetX, targetY)) {
+        agent.turnTowardsShip(agent.target);
+        nextState = new Dogfight();
+      } else {
+        agent.turnTowards(targetX, targetY);
+      }
       agent.thrust(agent.maxThrustSpeed);
       agent.fire();
       // continue strafing until we are within range.
-      if (targetDistance < Dogfight.DOGFIGHT_RANGE) {
+      if (Dogfight.inDogfightRange(agent, agent.target)) {
         nextState = new Dogfight();
       }
       return nextState;

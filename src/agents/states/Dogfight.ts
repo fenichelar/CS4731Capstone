@@ -8,7 +8,11 @@
 namespace Game {
   // In this state, agents attempt to path to an enemy while avoiding combat
   export class Dogfight extends State {
-    public static DOGFIGHT_RANGE: number = 150;
+    public static DOGFIGHT_RANGE: number = 100;
+
+    public static inDogfightRange(agent: Ship, target: Ship): boolean {
+      return shipDistMinusRadius(agent, target) <= Dogfight.DOGFIGHT_RANGE;
+    }
     public update(agent: Ship): State {
       // select a new target when necessary
       if (!agent.target || agent.target.health <= 0) {
@@ -22,19 +26,31 @@ namespace Game {
         return new Idle();
       }
       // otherwise we want to try to stay behind towards the target.
-      /*
-      let offset: number = agent.target.width * .5;
-      let targetAngle: number = 0; // agent.target.body.rotation;
+      let offset: number = Math.max(agent.target.sprite.width, agent.target.sprite.height) * 1.5;
+      let thrustAmount: number = agent.maxThrustSpeed * .66;
+      let currentAngle: number = agent.body.rotation;
+      let targetAngle: number = agent.target.body.rotation;
+      // if we're roughly behind the target, we just want to point and shoot,
+      // otherwise we want to move around it.
+      if (Math.abs(fixAngle(currentAngle - targetAngle)) <  Math.PI / 3) {
+        offset = 0;
+        // when too close, thrust back
+        if (shipDistMinusRadius(agent, agent.target) < Dogfight.DOGFIGHT_RANGE / 4) {
+          thrustAmount = - agent.maxThrustSpeed * .25;
+        } else {
+          thrustAmount = agent.maxThrustSpeed * .25;
+        }
+       } else {
+         targetAngle += Math.PI * 3 / 2;
+       }
       let targetX: number = agent.target.body.x + Math.cos(targetAngle) * offset;
       let targetY: number = agent.target.body.y + Math.sin(targetAngle) * offset;
       agent.turnTowards(targetX, targetY);
-      */
       agent.turnTowardsShip(agent.target);
-      agent.thrust(agent.maxThrustSpeed * .4);
+      agent.thrust(thrustAmount);
       agent.fire();
-      let targetDistance = shipDist(agent, agent.target);
       // continue doghfigting until we are out of range.
-      if (targetDistance > Dogfight.DOGFIGHT_RANGE) {
+      if (!Dogfight.inDogfightRange(agent, agent.target)) {
         return new Strafe();
       } else {
         return this;

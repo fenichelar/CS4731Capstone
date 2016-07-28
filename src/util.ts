@@ -45,6 +45,16 @@ namespace Game {
     return Math.sqrt(dx ** 2 + dy ** 2);
   }
 
+  export function shipDistMinusRadius(agent: Ship, target: Ship): number {
+    let dist: number = shipDist(agent, target);
+    if (dist === Number.POSITIVE_INFINITY) {
+      return Number.POSITIVE_INFINITY;
+    }
+    dist -= Math.max(agent.sprite.width, agent.sprite.height);
+    dist -= Math.max(target.sprite.width, target.sprite.height);
+    return dist;
+  }
+
   export function fixAngle(radians: number): number {
     let fixed: number = radians;
     while (fixed < -Math.PI) {
@@ -54,5 +64,18 @@ namespace Game {
       fixed -= Math.PI * 2;
     }
     return fixed;
+  }
+
+  export function outsideMap(game: Game.Game, x: number, y: number): boolean {
+    if (x < 0 || y < 0) {
+      return true;
+    }
+    if (x > game.world.bounds.width) {
+      return true;
+    }
+    if (y > game.world.bounds.height) {
+      return true;
+    }
+    return false;
   }
 }
