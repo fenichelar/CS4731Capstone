@@ -117,7 +117,9 @@ namespace Game {
           new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
         }
         this.lastFireTime = now;
-        this.playFireSound();
+        // disabled for now because the current iteration is too obnoxious
+        // TODO: re-visit audio
+        // this.playFireSound();
       }
     }
 
