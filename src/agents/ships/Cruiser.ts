@@ -11,6 +11,14 @@ namespace Game {
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "cruiser_", team, .75), new ChaseAndShoot(), Cruiser.CRUISER_BASE_HEALTH, team);
+      // these will need tweaking.
+      // cruisers fire more rounds, slower, larger, with more health/damage
+      this.fireDelay = 1.5;
+      this.roundsPerFire = 3;
+      this.roundSpacing = 6;
+      this.roundHealth *= 1.5;
+      this.roundScale = 0.65;
+      this.roundVelocity *= 0.8;
     }
 
     public getType(): IShipSubclass {
@@ -22,11 +30,11 @@ namespace Game {
     public static RESOURCE_COST: number = 25;
 
     public static getSupportGroups(): Array<ISupportGroup> {
-          return [{
-            maxDistance: 200,
-            maxNumber: 10,
-            shipType: Fighter
-          }];
-        }
-      }
+      return [{
+        maxDistance: 200,
+        maxNumber: 10,
+        shipType: Fighter
+      }];
+    }
+  }
 }

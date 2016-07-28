@@ -8,7 +8,7 @@
 namespace Game {
   export class Bullet extends PhysicsObject {
     static DefaultVelocity: number = 100;
-    static DefaultHealth: number = 4;
+    static DefaultHealth: number = 8;
     static DefaultScale: number = .5;
     public lifespan: number = 1; // 1 second
     public spawnTime: number;

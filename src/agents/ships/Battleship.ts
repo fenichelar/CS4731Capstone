@@ -11,6 +11,14 @@ namespace Game {
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "battleship_", team, 1), new ChaseAndShoot(), Battleship.BATTLESHIP_BASE_HEALTH, team);
+      // these will need tweaking.
+      // battleships fire lots of rounds, slower, larger, with more health/damage
+      this.fireDelay = 1.5;
+      this.roundsPerFire = 5;
+      this.roundSpacing = 4;
+      this.roundHealth *= 2;
+      this.roundScale = 0.75;
+      this.roundVelocity *= 0.75;
     }
 
     public getType(): IShipSubclass {
