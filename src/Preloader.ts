@@ -41,6 +41,17 @@ namespace Game {
       // NOTE: orange lasers do not exist currently...
       // this.load.image("bullet_4", "assets/Lasers/laserOrange03.png");
 
+      // Load damage overlays
+      this.load.image("fighter_damage_1", "assets/Damage/playerShip1_damage1.png");
+      this.load.image("fighter_damage_2", "assets/Damage/playerShip1_damage2.png");
+      this.load.image("fighter_damage_3", "assets/Damage/playerShip1_damage3.png");
+      this.load.image("cruiser_damage_1", "assets/Damage/playerShip2_damage1.png");
+      this.load.image("cruiser_damage_2", "assets/Damage/playerShip2_damage2.png");
+      this.load.image("cruiser_damage_3", "assets/Damage/playerShip2_damage3.png");
+      this.load.image("battleship_damage_1", "assets/Damage/playerShip3_damage1.png");
+      this.load.image("battleship_damage_2", "assets/Damage/playerShip3_damage2.png");
+      this.load.image("battleship_damage_3", "assets/Damage/playerShip3_damage3.png");
+
       // Walls can be visible or invisible
       this.load.image("red-pixel", "assets/red-pixel.png");
       this.load.image("transparent-pixel", "assets/transparent-pixel.png");

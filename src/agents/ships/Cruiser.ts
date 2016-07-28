@@ -31,6 +31,10 @@ namespace Game {
       return Cruiser;
     }
 
+    public showDamage(): void {
+      // Override this
+    }
+
     ///// Static stuff used by fleet generation /////
 
     public static RESOURCE_COST: number = 25;

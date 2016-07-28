@@ -31,6 +31,10 @@ namespace Game {
       return Battleship;
     }
 
+    public showDamage(): void {
+      // Override this
+    }
+
     ///// Static stuff used by fleet generation /////
 
     public static RESOURCE_COST: number = 100;

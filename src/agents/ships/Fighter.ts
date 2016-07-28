@@ -23,6 +23,10 @@ namespace Game {
       return Fighter;
     }
 
+    public showDamage(): void {
+      // Override this
+    }
+
     ///// Static stuff used by fleet generation /////
 
     public static RESOURCE_COST: number = 5;
