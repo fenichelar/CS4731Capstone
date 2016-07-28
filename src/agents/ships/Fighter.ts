@@ -29,6 +29,20 @@ namespace Game {
       return Fighter;
     }
 
+    public showDamage(damage: number): void {
+      let damageSprite: Phaser.Sprite;
+      if (damage === 1) {
+        damageSprite = this.sprite.game.make.sprite(0, 0, "fighter_damage_1");
+      } else if (damage === 2) {
+        damageSprite = this.sprite.game.make.sprite(0, 0, "fighter_damage_2");
+      } else if (damage === 3) {
+        damageSprite = this.sprite.game.make.sprite(0, 0, "fighter_damage_3");
+      }
+
+      this.sprite.addChild(damageSprite);
+      damageSprite.anchor.setTo(0.5, 0.5);
+    }
+
     public playFireSound() {
       this.fireSound.play();
     }

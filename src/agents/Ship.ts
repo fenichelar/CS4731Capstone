@@ -38,8 +38,12 @@ namespace Game {
 
     public target: Ship;
 
+    public baseHealth: number;
+    public damageLevel: number = 0;
+
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, team: number) {
       super(game, sprite, health, team);
+      this.baseHealth = health;
       this.lastFireTime = game.time.totalElapsedSeconds();
 
       // Super constructor enables body
@@ -57,6 +61,17 @@ namespace Game {
       this.body.angle = angle;
     }
 
+    public showDamage(damage: number): void {
+      // Override this
+    }
+
+    public setDamage(damage: number): void {
+      if (damage !== this.damageLevel) {
+        this.damageLevel = damage;
+        this.showDamage(damage);
+      }
+    }
+
     public update(): void {
       // Do stuff
       this.state = this.state.update(this);
@@ -64,6 +79,12 @@ namespace Game {
       // Make sure we don't stay alive when we shouldn't
       if (this.health <= 0) {
         this.die();
+      } else if (this.health < .25 * this.baseHealth) {
+        this.setDamage(3);
+      } else if (this.health < .50 * this.baseHealth) {
+        this.setDamage(2);
+      } else if (this.health < .75 * this.baseHealth) {
+        this.setDamage(1);
       }
     }
 
