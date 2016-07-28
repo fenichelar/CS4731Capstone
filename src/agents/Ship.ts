@@ -37,6 +37,7 @@ namespace Game {
     public target: Ship;
 
     public baseHealth: number;
+    public damageLevel: number = 0;
 
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, team: number) {
       super(game, sprite, health, team);
@@ -62,6 +63,13 @@ namespace Game {
       // Override this
     }
 
+    public setDamage(damage: number): void {
+      if (damage !== this.damageLevel) {
+        this.damageLevel = damage;
+        this.showDamage(damage);
+      }
+    }
+
     public update(): void {
       // Do stuff
       this.state = this.state.update(this);
@@ -70,11 +78,11 @@ namespace Game {
       if (this.health <= 0) {
         this.die();
       } else if (this.health < .25 * this.baseHealth) {
-        this.showDamage(3);
+        this.setDamage(3);
       } else if (this.health < .50 * this.baseHealth) {
-        this.showDamage(2);
+        this.setDamage(2);
       } else if (this.health < .75 * this.baseHealth) {
-        this.showDamage(1);
+        this.setDamage(1);
       }
     }
 
