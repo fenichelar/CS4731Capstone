@@ -31,8 +31,14 @@ namespace Game {
       return Cruiser;
     }
 
-    public showDamage(): void {
-      // Override this
+    public showDamage(damage: number): void {
+      if (damage === 1) {
+        this.sprite.addChild(this.sprite.game.make.sprite(0, 0, "cruiser_damage_1"));
+      } else if (damage === 2) {
+        this.sprite.addChild(this.sprite.game.make.sprite(0, 0, "cruiser_damage_2"));
+      } else if (damage === 3) {
+        this.sprite.addChild(this.sprite.game.make.sprite(0, 0, "cruiser_damage_3"));
+      }
     }
 
     ///// Static stuff used by fleet generation /////

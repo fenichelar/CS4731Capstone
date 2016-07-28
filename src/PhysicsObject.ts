@@ -20,7 +20,8 @@ namespace Game {
 
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number, public team: number) {
       game.physics.p2.enableBody(sprite, false);
-      this.body = sprite.body;
+      this.sprite = sprite;
+      this.body = this.sprite.body;
       // TODO: add correct shape for object...
       // this.body.clearShapes();
 

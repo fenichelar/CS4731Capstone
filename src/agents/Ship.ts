@@ -58,7 +58,7 @@ namespace Game {
       this.body.angle = angle;
     }
 
-    public showDamage(): void {
+    public showDamage(damage: number): void {
       // Override this
     }
 
