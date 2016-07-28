@@ -9,7 +9,7 @@ namespace Game {
   export class Wall extends PhysicsObject {
     // This is basically a dummy object
     public constructor(game: Game.Game, x: number, y: number, width: number, height: number, visible: boolean) {
-      super(game, Wall.createWallSprite(game, x, y, width, height, visible), 0);
+      super(game, Wall.createWallSprite(game, x, y, width, height, visible), 0, 0);
       this.body.kinematic = true;
     }
 
