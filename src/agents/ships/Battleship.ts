@@ -28,6 +28,9 @@ namespace Game {
       this.roundVelocity *= 0.75;
       // pew pew
       this.fireSound = game.add.audio("battleship_fire");
+
+      this.firingArc = Math.PI / 8;
+      this.firingRange = 1000;
     }
 
     public getType(): IShipSubclass {

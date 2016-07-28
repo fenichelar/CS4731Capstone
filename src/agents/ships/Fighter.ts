@@ -20,6 +20,9 @@ namespace Game {
       this.maxThrustSpeed = Fighter.FIGHTER_THRUST_SPEED;
       // pew pew
       this.fireSound = game.add.audio("fighter_fire");
+
+      this.firingArc = Math.PI / 8;
+      this.firingRange = 250;
     }
 
     public getType(): IShipSubclass {
