@@ -13,12 +13,18 @@ namespace Game {
     Hard = 5000
   }
 
+  export enum Mode {
+    pvp = 1,
+    pve = 2,
+    eve = 3
+  }
+
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
     static Difficulty: Difficulty = Difficulty.Easy;
+    static Mode: Mode = Mode.eve;
     static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
-    private fleetGenerator: FleetCompGenerator;
     public allShips: Array<Game.Ship>;
 
     public started: boolean = false;
@@ -44,8 +50,19 @@ namespace Game {
       const WORLD_WIDTH: number = this.game.world.bounds.width;
       const WORLD_HEIGHT: number = this.game.world.bounds.height;
 
-      // Generate enemy fleet
-      let params: IFleetCompParams = {
+      // Fleet generator and parameters per team
+      let fleetGenerator: FleetCompGenerator = new FleetCompGenerator(this.game);
+
+      let paramsTeam1: IFleetCompParams = {
+        maxX: WORLD_WIDTH / 2 - Battle.FLEET_BOUNDS_PADDING,
+        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
+        minX: Battle.FLEET_BOUNDS_PADDING,
+        minY: Battle.FLEET_BOUNDS_PADDING,
+        resources: Battle.Difficulty,
+        teamNumber: 1,
+      };
+
+      let paramsTeam2: IFleetCompParams = {
         maxX: WORLD_WIDTH - Battle.FLEET_BOUNDS_PADDING,
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
@@ -53,15 +70,24 @@ namespace Game {
         resources: Battle.Difficulty,
         teamNumber: 2,
       };
-      this.fleetGenerator = new FleetCompGenerator(this.game, params);
-      let enemies: Array<Ship> = this.fleetGenerator.generateFleet();
 
-      // Generate ally fleet
-      params.teamNumber = 1;
-      params.minX = Battle.FLEET_BOUNDS_PADDING;
-      params.maxX = WORLD_WIDTH / 2 - Battle.FLEET_BOUNDS_PADDING;
-      this.fleetGenerator.setParams(params);
-      let allies: Array<Ship> = this.fleetGenerator.generateFleet();
+      // Generate enemy fleet if applicable
+      let enemies: Array<Ship> = new Array<Ship>();
+      if (Battle.Mode > 1) {
+        fleetGenerator.setParams(paramsTeam2);
+        enemies = fleetGenerator.generateFleet();
+      } else {
+        // ToDo Manually create enemy ships here
+      }
+
+      // Generate ally fleet if applicable
+      let allies: Array<Ship> = new Array<Ship>();
+      if (Battle.Mode > 2) {
+        fleetGenerator.setParams(paramsTeam1);
+        allies = fleetGenerator.generateFleet();
+      } else {
+        // ToDo Manually create ally ships here
+      }
 
       this.allShips = allies.concat(enemies);
 

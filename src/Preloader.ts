@@ -63,11 +63,11 @@ namespace Game {
       this.preloadBar.scale.setTo(4, 4);
       pressKey.anchor.setTo(0.5, 0.5);
 
-      this.input.onDown.addOnce(this.startMainMenu, this);
+      this.input.onDown.addOnce(this.startDifficultyMenu, this);
     }
 
-    startMainMenu() {
-      this.game.state.start("MainMenu");
+    startDifficultyMenu() {
+      this.game.state.start("DifficultyMenu");
     }
 
   }
