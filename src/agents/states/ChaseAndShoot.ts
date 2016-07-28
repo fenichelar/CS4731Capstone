@@ -16,7 +16,7 @@ namespace Game {
       }
 
       if (agent.target != null) {
-        agent.turnTowards(agent.target);
+        agent.turnTowardsShip(agent.target);
         agent.thrust(agent.maxThrustSpeed);
         agent.fire();
       }

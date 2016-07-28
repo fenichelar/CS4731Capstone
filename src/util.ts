@@ -44,4 +44,15 @@ namespace Game {
     let dy: number = s1Y - s2Y;
     return Math.sqrt(dx ** 2 + dy ** 2);
   }
+
+  export function fixAngle(radians: number): number {
+    let fixed: number = radians;
+    while (fixed < -Math.PI) {
+      fixed += Math.PI * 2;
+    }
+    while (fixed > Math.PI) {
+      fixed -= Math.PI * 2;
+    }
+    return fixed;
+  }
 }

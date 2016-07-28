@@ -13,7 +13,7 @@ namespace Game {
     public static FIGHTER_THRUST_SPEED: number = Fighter.FIGHTER_MASS * 350;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToSprite(game, x, y, "fighter_", team, .5), new ChaseAndShoot(), Fighter.FIGHTER_BASE_HEALTH, team);
+      super(game, teamToSprite(game, x, y, "fighter_", team, .5), new Idle(), Fighter.FIGHTER_BASE_HEALTH, team);
       this.body.mass = Fighter.FIGHTER_MASS;
       this.maxTurnSpeed = Fighter.FIGHTER_TURN_SPEED;
       this.maxThrustSpeed = Fighter.FIGHTER_THRUST_SPEED;
