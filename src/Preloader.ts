@@ -57,6 +57,11 @@ namespace Game {
       this.load.image("transparent-pixel", "assets/transparent-pixel.png");
 
       this.load.image("play", "assets/play.png");
+
+      // load laser sounds
+      this.load.audio("fighter_fire", "assets/Sounds/SoundsCrate-SciFi-Laser4.mp3");
+      this.load.audio("cruiser_fire", "assets/Sounds/SoundsCrate-SciFi-Laser3.mp3");
+      this.load.audio("battleship_fire", "assets/Sounds/SoundsCrate-SciFi-Laser5.mp3");
     }
 
     create() {

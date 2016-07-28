@@ -11,9 +11,10 @@ namespace Game {
     public static CRUISER_MASS: number = 250;
     public static CRUISER_TURN_SPEED: number = 30;
     public static CRUISER_THRUST_SPEED: number = Cruiser.CRUISER_MASS * 50;
+    private fireSound: any;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
-      super(game, teamToSprite(game, x, y, "cruiser_", team, .75), new ChaseAndShoot(), Cruiser.CRUISER_BASE_HEALTH, team);
+      super(game, teamToSprite(game, x, y, "cruiser_", team, .75), new Idle(), Cruiser.CRUISER_BASE_HEALTH, team);
       this.body.mass = Cruiser.CRUISER_MASS;
       this.maxTurnSpeed = Cruiser.CRUISER_TURN_SPEED;
       this.maxThrustSpeed = Cruiser.CRUISER_THRUST_SPEED;
@@ -25,6 +26,11 @@ namespace Game {
       this.roundHealth *= 1.5;
       this.roundScale = 0.65;
       this.roundVelocity *= 0.8;
+      // pew pew
+      this.fireSound = game.add.audio("cruiser_fire");
+
+      this.firingArc = Math.PI / 8;
+      this.firingRange = 500;
     }
 
     public getType(): IShipSubclass {
@@ -43,6 +49,10 @@ namespace Game {
 
       this.sprite.addChild(damageSprite);
       damageSprite.anchor.setTo(0.5, 0.5);
+    }
+
+    public playFireSound() {
+      this.fireSound.play();
     }
 
     ///// Static stuff used by fleet generation /////

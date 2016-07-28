@@ -6,7 +6,7 @@
  */
 
 namespace Game {
-  export const name: string = "Game Title";
+  export const name: string = "Too Many Lasers";
   export function makeTitle(game: Game.Game): Phaser.Text {
     const titleX: number = game.world.centerX;
     const titleY: number = game.world.centerY - game.height * 0.25;
@@ -43,5 +43,39 @@ namespace Game {
     let dx: number = s1X - s2X;
     let dy: number = s1Y - s2Y;
     return Math.sqrt(dx ** 2 + dy ** 2);
+  }
+
+  export function shipDistMinusRadius(agent: Ship, target: Ship): number {
+    let dist: number = shipDist(agent, target);
+    if (dist === Number.POSITIVE_INFINITY) {
+      return Number.POSITIVE_INFINITY;
+    }
+    dist -= Math.max(agent.sprite.width, agent.sprite.height);
+    dist -= Math.max(target.sprite.width, target.sprite.height);
+    return dist;
+  }
+
+  export function fixAngle(radians: number): number {
+    let fixed: number = radians;
+    while (fixed < -Math.PI) {
+      fixed += Math.PI * 2;
+    }
+    while (fixed > Math.PI) {
+      fixed -= Math.PI * 2;
+    }
+    return fixed;
+  }
+
+  export function outsideMap(game: Game.Game, x: number, y: number): boolean {
+    if (x < 0 || y < 0) {
+      return true;
+    }
+    if (x > game.world.bounds.width) {
+      return true;
+    }
+    if (y > game.world.bounds.height) {
+      return true;
+    }
+    return false;
   }
 }

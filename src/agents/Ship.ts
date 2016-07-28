@@ -33,6 +33,8 @@ namespace Game {
     public roundHealth: number = Bullet.DefaultHealth;
     public roundScale: number = Bullet.DefaultScale;
     private lastFireTime: number;
+    public firingArc: number;  // Radians
+    public firingRange: number;
 
     public target: Ship;
 
@@ -122,15 +124,30 @@ namespace Game {
       this.body.thrust(speed);
     }
 
+    private angleTo(targetX: number, targetY: number): number {
+      let dx: number = targetX - this.sprite.x;
+      let dy: number = targetY - this.sprite.y;
+      // note: phaser's angles range from -180 to 180 (in degrees)
+      // 0 is upwards, therefore we need to map our angles into this range
+      return fixAngle(Math.atan2(dy, dx) + (Math.PI / 2)); // in radians
+    }
+
+    private targetInFiringArc(): boolean {
+      let angleToTarget: number = this.angleTo(this.target.sprite.x, this.target.sprite.y);
+      let angleDelta: number = angleToTarget - this.body.rotation;
+
+      return (Math.abs(angleDelta) < this.firingArc);
+    }
+
     public fire() {
       if (!this.sprite || !this.body) {
         return;
       }
       let game: Game.Game = this.sprite.game;
       let now: number = game.time.totalElapsedSeconds();
-      if ((now - this.lastFireTime) >= this.fireDelay) {
+      if ((now - this.lastFireTime) >= this.fireDelay && this.targetInFiringArc() && shipDist(this, this.target) <= this.firingRange) {
         let angle: number = this.sprite.rotation - Math.PI;
-        let offsetAmount: number = this.roundsPerFire * this.roundSpacing / 2;
+        let offsetAmount: number = -this.roundsPerFire * this.roundSpacing / 2;
         for (let i = 0; i < this.roundsPerFire; i++) {
           let offset: number = offsetAmount + this.roundSpacing * i;
           let x: number = this.sprite.x + Math.cos(angle) * offset;
@@ -138,28 +155,39 @@ namespace Game {
           new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
         }
         this.lastFireTime = now;
+        // disabled for now because the current iteration is too obnoxious
+        // TODO: re-visit audio
+        // this.playFireSound();
       }
+    }
+
+    public playFireSound() {
+      // override me
     }
 
     public stopRotating() {
       this.body.setZeroRotation();
     }
 
-    public turnTowards(other: Ship) {
-      if (!this.sprite || !this.body || !other || !other.sprite || !other.body) {
+    public turnTowardsShip(other: Ship) {
+      if (!other || !other.sprite || !other.body) {
+        return;
+      }
+      this.turnTowards(other.sprite.x, other.sprite.y);
+    }
+    public turnTowards(targetX: number, targetY: number) {
+      if (!this.sprite || !this.body) {
         return;
       }
 
-      let dx: number = other.sprite.x - this.sprite.x;
-      let dy: number = other.sprite.y - this.sprite.y;
-      // note: phaser's angles range from -180 to 180 (in degrees)
-      // 0 is upwards, therefore we need to map our angles into this range
-      let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
+      let angle: number = this.angleTo(targetX, targetY);
+      /*
       if (angle < -Math.PI) {
         angle += Math.PI * 2;
       } else if (angle > Math.PI) {
         angle -= Math.PI * 2;
       }
+      */
       let angleDelta: number = angle - this.sprite.body.rotation;
       if (angleDelta > 0) {
         this.rotate(this.maxTurnSpeed);
