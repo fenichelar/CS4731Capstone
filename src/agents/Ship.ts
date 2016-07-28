@@ -131,6 +131,8 @@ namespace Game {
 
       let dx: number = other.sprite.x - this.sprite.x;
       let dy: number = other.sprite.y - this.sprite.y;
+      // note: phaser's angles range from -180 to 180 (in degrees)
+      // 0 is upwards, therefore we need to map our angles into this range
       let angle: number = Math.atan2(dy, dx) + (Math.PI / 2); // in radians
       if (angle < -Math.PI) {
         angle += Math.PI * 2;
