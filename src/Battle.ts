@@ -80,7 +80,7 @@ namespace Game {
         fleetGenerator.setParams(paramsTeam2);
         enemies = fleetGenerator.generateFleet();
       } else {
-        // ToDo Manually create enemy ships here
+        this.createShips(Battle.Difficulty);
       }
 
       // Generate ally fleet if applicable
@@ -89,7 +89,7 @@ namespace Game {
         fleetGenerator.setParams(paramsTeam1);
         allies = fleetGenerator.generateFleet();
       } else {
-        // ToDo Manually create ally ships here
+        this.createShips(Battle.Difficulty * 0.75);
       }
 
       this.allShips = allies.concat(enemies);
@@ -107,6 +107,10 @@ namespace Game {
         "play", this.start, this);
       this.playButton.anchor.setTo(0.5, 0.5);
       this.playButton.scale.setTo(4, 4);
+    }
+
+    private createShips(resources: number): void {
+      // ToDo
     }
 
     private start(): void {
