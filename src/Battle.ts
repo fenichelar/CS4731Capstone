@@ -36,7 +36,9 @@ namespace Game {
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);
-      // Seed RNG with known seed.
+      // pick a random seed
+      Battle.Seed = this.game.rnd.integer();
+      // if console is open, prompt the user to select a seed
       let element = new Image();
       Object.defineProperty(element, "id", {
         get: function() {
@@ -45,6 +47,7 @@ namespace Game {
       });
       console.log("%cTesting if console is open.", element);
       console.log("Using seed: %i.", Battle.Seed);
+      // Seed RNG with selected seed.
       this.game.rnd.sow([Battle.Seed]);
 
       const WORLD_WIDTH: number = this.game.world.bounds.width;
