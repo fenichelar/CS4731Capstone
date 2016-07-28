@@ -109,7 +109,7 @@ namespace Game {
       let now: number = game.time.totalElapsedSeconds();
       if ((now - this.lastFireTime) >= this.fireDelay) {
         let angle: number = this.sprite.rotation - Math.PI;
-        let offsetAmount: number = this.roundsPerFire * this.roundSpacing / 2;
+        let offsetAmount: number = -this.roundsPerFire * this.roundSpacing / 2;
         for (let i = 0; i < this.roundsPerFire; i++) {
           let offset: number = offsetAmount + this.roundSpacing * i;
           let x: number = this.sprite.x + Math.cos(angle) * offset;
