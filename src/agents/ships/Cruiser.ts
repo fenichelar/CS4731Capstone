@@ -25,6 +25,9 @@ namespace Game {
       this.roundHealth *= 1.5;
       this.roundScale = 0.65;
       this.roundVelocity *= 0.8;
+
+      this.firingArc = Math.PI / 8;
+      this.firingRange = 500;
     }
 
     public getType(): IShipSubclass {

@@ -17,6 +17,9 @@ namespace Game {
       this.body.mass = Fighter.FIGHTER_MASS;
       this.maxTurnSpeed = Fighter.FIGHTER_TURN_SPEED;
       this.maxThrustSpeed = Fighter.FIGHTER_THRUST_SPEED;
+
+      this.firingArc = Math.PI / 8;
+      this.firingRange = 250;
     }
 
     public getType(): IShipSubclass {
