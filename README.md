@@ -20,4 +20,5 @@ This is the capstone project for CS 4731 at Georgia Tech, by [@fenichelar](https
 * `npm run server` (if you don't have a static web server)
 
 ## Contributions
-Thanks to Kenney Vleugels [(www.kenney.nl)](http://www.kenney.nl) for the assets!
+Thanks to Kenney Vleugels [(www.kenney.nl)](http://www.kenney.nl) for the art assets!
+Also thanks to [(soundscrate.com)](http://soundscrate.com/) for the sound effects!

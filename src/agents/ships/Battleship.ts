@@ -11,6 +11,7 @@ namespace Game {
     public static BATTLESHIP_MASS: number = 500;
     public static BATTLESHIP_TURN_SPEED: number = 20;
     public static BATTLESHIP_THRUST_SPEED: number = Battleship.BATTLESHIP_MASS * 30;
+    private fireSound: any;
 
     public constructor(game: Game.Game, x: number, y: number, public team: number) {
       super(game, teamToSprite(game, x, y, "battleship_", team, 1), new ChaseAndShoot(), Battleship.BATTLESHIP_BASE_HEALTH, team);
@@ -25,10 +26,16 @@ namespace Game {
       this.roundHealth *= 2;
       this.roundScale = 0.75;
       this.roundVelocity *= 0.75;
+      // pew pew
+      this.fireSound = game.add.audio("battleship_fire");
     }
 
     public getType(): IShipSubclass {
       return Battleship;
+    }
+
+    public playFireSound() {
+      this.fireSound.play();
     }
 
     ///// Static stuff used by fleet generation /////
