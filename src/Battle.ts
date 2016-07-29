@@ -8,9 +8,9 @@
 namespace Game {
   // these map to the enemy resource amount in FleetCompGenerator
   export enum Difficulty {
-    Easy = 500,
-    Medium = 1500,
-    Hard = 5000
+    Easy = 0.8,
+    Medium = 0.6,
+    Hard = 0.4
   }
 
   export enum Mode {
@@ -21,10 +21,13 @@ namespace Game {
 
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
+    static EnemyShipCount: number = 2000;
     static Difficulty: Difficulty = Difficulty.Easy;
     static Mode: Mode = Mode.eve;
     static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
+    public enemies: Array<Game.Ship>;
+    public allies: Array<Game.Ship>;
     public allShips: Array<Game.Ship>;
 
     public started: boolean = false;
@@ -61,7 +64,7 @@ namespace Game {
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.Difficulty * 0.75,
+        resources: Battle.EnemyShipCount * Battle.Difficulty,
         teamNumber: 1,
       };
 
@@ -70,29 +73,27 @@ namespace Game {
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.Difficulty,
+        resources: Battle.EnemyShipCount,
         teamNumber: 2,
       };
 
       // Generate enemy fleet if applicable
-      let enemies: Array<Ship> = new Array<Ship>();
       if (Battle.Mode > 1) {
         fleetGenerator.setParams(paramsTeam2);
-        enemies = fleetGenerator.generateFleet();
+        this.enemies = fleetGenerator.generateFleet();
       } else {
         this.createShips(paramsTeam2);
       }
 
       // Generate ally fleet if applicable
-      let allies: Array<Ship> = new Array<Ship>();
       if (Battle.Mode > 2) {
         fleetGenerator.setParams(paramsTeam1);
-        allies = fleetGenerator.generateFleet();
+        this.allies = fleetGenerator.generateFleet();
       } else {
         this.createShips(paramsTeam1);
       }
 
-      this.allShips = allies.concat(enemies);
+      this.allShips = this.allies.concat(this.enemies);
 
       // Build a wall and make the ships pay for it!
       // For some reason horizontal walls only go half way across so need to double width
@@ -118,9 +119,38 @@ namespace Game {
       this.playButton.destroy();
     }
 
+    addEndingText(prompt: string, x: number, y: number) {
+      let promptText: Phaser.Text = this.game.add.text(x, y, prompt, {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "bold 100px Titillium Web"
+      });
+      promptText.anchor.setTo(0.5, 0.5);
+      promptText.inputEnabled = true;
+      promptText.events.onInputDown.addOnce(function() {
+        this.started = false;
+        this.game.state.start("DifficultyMenu");
+      }, this);
+    }
+
     update() {
       if (!this.started) {
         return;
+      }
+
+      let enemiesAlive: boolean = this.enemies.some(function(ship: Ship) {
+        return ship.health > 0;
+      });
+
+      let alliesAlive: boolean = this.allies.some(function(ship: Ship) {
+        return ship.health > 0;
+      });
+
+      if (!enemiesAlive) {
+        this.addEndingText("You won! Play again?", this.game.world.centerX, this.game.world.centerY - 60);
+      } else if (!alliesAlive) {
+        this.addEndingText("You lost! Play again?", this.game.world.centerX, this.game.world.centerY + 60);
       }
 
       if (PhysicsObject.objects) {
