@@ -13,12 +13,37 @@ namespace Game {
     public started: boolean = false;
     private playButton: Phaser.Button;
 
-    init(allShips: Array<Ship>) {
-      this.allShips = allShips;
+    init(ships: Array<Ship>) {
+      // Re-add background
+      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+
+      // Reconstruct the ships
+      PhysicsObject.clearObjects();
+
+      this.allShips = new Array<Ship>();
+      for (let aShip of ships) {
+        let shipType: IShipSubclass = aShip.getType();
+        let shipX: number = aShip.sprite.x;
+        let shipY: number = aShip.sprite.y;
+        let shipTeam: number = aShip.team;
+        this.allShips.push(new shipType(this.game, shipX, shipY, shipTeam));
+      }
+
       Battle.CurrentBattle = this;
     }
 
     preload() {
+      const WORLD_WIDTH: number = this.game.world.bounds.width;
+      const WORLD_HEIGHT: number = this.game.world.bounds.height;
+
+      // Build a wall and make the ships pay for it!
+      // For some reason horizontal walls only go half way across so need to double width
+      let wallWidth: number = 1;
+      new Wall(this.game, 0, 0, WORLD_WIDTH, wallWidth, false);  // Top
+      new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
+      new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
+      new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
+
       // Set up a Play button to trigger the fight to start
       this.playButton = this.game.add.button(this.game.world.centerX, this.game.world.centerY,
         "play", this.start, this);

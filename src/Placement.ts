@@ -40,6 +40,7 @@ namespace Game {
     private costText: Array<Phaser.Text> = new Array<Phaser.Text>();
     private keyCodes: Array<Phaser.Key>;
     private graphics: Phaser.Graphics;
+    private shouldUpdate: boolean = false;
 
     preload(): void {
       PhysicsObject.clearObjects();
@@ -105,14 +106,6 @@ namespace Game {
       }
 
       this.initializePlacementUI();
-
-      // Build a wall and make the ships pay for it!
-      // For some reason horizontal walls only go half way across so need to double width
-      let wallWidth: number = 1;
-      new Wall(this.game, 0, 0, WORLD_WIDTH, wallWidth, false);  // Top
-      new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
-      new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
-      new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
     }
 
     private initializePlacementUI(): void {
@@ -149,6 +142,8 @@ namespace Game {
         this.game.input.keyboard.addKey(Phaser.Keyboard.TWO),
         this.game.input.keyboard.addKey(Phaser.Keyboard.THREE)
       ];
+
+      this.shouldUpdate = true;
     }
 
     addShipCostText(text: string, x: number, y: number): Phaser.Text {
@@ -198,6 +193,10 @@ namespace Game {
       this.graphics.drawRect(x, y, width, height);
 
       this.resourcesText.setText("Resources Remaining: " + resourcesAvailable);
+
+      if (!this.shouldUpdate) {
+        return;
+      }
 
       let mouseX: number = this.game.input.mousePointer.x;
       let mouseY: number = this.game.input.mousePointer.y;
