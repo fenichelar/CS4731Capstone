@@ -90,7 +90,7 @@ namespace Game {
       }
 
       if (!enemiesAlive || !alliesAlive) {
-        this.addEndingText("Click to play again.", this.game.world.centerX, this.game.world.centerY + 100);
+        this.addEndingText("Click here play again.", this.game.world.centerX, this.game.world.centerY + 100);
         this.started = false;
         return;
       }

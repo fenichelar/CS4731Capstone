@@ -39,6 +39,8 @@ namespace Game {
     private instructionsText: Phaser.Text;
     private costText: Array<Phaser.Text> = new Array<Phaser.Text>();
     private keyCodes: Array<Phaser.Key>;
+    private confirmKey: Phaser.Key;
+    private confirmKeyState: boolean;
     private keyStates: Array<boolean>;
     private graphics: Phaser.Graphics;
     private shouldUpdate: boolean = false;
@@ -98,7 +100,7 @@ namespace Game {
       this.enemiesResourcesAvailable = this.fleetGenerator.params.resources;
       if (Placement.Mode > 1) {
         this.enemies = this.fleetGenerator.generateFleet();
-        this.enemiesResourcesAvailable = 0;
+        this.enemiesResourcesAvailable = -1;
       }
 
       // Generate ally fleet if applicable
@@ -106,27 +108,28 @@ namespace Game {
       this.alliesResourcesAvailable = this.fleetGenerator.params.resources;
       if (Placement.Mode > 2) {
         this.allies = this.fleetGenerator.generateFleet();
-        this.alliesResourcesAvailable = 0;
+        this.alliesResourcesAvailable = -1;
       }
 
       this.initializePlacementUI();
       this.game.input.onDown.add(this.click, this);
+      this.confirmKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+      this.confirmKeyState = true;
     }
 
     private initializePlacementUI(): void {
-      this.resourcesText = this.game.add.text(10, 10, "Resources Remaining: ", {
-        boundsAlignH: "center",
-        boundsAlignV: "middle",
-        fill: "#ff0",
-        font: "bold 40px Titillium Web"
-      });
-
-      // Instructions
-      this.instructionsText = this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
+      this.instructionsText = this.game.add.text(10, 10, "Press (key) to place a ship, click a ship to remove it, enter to accept placement.", {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
         font: "bold 35px Titillium Web"
+      });
+
+      this.resourcesText = this.game.add.text(10, 60, "Resources Remaining: ", {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "bold 40px Titillium Web"
       });
 
       this.costText = new Array<Phaser.Text>();
@@ -167,7 +170,7 @@ namespace Game {
     }
 
     click(pointer: Phaser.Pointer): void {
-      if (this.enemiesResourcesAvailable) {
+      if (this.enemiesResourcesAvailable > -1) {
         let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
         for (let enemy of this.enemies) {
           sprites.push(enemy.sprite);
@@ -183,7 +186,7 @@ namespace Game {
             }
           }
         }
-      } else if (this.alliesResourcesAvailable) {
+      } else if (this.alliesResourcesAvailable > -1) {
         let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
         for (let ally of this.allies) {
           sprites.push(ally.sprite);
@@ -212,13 +215,25 @@ namespace Game {
 
       this.graphics.destroy();
 
-      if (this.enemiesResourcesAvailable) {
+      if (this.confirmKey.isDown && this.confirmKeyState) {
+        if (this.enemiesResourcesAvailable > -1) {
+          this.enemiesResourcesAvailable = -1;
+          this.confirmKeyState = false;
+        } else if (this.alliesResourcesAvailable > -1) {
+          this.alliesResourcesAvailable = -1;
+          this.confirmKeyState = false;
+        }
+      } else if (!this.confirmKey.isDown) {
+        this.confirmKeyState = true;
+      }
+
+      if (this.enemiesResourcesAvailable > -1) {
         x = this.enemiesParams.minX;
         y = this.enemiesParams.minY;
         width = this.enemiesParams.maxX - this.enemiesParams.minX;
         height = this.enemiesParams.maxY - this.enemiesParams.minY;
         resourcesAvailable = this.enemiesResourcesAvailable;
-      } else if (this.alliesResourcesAvailable) {
+      } else if (this.alliesResourcesAvailable > -1) {
         x = this.alliesParams.minX;
         y = this.alliesParams.minY;
         width = this.alliesParams.maxX - this.alliesParams.minX;
@@ -261,10 +276,10 @@ namespace Game {
         } else if (this.keyStates[i] && this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
           this.keyStates[i] = false;
           resourcesAvailable -= types[i].RESOURCE_COST;
-          if (this.enemiesResourcesAvailable) {
+          if (this.enemiesResourcesAvailable > -1) {
             this.enemiesResourcesAvailable = resourcesAvailable;
             this.enemies.push(new types[i](this.game, mouseX, mouseY, this.enemiesParams.teamNumber));
-          } else if (this.alliesResourcesAvailable) {
+          } else if (this.alliesResourcesAvailable > -1) {
             this.alliesResourcesAvailable = resourcesAvailable;
             this.allies.push(new types[i](this.game, mouseX, mouseY, this.alliesParams.teamNumber));
           }
