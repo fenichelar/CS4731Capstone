@@ -169,13 +169,20 @@ namespace Game {
         for (let enemy of this.enemies) {
           sprites.push(enemy.sprite);
         }
+
         let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
         let index: number = -1;
         if (bodies.length > 0) {
-          index = sprites.indexOf(bodies[0].sprite);
+          for (let i: number = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].body.id === bodies[0].id) {
+              index = i;
+              break;
+            }
+          }
         }
         if (index > -1) {
           this.enemiesResourcesAvailable += this.enemies[index].getType().RESOURCE_COST;
+          this.enemies[index].die();
           this.enemies.splice(index, 1);
         }
       } else if (this.alliesResourcesAvailable) {
@@ -186,10 +193,16 @@ namespace Game {
         let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
         let index: number = -1;
         if (bodies.length > 0) {
-          index = sprites.indexOf(bodies[0].sprite);
+          for (let i: number = 0; i < this.allies.length; i++) {
+            if (this.allies[i].body.id === bodies[0].id) {
+              index = i;
+              break;
+            }
+          }
         }
         if (index > -1) {
           this.alliesResourcesAvailable += this.allies[index].getType().RESOURCE_COST;
+          this.allies[index].die();
           this.allies.splice(index, 1);
         }
       }
