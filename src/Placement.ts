@@ -203,10 +203,6 @@ namespace Game {
 
       let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
 
-      if (resourcesAvailable < types[types.length - 1].RESOURCE_COST) {
-        this.game.state.start("Battle", false, false, this.allShips);
-      }
-
       for (let i: number = 0; i < this.keyCodes.length; i++) {
         if (this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
           resourcesAvailable -= types[i].RESOURCE_COST;
