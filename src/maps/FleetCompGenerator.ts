@@ -40,9 +40,6 @@ namespace Game {
           this.typesOrderedByCost.push(aType);
         }
       }
-
-      console.log(this.groupCosts);
-      console.log(this.typesOrderedByCost);
     }
 
     private getDefaultParams(): IFleetCompParams {
