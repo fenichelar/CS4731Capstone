@@ -20,7 +20,7 @@ namespace Game {
       this.maxThrustSpeed = Battleship.BATTLESHIP_THRUST_SPEED;
       // these will need tweaking.
       // battleships fire lots of rounds, slower, larger, with more health/damage
-      this.fireDelay = 1.5;
+      this.fireDelay = 90;
       this.roundsPerFire = 5;
       this.roundSpacing = 4;
       this.roundHealth *= 2;
