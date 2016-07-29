@@ -46,7 +46,6 @@ namespace Game {
     private shouldUpdate: boolean = false;
 
     preload(): void {
-      addSoundToggle(this.game);
       PhysicsObject.clearObjects();
       this.enemies = new Array<Ship>();
       this.allies = new Array<Ship>();
@@ -55,6 +54,7 @@ namespace Game {
       this.graphics = this.game.add.graphics(0, 0);
 
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+      addSoundToggle(this.game);
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);

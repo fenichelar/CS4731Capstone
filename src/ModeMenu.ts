@@ -10,8 +10,8 @@ namespace Game {
     static Difficulty: Difficulty;
 
     create() {
-      addSoundToggle(this.game);
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+      addSoundToggle(this.game);
       makeTitle(this.game);
       this.addModeText("Player vs Player", Mode.pvp, this.game.world.centerX, this.game.world.centerY - 60);
       this.addModeText("Player vs AI", Mode.pve, this.game.world.centerX, this.game.world.centerY + 140);

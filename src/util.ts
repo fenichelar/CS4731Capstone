@@ -80,12 +80,28 @@ namespace Game {
   }
 
   export function addSoundToggle(game: Game.Game) {
+    let soundText: Phaser.Text = game.add.text(game.width - 10, 10, "Press M to disable sound.", {
+      boundsAlignH: "center",
+      boundsAlignV: "middle",
+      fill: "#ff0",
+      font: "bold 20px Titillium Web"
+    });
+
+    soundText.anchor.x = 1;
+
+    if (game.sound.mute) {
+      soundText.setText("Press M to enable sound.");
+    }
+
     game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(function() {
       if (game.sound.mute) {
         game.sound.mute = false;
+        soundText.setText("Press M to disable sound.");
       } else {
         game.sound.mute = true;
+        soundText.setText("Press M to enable sound.");
       }
     }, this);
   }
+
 }

@@ -16,6 +16,7 @@ namespace Game {
     init(ships: Array<Ship>) {
       // Re-add background
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+      addSoundToggle(this.game);
 
       // Reconstruct the ships
       PhysicsObject.clearObjects();
@@ -33,7 +34,6 @@ namespace Game {
     }
 
     preload() {
-      addSoundToggle(this.game);
       const WORLD_WIDTH: number = this.game.world.bounds.width;
       const WORLD_HEIGHT: number = this.game.world.bounds.height;
 
