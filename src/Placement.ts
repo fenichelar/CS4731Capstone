@@ -31,12 +31,20 @@ namespace Game {
     public allShips: Array<Game.Ship>;
 
     private fleetGenerator: FleetCompGenerator;
-    private resourcesAvailable: number;
+    private enemiesParams: IFleetCompParams;
+    private alliesParams: IFleetCompParams;
+    private enemiesResourcesAvailable: number;
+    private alliesResourcesAvailable: number;
     private resourcesText: Phaser.Text;
+    private instructionsText: Phaser.Text;
+    private costText: Array<Phaser.Text> = new Array<Phaser.Text>();
     private keyCodes: Array<Phaser.Key>;
+    private graphics: Phaser.Graphics;
 
     preload(): void {
       PhysicsObject.clearObjects();
+
+      this.graphics = this.game.add.graphics(0, 0);
 
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       // enable p2 physics
@@ -62,7 +70,7 @@ namespace Game {
       // Fleet generator and parameters per team
       this.fleetGenerator = new FleetCompGenerator(this.game);
 
-      let paramsTeam1: IFleetCompParams = {
+      this.alliesParams = {
         maxX: WORLD_WIDTH / 2 - Placement.FLEET_BOUNDS_PADDING,
         maxY: WORLD_HEIGHT - Placement.FLEET_BOUNDS_PADDING,
         minX: Placement.FLEET_BOUNDS_PADDING,
@@ -71,7 +79,7 @@ namespace Game {
         teamNumber: 1,
       };
 
-      let paramsTeam2: IFleetCompParams = {
+      this.enemiesParams = {
         maxX: WORLD_WIDTH - Placement.FLEET_BOUNDS_PADDING,
         maxY: WORLD_HEIGHT - Placement.FLEET_BOUNDS_PADDING,
         minX: WORLD_WIDTH / 2 + Placement.FLEET_BOUNDS_PADDING,
@@ -81,22 +89,22 @@ namespace Game {
       };
 
       // Generate enemy fleet if applicable
-      this.fleetGenerator.setParams(paramsTeam2);
+      this.fleetGenerator.setParams(this.enemiesParams);
+      this.enemiesResourcesAvailable = this.fleetGenerator.params.resources;
       if (Placement.Mode > 1) {
         this.enemies = this.fleetGenerator.generateFleet();
-      } else {
-        // this.enemies = this.createShips(fleetGenerator);
+        this.enemiesResourcesAvailable = 0;
       }
 
       // Generate ally fleet if applicable
-      this.fleetGenerator.setParams(paramsTeam1);
+      this.fleetGenerator.setParams(this.alliesParams);
+      this.alliesResourcesAvailable = this.fleetGenerator.params.resources;
       if (Placement.Mode > 2) {
         this.allies = this.fleetGenerator.generateFleet();
-      } else {
-        // this.allies = this.createShips(fleetGenerator);
+        this.alliesResourcesAvailable = 0;
       }
 
-      this.allShips = this.allies.concat(this.enemies);
+      this.initializePlacementUI();
 
       // Build a wall and make the ships pay for it!
       // For some reason horizontal walls only go half way across so need to double width
@@ -105,24 +113,10 @@ namespace Game {
       new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
       new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
       new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
-
-      switch (Placement.Mode) {
-        case Mode.pvp:
-          break;
-        case Mode.pve:
-          this.initializePlacementUI();
-          break;
-        case Mode.eve:
-        default:
-          this.game.state.start("Battle", false, false, this.allShips);
-          break;
-      }
     }
 
     private initializePlacementUI(): void {
-      this.resourcesAvailable = this.fleetGenerator.params.resources;
-
-      this.resourcesText = this.game.add.text(10, 10, "Resources Remaining: " + this.resourcesAvailable, {
+      this.resourcesText = this.game.add.text(10, 10, "Resources Remaining: ", {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
@@ -130,50 +124,31 @@ namespace Game {
       });
 
       // Instructions
-      this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
+      this.instructionsText = this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
         font: "bold 35px Titillium Web"
       });
 
+      this.costText = new Array<Phaser.Text>();
+
       let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
-      let costText: Array<Phaser.Text> = new Array<Phaser.Text>();
       let position: number = 120;
       let index: number = 1;
 
       for (let type of types) {
         let text: Phaser.Text = this.addShipCostText("(" + index + ") " + type.name + " Cost: " + type.RESOURCE_COST, 10, position);
-        costText.push(text);
+        this.costText.push(text);
         position += 50;
         index += 1;
       }
-
-      let x: number = this.fleetGenerator.params.minX;
-      let y: number = this.fleetGenerator.params.minY;
-      let width: number = this.fleetGenerator.params.maxX - this.fleetGenerator.params.minX;
-      let height: number = this.fleetGenerator.params.maxY - this.fleetGenerator.params.minY;
-
-      let graphics: Phaser.Graphics = this.game.add.graphics(0, 0);
-
-      graphics.lineStyle(2, 0xffd900, 1);
-      graphics.drawRect(x, y, width, height);
 
       this.keyCodes = [
         this.game.input.keyboard.addKey(Phaser.Keyboard.ONE),
         this.game.input.keyboard.addKey(Phaser.Keyboard.TWO),
         this.game.input.keyboard.addKey(Phaser.Keyboard.THREE)
       ];
-
-
-      /*
-      graphics.destroy();
-      resourcesText.destroy();
-      instructionsText.destroy();
-      for (let text of costText) {
-        text.destroy();
-      }
-      */
     }
 
     addShipCostText(text: string, x: number, y: number): Phaser.Text {
@@ -186,15 +161,63 @@ namespace Game {
     }
 
     update(): void {
-      this.resourcesText.setText("Resources Remaining: " + this.resourcesAvailable);
+      let x: number;
+      let y: number;
+      let width: number;
+      let height: number;
+
+      let resourcesAvailable: number;
+
+      if (this.enemiesResourcesAvailable) {
+        x = this.enemiesParams.minX;
+        y = this.enemiesParams.minY;
+        width = this.enemiesParams.maxX - this.enemiesParams.minX;
+        height = this.enemiesParams.maxY - this.enemiesParams.minY;
+        resourcesAvailable = this.enemiesResourcesAvailable;
+      } else if (this.alliesResourcesAvailable) {
+        x = this.alliesParams.minX;
+        y = this.alliesParams.minY;
+        width = this.alliesParams.maxX - this.alliesParams.minX;
+        height = this.alliesParams.maxY - this.alliesParams.minY;
+        resourcesAvailable = this.alliesResourcesAvailable;
+      } else {
+        this.resourcesText.destroy();
+        this.instructionsText.destroy();
+        for (let text of this.costText) {
+          text.destroy();
+        }
+        this.graphics.destroy();
+        this.allShips = this.allies.concat(this.enemies);
+        this.game.state.start("Battle", false, false, this.allShips);
+        return;
+      }
+
+      this.graphics = this.game.add.graphics(0, 0);
+
+      this.graphics.lineStyle(2, 0xffd900, 1);
+      this.graphics.drawRect(x, y, width, height);
+
+      this.resourcesText.setText("Resources Remaining: " + resourcesAvailable);
+
       let mouseX: number = this.game.input.mousePointer.x;
       let mouseY: number = this.game.input.mousePointer.y;
 
       let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
 
+      if (resourcesAvailable < types[types.length - 1].RESOURCE_COST) {
+        this.game.state.start("Battle", false, false, this.allShips);
+      }
+
       for (let i: number = 0; i < this.keyCodes.length; i++) {
-        if (this.keyCodes[i].isDown && this.resourcesAvailable >= types[i].RESOURCE_COST) {
-          this.allShips.push(new types[i](this.game, mouseX, mouseY, this.fleetGenerator.params.teamNumber));
+        if (this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
+          resourcesAvailable -= types[i].RESOURCE_COST;
+          if (this.enemiesResourcesAvailable) {
+            this.enemiesResourcesAvailable = resourcesAvailable;
+            this.enemies.push(new types[i](this.game, mouseX, mouseY, this.enemiesParams.teamNumber));
+          } else if (this.alliesResourcesAvailable) {
+            this.alliesResourcesAvailable = resourcesAvailable;
+            this.allies.push(new types[i](this.game, mouseX, mouseY, this.alliesParams.teamNumber));
+          }
         }
       }
     }
