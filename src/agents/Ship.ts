@@ -156,7 +156,7 @@ namespace Game {
         this.ticksSinceLastFire = 0;
         // disabled for now because the current iteration is too obnoxious
         // TODO: re-visit audio
-        // this.playFireSound();
+        this.playFireSound();
       }
     }
 

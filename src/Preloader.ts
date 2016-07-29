@@ -60,7 +60,7 @@ namespace Game {
 
       // load laser sounds
       this.load.audio("fighter_fire", "assets/Sounds/SoundsCrate-SciFi-Laser4.mp3");
-      this.load.audio("cruiser_fire", "assets/Sounds/SoundsCrate-SciFi-Laser3.mp3");
+      this.load.audio("cruiser_fire", "assets/Sounds/SoundsCrate-SciFi-Laser1.mp3");
       this.load.audio("battleship_fire", "assets/Sounds/SoundsCrate-SciFi-Laser5.mp3");
     }
 
