@@ -12,11 +12,12 @@ namespace Game {
 
     static started: boolean = false;
     private playButton: Phaser.Button;
+    static STATUS_MENU: Phaser.Text;
 
     init(ships: Array<Ship>) {
       // Re-add background
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
-      addStatusMenu(this.game);
+      Battle.STATUS_MENU = addStatusMenu(this.game);
 
       // Reconstruct the ships
       PhysicsObject.clearObjects();
@@ -55,6 +56,7 @@ namespace Game {
     private start(): void {
       Battle.started = true;
       this.playButton.destroy();
+      Battle.STATUS_MENU.setText(getStatusText(this.game));
     }
 
     addEndingText(prompt: string, x: number, y: number) {

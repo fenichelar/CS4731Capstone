@@ -105,7 +105,7 @@ namespace Game {
     return text;
   }
 
-  export function addStatusMenu(game: Game.Game) {
+  export function addStatusMenu(game: Game.Game): Phaser.Text {
     let statusText: Phaser.Text = game.add.text(game.width - 10, 10, this.getStatusText(game), {
       boundsAlignH: "center",
       boundsAlignV: "middle",
@@ -152,6 +152,7 @@ namespace Game {
         game.state.start("DifficultyMenu");
       }
     }, this);
+    return statusText;
   }
 
 }
