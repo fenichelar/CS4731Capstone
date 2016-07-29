@@ -61,8 +61,8 @@ namespace Game {
 
     public static getSupportGroups(): Array<ISupportGroup> {
       return [{
-        maxDistance: 500,
-        maxNumber: 3,
+        maxDistance: 250,
+        maxNumber: 4,
         shipType: Cruiser
       }];
     }
