@@ -61,8 +61,8 @@ namespace Game {
 
     public static getSupportGroups(): Array<ISupportGroup> {
       return [{
-        maxDistance: 200,
-        maxNumber: 10,
+        maxDistance: 100,
+        maxNumber: 5,
         shipType: Fighter
       }];
     }
