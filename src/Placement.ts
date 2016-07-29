@@ -198,10 +198,14 @@ namespace Game {
         return;
       }
 
+      let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
+
       let mouseX: number = this.game.input.mousePointer.x;
       let mouseY: number = this.game.input.mousePointer.y;
 
-      let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
+      if (mouseX < x || mouseX > x + width || mouseY < y || mouseY > y + height) {
+        return;
+      }
 
       for (let i: number = 0; i < this.keyCodes.length; i++) {
         if (this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
