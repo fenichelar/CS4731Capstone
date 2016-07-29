@@ -9,6 +9,7 @@ namespace Game {
   export class DifficultyMenu extends Phaser.State {
 
     create() {
+      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       makeTitle(this.game);
       this.addDifficultyText("Play Easy", Difficulty.Easy, this.game.world.centerX, this.game.world.centerY - 60);
       this.addDifficultyText("Play Medium", Difficulty.Medium, this.game.world.centerX, this.game.world.centerY + 140);
