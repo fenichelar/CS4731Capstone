@@ -122,15 +122,41 @@ namespace Game {
         font: "bold 40px Titillium Web"
       });
 
+      let instructionsText: Phaser.Text = this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "bold 35px Titillium Web"
+      });
+
       let types: Array<IShipSubclass> = fleetGenerator.typesOrderedByCost;
-      let position: number = 80;
+      let costText: Array<Phaser.Text> = new Array<Phaser.Text>();
+      let position: number = 120;
 
       for (let type of types) {
-        this.addShipCostText(type.name + " Cost: " + type.RESOURCE_COST, 10, position);
+        let text: Phaser.Text = this.addShipCostText("(" + type.name[0] + ") " + type.name + " Cost: " + type.RESOURCE_COST, 10, position);
+        costText.push(text);
         position += 50;
       }
 
+      let x: number = fleetGenerator.params.minX;
+      let y: number = fleetGenerator.params.minY;
+      let width: number = fleetGenerator.params.maxX - fleetGenerator.params.minX;
+      let height: number = fleetGenerator.params.maxY - fleetGenerator.params.minY;
+
+      let graphics: Phaser.Graphics = this.game.add.graphics(0, 0);
+
+      graphics.lineStyle(2, 0xffd900, 1);
+      graphics.drawRect(x, y, width, height);
+
       resourcesText.setText("Resources Remaining: " + resourcesAvailable);
+
+      graphics.destroy();
+      resourcesText.destroy();
+      instructionsText.destroy();
+      for (let text of costText) {
+        text.destroy();
+      }
     }
 
     private start(): void {
@@ -139,7 +165,7 @@ namespace Game {
     }
 
     addShipCostText(text: string, x: number, y: number) {
-      this.game.add.text(x, y, text, {
+      return this.game.add.text(x, y, text, {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
