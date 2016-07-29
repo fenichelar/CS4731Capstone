@@ -149,9 +149,9 @@ namespace Game {
       });
 
       if (!enemiesAlive) {
-        this.addEndingText("You won!", this.game.world.centerX, this.game.world.centerY - 100);
+        this.addEndingText("Green team won!", this.game.world.centerX, this.game.world.centerY - 100);
       } else if (!alliesAlive) {
-        this.addEndingText("You lost!", this.game.world.centerX, this.game.world.centerY - 100);
+        this.addEndingText("Green team lost!", this.game.world.centerX, this.game.world.centerY - 100);
       }
 
       if (!enemiesAlive || !alliesAlive) {
