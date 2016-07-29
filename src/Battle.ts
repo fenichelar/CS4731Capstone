@@ -10,7 +10,7 @@ namespace Game {
     static CurrentBattle: Battle = null;
     public allShips: Array<Game.Ship>;
 
-    public started: boolean = false;
+    static started: boolean = false;
     private playButton: Phaser.Button;
 
     init(ships: Array<Ship>) {
@@ -53,7 +53,7 @@ namespace Game {
     }
 
     private start(): void {
-      this.started = true;
+      Battle.started = true;
       this.playButton.destroy();
     }
 
@@ -72,7 +72,7 @@ namespace Game {
     }
 
     update() {
-      if (!this.started) {
+      if (!Battle.started) {
         return;
       }
 
@@ -92,7 +92,7 @@ namespace Game {
 
       if (!enemiesAlive || !alliesAlive) {
         this.addEndingText("Click here play again.", this.game.world.centerX, this.game.world.centerY + 100);
-        this.started = false;
+        Battle.started = false;
         return;
       }
 

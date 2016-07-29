@@ -90,7 +90,7 @@ namespace Game {
 
     if (game.paused) {
       return pausedText;
-    } else {
+    } else if (Battle.started) {
       text += unpausedText;
     }
 
@@ -119,6 +119,10 @@ namespace Game {
       statusText.setText(getStatusText(game));
     }
 
+    game.input.onDown.add(function() {
+      statusText.setText(getStatusText(game));
+    }, this);
+
     game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(function() {
       if (!game.paused) {
         if (game.sound.mute) {
@@ -132,12 +136,14 @@ namespace Game {
     }, this);
 
     game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {
-      if (game.paused) {
-        game.paused = false;
-        statusText.setText(getStatusText(game));
-      } else {
-        game.paused = true;
-        statusText.setText(getStatusText(game));
+      if (Battle.started) {
+        if (game.paused) {
+          game.paused = false;
+          statusText.setText(getStatusText(game));
+        } else {
+          game.paused = true;
+          statusText.setText(getStatusText(game));
+        }
       }
     }, this);
 
