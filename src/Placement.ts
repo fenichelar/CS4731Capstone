@@ -54,6 +54,7 @@ namespace Game {
       this.graphics = this.game.add.graphics(0, 0);
 
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+      Battle.STATUS_MENU = addStatusMenu(this.game);
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);

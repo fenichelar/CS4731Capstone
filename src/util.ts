@@ -78,4 +78,81 @@ namespace Game {
     }
     return false;
   }
+
+  export function getStatusText(game: Game.Game): string {
+    let soundOnText: string = "Press M to disable sound.";
+    let soundOffText: string = "Press M to enable sound.";
+    let pausedText: string = "Press P to resume.";
+    let unpausedText: string = "Press P to pause.";
+    let otherText: string = "Press Q to exit.";
+
+    let text: string = "";
+
+    if (game.paused) {
+      return pausedText;
+    } else if (Battle.started) {
+      text += unpausedText;
+    }
+
+    if (game.sound.mute) {
+      text += " " + soundOffText;
+    } else {
+      text += " " + soundOnText;
+    }
+
+    text += " " + otherText;
+
+    return text;
+  }
+
+  export function addStatusMenu(game: Game.Game): Phaser.Text {
+    let statusText: Phaser.Text = game.add.text(game.width - 10, 10, this.getStatusText(game), {
+      boundsAlignH: "center",
+      boundsAlignV: "middle",
+      fill: "#ff0",
+      font: "bold 20px Titillium Web"
+    });
+
+    statusText.anchor.x = 1;
+
+    if (game.sound.mute) {
+      statusText.setText(getStatusText(game));
+    }
+
+    game.input.onDown.add(function() {
+      statusText.setText(getStatusText(game));
+    }, this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(function() {
+      if (!game.paused) {
+        if (game.sound.mute) {
+          game.sound.mute = false;
+          statusText.setText(getStatusText(game));
+        } else {
+          game.sound.mute = true;
+          statusText.setText(getStatusText(game));
+        }
+      }
+    }, this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {
+      if (Battle.started) {
+        if (game.paused) {
+          game.paused = false;
+          statusText.setText(getStatusText(game));
+        } else {
+          game.paused = true;
+          statusText.setText(getStatusText(game));
+        }
+      }
+    }, this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() {
+      if (!game.paused) {
+        game.state.start("DifficultyMenu");
+      }
+    }, this);
+    return statusText;
+  }
+
 }

@@ -10,12 +10,14 @@ namespace Game {
     static CurrentBattle: Battle = null;
     public allShips: Array<Game.Ship>;
 
-    public started: boolean = false;
+    static started: boolean = false;
     private playButton: Phaser.Button;
+    static STATUS_MENU: Phaser.Text;
 
     init(ships: Array<Ship>) {
       // Re-add background
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+      Battle.STATUS_MENU = addStatusMenu(this.game);
 
       // Reconstruct the ships
       PhysicsObject.clearObjects();
@@ -52,8 +54,9 @@ namespace Game {
     }
 
     private start(): void {
-      this.started = true;
+      Battle.started = true;
       this.playButton.destroy();
+      Battle.STATUS_MENU.setText(getStatusText(this.game));
     }
 
     addEndingText(prompt: string, x: number, y: number) {
@@ -71,7 +74,7 @@ namespace Game {
     }
 
     update() {
-      if (!this.started) {
+      if (!Battle.started) {
         return;
       }
 
@@ -91,7 +94,7 @@ namespace Game {
 
       if (!enemiesAlive || !alliesAlive) {
         this.addEndingText("Click here play again.", this.game.world.centerX, this.game.world.centerY + 100);
-        this.started = false;
+        Battle.started = false;
         return;
       }
 
