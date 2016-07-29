@@ -26,8 +26,8 @@ namespace Game {
     static Mode: Mode = Mode.eve;
     static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
-    public enemies: Array<Game.Ship>;
-    public allies: Array<Game.Ship>;
+    public enemies: Array<Game.Ship> = new Array<Ship>();
+    public allies: Array<Game.Ship> = new Array<Ship>();
     public allShips: Array<Game.Ship>;
 
     public started: boolean = false;
