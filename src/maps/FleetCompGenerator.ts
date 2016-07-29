@@ -7,13 +7,13 @@
 
 namespace Game {
   export class FleetCompGenerator {
-    private params: IFleetCompParams;
+    public params: IFleetCompParams;
     private resourcesRemaining: number;
 
     // These hold group cost information for each ship type.
     // Built on creation to save time during generation.
     private groupCosts: Map<IShipSubclass, number> = new Map<IShipSubclass, number>();
-    private typesOrderedByCost: Array<IShipSubclass> = new Array<IShipSubclass>();
+    public typesOrderedByCost: Array<IShipSubclass> = new Array<IShipSubclass>();
 
     public constructor(private game: Game, params?: IFleetCompParams) {
       this.params = params || this.getDefaultParams();
@@ -66,7 +66,7 @@ namespace Game {
         let currentType: IShipSubclass = this.typesOrderedByCost[i];
 
         while (this.resourcesRemaining >= this.groupCosts.get(currentType) / 2 &&
-               this.resourcesRemaining >= currentType.RESOURCE_COST) {
+          this.resourcesRemaining >= currentType.RESOURCE_COST) {
           // Buffer the central ship from the edges of fleet bounds by its support radius
           // Makes it less likely for fleets to overlap
           let radius: number = 0;

@@ -80,19 +80,19 @@ namespace Game {
       };
 
       // Generate enemy fleet if applicable
+      fleetGenerator.setParams(paramsTeam2);
       if (Battle.Mode > 1) {
-        fleetGenerator.setParams(paramsTeam2);
         this.enemies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(paramsTeam2);
+        this.createShips(fleetGenerator);
       }
 
       // Generate ally fleet if applicable
+      fleetGenerator.setParams(paramsTeam1);
       if (Battle.Mode > 2) {
-        fleetGenerator.setParams(paramsTeam1);
         this.allies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(paramsTeam1);
+        this.createShips(fleetGenerator);
       }
 
       this.allShips = this.allies.concat(this.enemies);
@@ -112,13 +112,39 @@ namespace Game {
       this.playButton.scale.setTo(4, 4);
     }
 
-    private createShips(params: IFleetCompParams): void {
-      // ToDo
+    private createShips(fleetGenerator: FleetCompGenerator): void {
+      let resourcesAvailable: number = fleetGenerator.params.resources;
+
+      let resourcesText: Phaser.Text = this.game.add.text(10, 10, "Resources Remaining: " + resourcesAvailable, {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "bold 40px Titillium Web"
+      });
+
+      let types: Array<IShipSubclass> = fleetGenerator.typesOrderedByCost;
+      let position: number = 80;
+
+      for (let type of types) {
+        this.addShipCostText(type.name + " Cost: " + type.RESOURCE_COST, 10, position);
+        position += 50;
+      }
+
+      resourcesText.setText("Resources Remaining: " + resourcesAvailable);
     }
 
     private start(): void {
       this.started = true;
       this.playButton.destroy();
+    }
+
+    addShipCostText(text: string, x: number, y: number) {
+      this.game.add.text(x, y, text, {
+        boundsAlignH: "center",
+        boundsAlignV: "middle",
+        fill: "#ff0",
+        font: "bold 30px Titillium Web"
+      });
     }
 
     addEndingText(prompt: string, x: number, y: number) {
