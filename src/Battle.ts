@@ -34,6 +34,8 @@ namespace Game {
     private playButton: Phaser.Button;
 
     preload() {
+      PhysicsObject.clearObjects();
+
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       Battle.CurrentBattle = this;
       // enable p2 physics

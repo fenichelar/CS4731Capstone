@@ -95,6 +95,11 @@ namespace Game {
         PhysicsObject.objects.splice(i, 1);
       }
     }
+
+    public static clearObjects(): void {
+      PhysicsObject.objects = null;
+      PhysicsObject.collisionGroups = null;
+    }
   }
 
   function collideBodies(body1: IOurPhysicsBody, body2: IOurPhysicsBody) {
