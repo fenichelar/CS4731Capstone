@@ -7,7 +7,7 @@
 
 namespace Game {
   export class Fighter extends Ship {
-    public static FIGHTER_BASE_HEALTH: number = 100;
+    public static FIGHTER_BASE_HEALTH: number = 30;
     public static FIGHTER_MASS: number = 50;
     public static FIGHTER_TURN_SPEED: number = 160;
     public static FIGHTER_THRUST_SPEED: number = Fighter.FIGHTER_MASS * 350;
@@ -49,7 +49,7 @@ namespace Game {
 
     ///// Static stuff used by fleet generation /////
 
-    public static RESOURCE_COST: number = 5;
+    public static RESOURCE_COST: number = 10;
 
     public static getSupportGroups(): Array<ISupportGroup> {
       return [];

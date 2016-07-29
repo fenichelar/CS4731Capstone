@@ -7,9 +7,9 @@
 
 namespace Game {
   export class Battleship extends Ship {
-    public static BATTLESHIP_BASE_HEALTH: number = 1400;
-    public static BATTLESHIP_MASS: number = 500;
-    public static BATTLESHIP_TURN_SPEED: number = 20;
+    public static BATTLESHIP_BASE_HEALTH: number = 1200;
+    public static BATTLESHIP_MASS: number = 600;
+    public static BATTLESHIP_TURN_SPEED: number = 25;
     public static BATTLESHIP_THRUST_SPEED: number = Battleship.BATTLESHIP_MASS * 30;
     private fireSound: any;
 
@@ -20,12 +20,12 @@ namespace Game {
       this.maxThrustSpeed = Battleship.BATTLESHIP_THRUST_SPEED;
       // these will need tweaking.
       // battleships fire lots of rounds, slower, larger, with more health/damage
-      this.fireDelay = 90;
-      this.roundsPerFire = 5;
+      this.fireDelay = 220;
+      this.roundsPerFire = 6;
       this.roundSpacing = 4;
       this.roundHealth *= 2;
       this.roundScale = 0.75;
-      this.roundVelocity *= 0.75;
+      this.roundVelocity *= 0.6;
       // pew pew
       this.fireSound = game.add.audio("battleship_fire");
 
@@ -57,7 +57,7 @@ namespace Game {
 
     ///// Static stuff used by fleet generation /////
 
-    public static RESOURCE_COST: number = 100;
+    public static RESOURCE_COST: number = 120;
 
     public static getSupportGroups(): Array<ISupportGroup> {
       return [{

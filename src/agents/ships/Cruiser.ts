@@ -7,9 +7,9 @@
 
 namespace Game {
   export class Cruiser extends Ship {
-    public static CRUISER_BASE_HEALTH: number = 500;
+    public static CRUISER_BASE_HEALTH: number = 200;
     public static CRUISER_MASS: number = 250;
-    public static CRUISER_TURN_SPEED: number = 30;
+    public static CRUISER_TURN_SPEED: number = 50;
     public static CRUISER_THRUST_SPEED: number = Cruiser.CRUISER_MASS * 50;
     private fireSound: any;
 
@@ -57,7 +57,7 @@ namespace Game {
 
     ///// Static stuff used by fleet generation /////
 
-    public static RESOURCE_COST: number = 25;
+    public static RESOURCE_COST: number = 50;
 
     public static getSupportGroups(): Array<ISupportGroup> {
       return [{
