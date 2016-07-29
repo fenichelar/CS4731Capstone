@@ -129,7 +129,6 @@ namespace Game {
       promptText.anchor.setTo(0.5, 0.5);
       promptText.inputEnabled = true;
       promptText.events.onInputDown.addOnce(function() {
-        this.started = false;
         this.game.state.start("DifficultyMenu");
       }, this);
     }
@@ -148,9 +147,15 @@ namespace Game {
       });
 
       if (!enemiesAlive) {
-        this.addEndingText("You won! Play again?", this.game.world.centerX, this.game.world.centerY - 60);
+        this.addEndingText("You won!", this.game.world.centerX, this.game.world.centerY - 60);
       } else if (!alliesAlive) {
-        this.addEndingText("You lost! Play again?", this.game.world.centerX, this.game.world.centerY + 60);
+        this.addEndingText("You lost!", this.game.world.centerX, this.game.world.centerY - 60);
+      }
+
+      if (!enemiesAlive || !alliesAlive) {
+        this.addEndingText("Click to play again.", this.game.world.centerX, this.game.world.centerY + 60);
+        this.started = false;
+        return;
       }
 
       if (PhysicsObject.objects) {
