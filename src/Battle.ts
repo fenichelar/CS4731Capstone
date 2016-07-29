@@ -8,9 +8,9 @@
 namespace Game {
   // these map to the enemy resource amount in FleetCompGenerator
   export enum Difficulty {
-    Easy = 0.8,
-    Medium = 0.6,
-    Hard = 0.4
+    Easy = 1.0,
+    Medium = 0.9,
+    Hard = 0.75
   }
 
   export enum Mode {
@@ -21,7 +21,7 @@ namespace Game {
 
   export class Battle extends Phaser.State {
     static Seed: number = 31337;
-    static EnemyShipCount: number = 2000;
+    static EnemyResourceCount: number = 3000;
     static Difficulty: Difficulty = Difficulty.Easy;
     static Mode: Mode = Mode.eve;
     static FLEET_BOUNDS_PADDING: number = 50;
@@ -66,7 +66,7 @@ namespace Game {
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyShipCount * Battle.Difficulty,
+        resources: Battle.EnemyResourceCount * Battle.Difficulty,
         teamNumber: 1,
       };
 
@@ -75,7 +75,7 @@ namespace Game {
         maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
         minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
         minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyShipCount,
+        resources: Battle.EnemyResourceCount,
         teamNumber: 2,
       };
 
