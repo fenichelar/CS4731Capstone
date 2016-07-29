@@ -15,6 +15,7 @@ namespace Game {
       this.state.add("Preloader", Preloader, false);
       this.state.add("DifficultyMenu", DifficultyMenu, false);
       this.state.add("ModeMenu", ModeMenu, false);
+      this.state.add("Placement", Placement, false);
       this.state.add("Battle", Battle, false);
 
       this.state.start("Boot");

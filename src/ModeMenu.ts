@@ -10,6 +10,7 @@ namespace Game {
     static Difficulty: Difficulty;
 
     create() {
+      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
       makeTitle(this.game);
       this.addModeText("Player vs Player", Mode.pvp, this.game.world.centerX, this.game.world.centerY - 60);
       this.addModeText("Player vs AI", Mode.pve, this.game.world.centerX, this.game.world.centerY + 140);
@@ -17,9 +18,9 @@ namespace Game {
     }
 
     startBattle(mode: Mode) {
-      Battle.Difficulty = ModeMenu.Difficulty;
-      Battle.Mode = mode;
-      this.game.state.start("Battle");
+      Placement.Difficulty = ModeMenu.Difficulty;
+      Placement.Mode = mode;
+      this.game.state.start("Placement");
     }
 
     addModeText(prompt: string, mode: Mode, x: number, y: number) {

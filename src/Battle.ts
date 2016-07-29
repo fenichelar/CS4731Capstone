@@ -6,96 +6,35 @@
  */
 
 namespace Game {
-  // these map to the enemy resource amount in FleetCompGenerator
-  export enum Difficulty {
-    Easy = 1.0,
-    Medium = 0.9,
-    Hard = 0.75
-  }
-
-  export enum Mode {
-    pvp = 1,
-    pve = 2,
-    eve = 3
-  }
-
   export class Battle extends Phaser.State {
-    static Seed: number = 31337;
-    static EnemyResourceCount: number = 3000;
-    static Difficulty: Difficulty = Difficulty.Easy;
-    static Mode: Mode = Mode.eve;
-    static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
-    public enemies: Array<Game.Ship> = new Array<Ship>();
-    public allies: Array<Game.Ship> = new Array<Ship>();
     public allShips: Array<Game.Ship>;
 
     public started: boolean = false;
     private playButton: Phaser.Button;
 
-    preload() {
+    init(ships: Array<Ship>) {
+      // Re-add background
+      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
+
+      // Reconstruct the ships
       PhysicsObject.clearObjects();
 
-      this.game.add.tileSprite(0, 0, 2560, 1440, "background");
-      Battle.CurrentBattle = this;
-      // enable p2 physics
-      this.game.physics.startSystem(Phaser.Physics.P2JS);
-      this.game.physics.p2.setImpactEvents(true);
-      // pick a random seed
-      Battle.Seed = this.game.rnd.integer();
-      // if console is open, prompt the user to select a seed
-      let element = new Image();
-      Object.defineProperty(element, "id", {
-        get: function() {
-          Battle.Seed = parseInt(prompt("Enter a seed value", Battle.Seed.toString()), 10);
-        }
-      });
-      console.log("%cTesting if console is open.", element);
-      console.log("Using seed: %i.", Battle.Seed);
-      // Seed RNG with selected seed.
-      this.game.rnd.sow([Battle.Seed]);
+      this.allShips = new Array<Ship>();
+      for (let aShip of ships) {
+        let shipType: IShipSubclass = aShip.getType();
+        let shipX: number = aShip.sprite.x;
+        let shipY: number = aShip.sprite.y;
+        let shipTeam: number = aShip.team;
+        this.allShips.push(new shipType(this.game, shipX, shipY, shipTeam));
+      }
 
+      Battle.CurrentBattle = this;
+    }
+
+    preload() {
       const WORLD_WIDTH: number = this.game.world.bounds.width;
       const WORLD_HEIGHT: number = this.game.world.bounds.height;
-
-      // Fleet generator and parameters per team
-      let fleetGenerator: FleetCompGenerator = new FleetCompGenerator(this.game);
-
-      let paramsTeam1: IFleetCompParams = {
-        maxX: WORLD_WIDTH / 2 - Battle.FLEET_BOUNDS_PADDING,
-        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
-        minX: Battle.FLEET_BOUNDS_PADDING,
-        minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyResourceCount * Battle.Difficulty,
-        teamNumber: 1,
-      };
-
-      let paramsTeam2: IFleetCompParams = {
-        maxX: WORLD_WIDTH - Battle.FLEET_BOUNDS_PADDING,
-        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
-        minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
-        minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyResourceCount,
-        teamNumber: 2,
-      };
-
-      // Generate enemy fleet if applicable
-      if (Battle.Mode > 1) {
-        fleetGenerator.setParams(paramsTeam2);
-        this.enemies = fleetGenerator.generateFleet();
-      } else {
-        this.createShips(paramsTeam2);
-      }
-
-      // Generate ally fleet if applicable
-      if (Battle.Mode > 2) {
-        fleetGenerator.setParams(paramsTeam1);
-        this.allies = fleetGenerator.generateFleet();
-      } else {
-        this.createShips(paramsTeam1);
-      }
-
-      this.allShips = this.allies.concat(this.enemies);
 
       // Build a wall and make the ships pay for it!
       // For some reason horizontal walls only go half way across so need to double width
@@ -110,10 +49,6 @@ namespace Game {
         "play", this.start, this);
       this.playButton.anchor.setTo(0.5, 0.5);
       this.playButton.scale.setTo(4, 4);
-    }
-
-    private createShips(params: IFleetCompParams): void {
-      // ToDo
     }
 
     private start(): void {
@@ -140,12 +75,12 @@ namespace Game {
         return;
       }
 
-      let enemiesAlive: boolean = this.enemies.some(function(ship: Ship) {
-        return ship.health > 0;
+      let enemiesAlive: boolean = this.allShips.some(function(ship: Ship) {
+        return ship.team !== 1 && ship.health > 0;
       });
 
-      let alliesAlive: boolean = this.allies.some(function(ship: Ship) {
-        return ship.health > 0;
+      let alliesAlive: boolean = this.allShips.some(function(ship: Ship) {
+        return ship.team === 1 && ship.health > 0;
       });
 
       if (!enemiesAlive) {
