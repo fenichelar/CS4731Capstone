@@ -110,6 +110,7 @@ namespace Game {
       }
 
       this.initializePlacementUI();
+      this.game.input.onDown.add(this.click, this);
     }
 
     private initializePlacementUI(): void {
@@ -163,6 +164,42 @@ namespace Game {
         fill: "#ff0",
         font: "bold 30px Titillium Web"
       });
+    }
+
+    click(pointer: Phaser.Pointer): void {
+      if (this.enemiesResourcesAvailable) {
+        let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
+        for (let enemy of this.enemies) {
+          sprites.push(enemy.sprite);
+        }
+        let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
+        if (bodies.length > 0) {
+          for (let i: number = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].body.id === bodies[0].id) {
+              this.enemiesResourcesAvailable += this.enemies[i].getType().RESOURCE_COST;
+              this.enemies[i].die();
+              this.enemies.splice(i, 1);
+              break;
+            }
+          }
+        }
+      } else if (this.alliesResourcesAvailable) {
+        let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
+        for (let ally of this.allies) {
+          sprites.push(ally.sprite);
+        }
+        let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
+        if (bodies.length > 0) {
+          for (let i: number = 0; i < this.allies.length; i++) {
+            if (this.allies[i].body.id === bodies[0].id) {
+              this.alliesResourcesAvailable += this.allies[i].getType().RESOURCE_COST;
+              this.allies[i].die();
+              this.allies.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
     }
 
     update(): void {
