@@ -39,6 +39,7 @@ namespace Game {
     private instructionsText: Phaser.Text;
     private costText: Array<Phaser.Text> = new Array<Phaser.Text>();
     private keyCodes: Array<Phaser.Key>;
+    private keyStates: Array<boolean>;
     private graphics: Phaser.Graphics;
     private shouldUpdate: boolean = false;
 
@@ -143,6 +144,12 @@ namespace Game {
         this.game.input.keyboard.addKey(Phaser.Keyboard.THREE)
       ];
 
+      this.keyStates = [
+        true,
+        true,
+        true
+      ];
+
       this.shouldUpdate = true;
     }
 
@@ -209,7 +216,10 @@ namespace Game {
       }
 
       for (let i: number = 0; i < this.keyCodes.length; i++) {
-        if (this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
+        if (!this.keyCodes[i].isDown) {
+          this.keyStates[i] = true;
+        } else if (this.keyStates[i] && this.keyCodes[i].isDown && resourcesAvailable >= types[i].RESOURCE_COST) {
+          this.keyStates[i] = false;
           resourcesAvailable -= types[i].RESOURCE_COST;
           if (this.enemiesResourcesAvailable) {
             this.enemiesResourcesAvailable = resourcesAvailable;
