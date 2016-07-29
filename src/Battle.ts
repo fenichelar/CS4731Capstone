@@ -16,7 +16,7 @@ namespace Game {
     init(ships: Array<Ship>) {
       // Re-add background
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
-      addSoundToggle(this.game);
+      addStatusMenu(this.game);
 
       // Reconstruct the ships
       PhysicsObject.clearObjects();
