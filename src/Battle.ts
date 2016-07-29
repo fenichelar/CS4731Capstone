@@ -95,6 +95,7 @@ namespace Game {
       if (!enemiesAlive || !alliesAlive) {
         this.addEndingText("Click here play again.", this.game.world.centerX, this.game.world.centerY + 100);
         Battle.started = false;
+        Battle.STATUS_MENU.setText(getStatusText(this.game));
         return;
       }
 
