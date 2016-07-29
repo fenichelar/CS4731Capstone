@@ -20,7 +20,7 @@ namespace Game {
       this.maxThrustSpeed = Cruiser.CRUISER_THRUST_SPEED;
       // these will need tweaking.
       // cruisers fire more rounds, slower, larger, with more health/damage
-      this.fireDelay = 1.5;
+      this.fireDelay = 90;
       this.roundsPerFire = 3;
       this.roundSpacing = 6;
       this.roundHealth *= 1.5;

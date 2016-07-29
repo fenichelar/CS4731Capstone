@@ -26,13 +26,13 @@ namespace Game {
     // TODO: determine a good value for this, should be in pixels/s
     public maxThrustSpeed: number = 50;
     // TODO: determine a good value for this.
-    public fireDelay: number = 1;
+    public fireDelay: number = 60;
     public roundsPerFire: number = 2;
     public roundSpacing: number = 5;
     public roundVelocity: number = Bullet.DefaultVelocity;
     public roundHealth: number = Bullet.DefaultHealth;
     public roundScale: number = Bullet.DefaultScale;
-    private lastFireTime: number;
+    private ticksSinceLastFire: number = 1000;  // Let them fire immediately
     public firingArc: number;  // Radians
     public firingRange: number;
 
@@ -44,7 +44,6 @@ namespace Game {
     public constructor(game: Game.Game, sprite: Phaser.Sprite, public state: State, public health: number, team: number) {
       super(game, sprite, health, team);
       this.baseHealth = health;
-      this.lastFireTime = game.time.totalElapsedSeconds();
 
       // Super constructor enables body
       // Set orientation based on team
@@ -75,6 +74,7 @@ namespace Game {
     public update(): void {
       // Do stuff
       this.state = this.state.update(this);
+      this.ticksSinceLastFire++;
 
       // Make sure we don't stay alive when we shouldn't
       if (this.health <= 0) {
@@ -144,8 +144,7 @@ namespace Game {
         return;
       }
       let game: Game.Game = this.sprite.game;
-      let now: number = game.time.totalElapsedSeconds();
-      if ((now - this.lastFireTime) >= this.fireDelay && this.targetInFiringArc() && shipDist(this, this.target) <= this.firingRange) {
+      if (this.ticksSinceLastFire >= this.fireDelay && this.targetInFiringArc() && shipDist(this, this.target) <= this.firingRange) {
         let angle: number = this.sprite.rotation - Math.PI;
         let offsetAmount: number = -this.roundsPerFire * this.roundSpacing / 2;
         for (let i = 0; i < this.roundsPerFire; i++) {
@@ -154,7 +153,7 @@ namespace Game {
           let y: number = this.sprite.y + Math.sin(angle) * offset;
           new Bullet(game, this.roundHealth, this.team, this.body.rotation, x, y, this.roundVelocity, this.roundScale);
         }
-        this.lastFireTime = now;
+        this.ticksSinceLastFire = 0;
         // disabled for now because the current iteration is too obnoxious
         // TODO: re-visit audio
         // this.playFireSound();
