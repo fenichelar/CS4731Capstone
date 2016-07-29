@@ -99,14 +99,6 @@ namespace Game {
 
       this.allShips = this.allies.concat(this.enemies);
 
-      // Build a wall and make the ships pay for it!
-      // For some reason horizontal walls only go half way across so need to double width
-      let wallWidth: number = 1;
-      new Wall(this.game, 0, 0, WORLD_WIDTH, wallWidth, false);  // Top
-      new Wall(this.game, 0, WORLD_HEIGHT - wallWidth, WORLD_WIDTH, wallWidth, false); // Bottom
-      new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
-      new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
-
       switch (Placement.Mode) {
         case Mode.pvp:
           break;
@@ -115,7 +107,7 @@ namespace Game {
           break;
         case Mode.eve:
         default:
-          this.game.state.start("Battle", false, false, this.allShips);
+          this.game.state.start("Battle", true, false, this.allShips);
           break;
       }
     }
