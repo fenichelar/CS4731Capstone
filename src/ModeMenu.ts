@@ -17,9 +17,9 @@ namespace Game {
     }
 
     startBattle(mode: Mode) {
-      Battle.Difficulty = ModeMenu.Difficulty;
-      Battle.Mode = mode;
-      this.game.state.start("Battle");
+      Placement.Difficulty = ModeMenu.Difficulty;
+      Placement.Mode = mode;
+      this.game.state.start("Placement");
     }
 
     addModeText(prompt: string, mode: Mode, x: number, y: number) {

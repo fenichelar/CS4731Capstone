@@ -19,7 +19,7 @@ namespace Game {
     public body: IOurPhysicsBody; // not: Phaser.Physics.P2.Body; because we need to add a field
 
     public constructor(game: Game.Game, public sprite: Phaser.Sprite, public health: number, public team: number) {
-      game.physics.p2.enableBody(sprite, false);
+      //game.physics.p2.enableBody(sprite, false);
       this.sprite = sprite;
       this.body = this.sprite.body;
       // TODO: add correct shape for object...

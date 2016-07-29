@@ -30,69 +30,70 @@ namespace Game {
     public allies: Array<Game.Ship> = new Array<Ship>();
     public allShips: Array<Game.Ship>;
 
-    public started: boolean = false;
-    private playButton: Phaser.Button;
+    private fleetGenerator: FleetCompGenerator;
+    private resourcesAvailable: number;
+    private resourcesText: Phaser.Text;
+    private keyCodes: Array<Phaser.Key>;
 
-    preload() {
+    preload(): void {
       PhysicsObject.clearObjects();
 
       this.game.add.tileSprite(0, 0, 2560, 1440, "background");
-      Battle.CurrentBattle = this;
       // enable p2 physics
       this.game.physics.startSystem(Phaser.Physics.P2JS);
       this.game.physics.p2.setImpactEvents(true);
       // pick a random seed
-      Battle.Seed = this.game.rnd.integer();
+      Placement.Seed = this.game.rnd.integer();
       // if console is open, prompt the user to select a seed
       let element = new Image();
       Object.defineProperty(element, "id", {
         get: function() {
-          Battle.Seed = parseInt(prompt("Enter a seed value", Battle.Seed.toString()), 10);
+          Placement.Seed = parseInt(prompt("Enter a seed value", Placement.Seed.toString()), 10);
         }
       });
       console.log("%cTesting if console is open.", element);
-      console.log("Using seed: %i.", Battle.Seed);
+      console.log("Using seed: %i.", Placement.Seed);
       // Seed RNG with selected seed.
-      this.game.rnd.sow([Battle.Seed]);
+      this.game.rnd.sow([Placement.Seed]);
 
       const WORLD_WIDTH: number = this.game.world.bounds.width;
       const WORLD_HEIGHT: number = this.game.world.bounds.height;
 
       // Fleet generator and parameters per team
-      let fleetGenerator: FleetCompGenerator = new FleetCompGenerator(this.game);
+      this.fleetGenerator = new FleetCompGenerator(this.game);
 
       let paramsTeam1: IFleetCompParams = {
-        maxX: WORLD_WIDTH / 2 - Battle.FLEET_BOUNDS_PADDING,
-        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
-        minX: Battle.FLEET_BOUNDS_PADDING,
-        minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyResourceCount * Battle.Difficulty,
+        maxX: WORLD_WIDTH / 2 - Placement.FLEET_BOUNDS_PADDING,
+        maxY: WORLD_HEIGHT - Placement.FLEET_BOUNDS_PADDING,
+        minX: Placement.FLEET_BOUNDS_PADDING,
+        minY: Placement.FLEET_BOUNDS_PADDING,
+        resources: Placement.EnemyResourceCount * Placement.Difficulty,
         teamNumber: 1,
       };
 
       let paramsTeam2: IFleetCompParams = {
-        maxX: WORLD_WIDTH - Battle.FLEET_BOUNDS_PADDING,
-        maxY: WORLD_HEIGHT - Battle.FLEET_BOUNDS_PADDING,
-        minX: WORLD_WIDTH / 2 + Battle.FLEET_BOUNDS_PADDING,
-        minY: Battle.FLEET_BOUNDS_PADDING,
-        resources: Battle.EnemyResourceCount,
+        maxX: WORLD_WIDTH - Placement.FLEET_BOUNDS_PADDING,
+        maxY: WORLD_HEIGHT - Placement.FLEET_BOUNDS_PADDING,
+        minX: WORLD_WIDTH / 2 + Placement.FLEET_BOUNDS_PADDING,
+        minY: Placement.FLEET_BOUNDS_PADDING,
+        resources: Placement.EnemyResourceCount,
         teamNumber: 2,
       };
 
       // Generate enemy fleet if applicable
-      fleetGenerator.setParams(paramsTeam2);
-      if (Battle.Mode > 1) {
-        this.enemies = fleetGenerator.generateFleet();
+      this.fleetGenerator.setParams(paramsTeam2);
+      if (Placement.Mode > 1) {
+        this.enemies = this.fleetGenerator.generateFleet();
       } else {
-        this.enemies = this.createShips(fleetGenerator);
+        // this.enemies = this.createShips(fleetGenerator);
       }
 
       // Generate ally fleet if applicable
-      fleetGenerator.setParams(paramsTeam1);
-      if (Battle.Mode > 2) {
-        this.allies = fleetGenerator.generateFleet();
+      this.fleetGenerator.setParams(paramsTeam1);
+      if (Placement.Mode > 2) {
+        this.allies = this.fleetGenerator.generateFleet();
       } else {
-        this.allies = this.createShips(fleetGenerator);
+        // this.allies = this.createShips(fleetGenerator);
       }
 
       this.allShips = this.allies.concat(this.enemies);
@@ -105,32 +106,38 @@ namespace Game {
       new Wall(this.game, 0, 0, wallWidth, WORLD_HEIGHT, false);  // Left
       new Wall(this.game, WORLD_WIDTH - wallWidth, 0, wallWidth, WORLD_HEIGHT, false); // Right
 
-      // Set up a Play button to trigger the fight to start
-      this.playButton = this.game.add.button(this.game.world.centerX, this.game.world.centerY,
-        "play", this.start, this);
-      this.playButton.anchor.setTo(0.5, 0.5);
-      this.playButton.scale.setTo(4, 4);
+      switch (Placement.Mode) {
+        case Mode.pvp:
+          break;
+        case Mode.pve:
+          this.initializePlacementUI();
+          break;
+        case Mode.eve:
+        default:
+          this.game.state.start("Battle", false, false, this.allShips);
+          break;
+      }
     }
 
-    private createShips(fleetGenerator: FleetCompGenerator): Array<Game.Ship> {
-      let resourcesAvailable: number = fleetGenerator.params.resources;
-      let shipArray: Array<Game.Ship> = new Array<Ship>();
+    private initializePlacementUI(): void {
+      this.resourcesAvailable = this.fleetGenerator.params.resources;
 
-      let resourcesText: Phaser.Text = this.game.add.text(10, 10, "Resources Remaining: " + resourcesAvailable, {
+      this.resourcesText = this.game.add.text(10, 10, "Resources Remaining: " + this.resourcesAvailable, {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
         font: "bold 40px Titillium Web"
       });
 
-      let instructionsText: Phaser.Text = this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
+      // Instructions
+      this.game.add.text(10, 65, "Press (key) to place, click to remove.", {
         boundsAlignH: "center",
         boundsAlignV: "middle",
         fill: "#ff0",
         font: "bold 35px Titillium Web"
       });
 
-      let types: Array<IShipSubclass> = fleetGenerator.typesOrderedByCost;
+      let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
       let costText: Array<Phaser.Text> = new Array<Phaser.Text>();
       let position: number = 120;
       let index: number = 1;
@@ -142,49 +149,34 @@ namespace Game {
         index += 1;
       }
 
-      let x: number = fleetGenerator.params.minX;
-      let y: number = fleetGenerator.params.minY;
-      let width: number = fleetGenerator.params.maxX - fleetGenerator.params.minX;
-      let height: number = fleetGenerator.params.maxY - fleetGenerator.params.minY;
+      let x: number = this.fleetGenerator.params.minX;
+      let y: number = this.fleetGenerator.params.minY;
+      let width: number = this.fleetGenerator.params.maxX - this.fleetGenerator.params.minX;
+      let height: number = this.fleetGenerator.params.maxY - this.fleetGenerator.params.minY;
 
       let graphics: Phaser.Graphics = this.game.add.graphics(0, 0);
 
       graphics.lineStyle(2, 0xffd900, 1);
       graphics.drawRect(x, y, width, height);
 
-      let key1: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-      let key2: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-      let key3: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+      this.keyCodes = [
+        this.game.input.keyboard.addKey(Phaser.Keyboard.ONE),
+        this.game.input.keyboard.addKey(Phaser.Keyboard.TWO),
+        this.game.input.keyboard.addKey(Phaser.Keyboard.THREE)
+      ];
 
-      while (resourcesAvailable > types[types.length - 1].RESOURCE_COST) {
-        resourcesText.setText("Resources Remaining: " + resourcesAvailable);
-        let mouseX: number = this.game.input.mousePointer.x;
-        let mouseY: number = this.game.input.mousePointer.y;
-        if (key1.isDown) {
-          shipArray.push(new types[0](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
-        } else if (key2.isDown) {
-          shipArray.push(new types[1](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
-        } else if (key3.isDown) {
-          shipArray.push(new types[2](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
-        }
-      }
 
+      /*
       graphics.destroy();
       resourcesText.destroy();
       instructionsText.destroy();
       for (let text of costText) {
         text.destroy();
       }
-
-      return shipArray;
+      */
     }
 
-    private start(): void {
-      this.started = true;
-      this.playButton.destroy();
-    }
-
-    addShipCostText(text: string, x: number, y: number) {
+    addShipCostText(text: string, x: number, y: number): Phaser.Text {
       return this.game.add.text(x, y, text, {
         boundsAlignH: "center",
         boundsAlignV: "middle",
@@ -193,48 +185,16 @@ namespace Game {
       });
     }
 
-    addEndingText(prompt: string, x: number, y: number) {
-      let promptText: Phaser.Text = this.game.add.text(x, y, prompt, {
-        boundsAlignH: "center",
-        boundsAlignV: "middle",
-        fill: "#ff0",
-        font: "bold 100px Titillium Web"
-      });
-      promptText.anchor.setTo(0.5, 0.5);
-      promptText.inputEnabled = true;
-      promptText.events.onInputDown.addOnce(function() {
-        this.game.state.start("DifficultyMenu");
-      }, this);
-    }
+    update(): void {
+      this.resourcesText.setText("Resources Remaining: " + this.resourcesAvailable);
+      let mouseX: number = this.game.input.mousePointer.x;
+      let mouseY: number = this.game.input.mousePointer.y;
 
-    update() {
-      if (!this.started) {
-        return;
-      }
+      let types: Array<IShipSubclass> = this.fleetGenerator.typesOrderedByCost;
 
-      let enemiesAlive: boolean = this.enemies.some(function(ship: Ship) {
-        return ship.health > 0;
-      });
-
-      let alliesAlive: boolean = this.allies.some(function(ship: Ship) {
-        return ship.health > 0;
-      });
-
-      if (!enemiesAlive) {
-        this.addEndingText("Green team won!", this.game.world.centerX, this.game.world.centerY - 100);
-      } else if (!alliesAlive) {
-        this.addEndingText("Green team lost!", this.game.world.centerX, this.game.world.centerY - 100);
-      }
-
-      if (!enemiesAlive || !alliesAlive) {
-        this.addEndingText("Click to play again.", this.game.world.centerX, this.game.world.centerY + 100);
-        this.started = false;
-        return;
-      }
-
-      if (PhysicsObject.objects) {
-        for (let object of PhysicsObject.objects) {
-          object.update();
+      for (let i: number = 0; i < this.keyCodes.length; i++) {
+        if (this.keyCodes[i].isDown && this.resourcesAvailable >= types[i].RESOURCE_COST) {
+          this.allShips.push(new types[i](this.game, mouseX, mouseY, this.fleetGenerator.params.teamNumber));
         }
       }
     }
