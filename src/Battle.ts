@@ -84,7 +84,7 @@ namespace Game {
       if (Battle.Mode > 1) {
         this.enemies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(fleetGenerator);
+        this.enemies = this.createShips(fleetGenerator);
       }
 
       // Generate ally fleet if applicable
@@ -92,7 +92,7 @@ namespace Game {
       if (Battle.Mode > 2) {
         this.allies = fleetGenerator.generateFleet();
       } else {
-        this.createShips(fleetGenerator);
+        this.allies = this.createShips(fleetGenerator);
       }
 
       this.allShips = this.allies.concat(this.enemies);
@@ -112,8 +112,9 @@ namespace Game {
       this.playButton.scale.setTo(4, 4);
     }
 
-    private createShips(fleetGenerator: FleetCompGenerator): void {
+    private createShips(fleetGenerator: FleetCompGenerator): Array<Game.Ship> {
       let resourcesAvailable: number = fleetGenerator.params.resources;
+      let shipArray: Array<Game.Ship> = new Array<Ship>();
 
       let resourcesText: Phaser.Text = this.game.add.text(10, 10, "Resources Remaining: " + resourcesAvailable, {
         boundsAlignH: "center",
@@ -132,11 +133,13 @@ namespace Game {
       let types: Array<IShipSubclass> = fleetGenerator.typesOrderedByCost;
       let costText: Array<Phaser.Text> = new Array<Phaser.Text>();
       let position: number = 120;
+      let index: number = 1;
 
       for (let type of types) {
-        let text: Phaser.Text = this.addShipCostText("(" + type.name[0] + ") " + type.name + " Cost: " + type.RESOURCE_COST, 10, position);
+        let text: Phaser.Text = this.addShipCostText("(" + index + ") " + type.name + " Cost: " + type.RESOURCE_COST, 10, position);
         costText.push(text);
         position += 50;
+        index += 1;
       }
 
       let x: number = fleetGenerator.params.minX;
@@ -149,7 +152,22 @@ namespace Game {
       graphics.lineStyle(2, 0xffd900, 1);
       graphics.drawRect(x, y, width, height);
 
-      resourcesText.setText("Resources Remaining: " + resourcesAvailable);
+      let key1: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+      let key2: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+      let key3: Phaser.Key = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+
+      while (resourcesAvailable > types[types.length - 1].RESOURCE_COST) {
+        resourcesText.setText("Resources Remaining: " + resourcesAvailable);
+        let mouseX: number = this.game.input.mousePointer.x;
+        let mouseY: number = this.game.input.mousePointer.y;
+        if (key1.isDown) {
+          shipArray.push(new types[0](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
+        } else if (key2.isDown) {
+          shipArray.push(new types[1](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
+        } else if (key3.isDown) {
+          shipArray.push(new types[2](this.game, mouseX, mouseY, fleetGenerator.params.teamNumber));
+        }
+      }
 
       graphics.destroy();
       resourcesText.destroy();
@@ -157,6 +175,8 @@ namespace Game {
       for (let text of costText) {
         text.destroy();
       }
+
+      return shipArray;
     }
 
     private start(): void {
