@@ -107,6 +107,7 @@ namespace Game {
       }
 
       this.initializePlacementUI();
+      this.game.input.onDown.add(this.click, this);
     }
 
     private initializePlacementUI(): void {
@@ -160,6 +161,39 @@ namespace Game {
         fill: "#ff0",
         font: "bold 30px Titillium Web"
       });
+    }
+
+    click(pointer: Phaser.Pointer): void {
+      if (this.enemiesResourcesAvailable) {
+        let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
+        for (let enemy of this.enemies) {
+          sprites.push(enemy.sprite);
+        }
+        let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
+        let index: number = -1;
+        if (bodies.length > 0) {
+          index = sprites.indexOf(bodies[0].sprite);
+        }
+        if (index > -1) {
+          this.enemiesResourcesAvailable += this.enemies[index].getType().RESOURCE_COST;
+          this.enemies.splice(index, 1);
+        }
+      } else if (this.alliesResourcesAvailable) {
+        let sprites: Array<Phaser.Sprite> = new Array<Phaser.Sprite>();
+        for (let ally of this.allies) {
+          sprites.push(ally.sprite);
+        }
+        let bodies: Array<Phaser.Physics.P2.Body> = this.game.physics.p2.hitTest(pointer.position, sprites);
+        let index: number = -1;
+        if (bodies.length > 0) {
+          index = sprites.indexOf(bodies[0].sprite);
+        }
+        if (index > -1) {
+          this.alliesResourcesAvailable += this.allies[index].getType().RESOURCE_COST;
+          this.allies.splice(index, 1);
+        }
+      }
+
     }
 
     update(): void {
