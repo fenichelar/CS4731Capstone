@@ -33,6 +33,7 @@ namespace Game {
     }
 
     preload() {
+      addSoundToggle(this.game);
       const WORLD_WIDTH: number = this.game.world.bounds.width;
       const WORLD_HEIGHT: number = this.game.world.bounds.height;
 

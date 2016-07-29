@@ -46,6 +46,7 @@ namespace Game {
     private shouldUpdate: boolean = false;
 
     preload(): void {
+      addSoundToggle(this.game);
       PhysicsObject.clearObjects();
       this.enemies = new Array<Ship>();
       this.allies = new Array<Ship>();

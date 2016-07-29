@@ -78,4 +78,14 @@ namespace Game {
     }
     return false;
   }
+
+  export function addSoundToggle(game: Game.Game) {
+    game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(function() {
+      if (game.sound.mute) {
+        game.sound.mute = false;
+      } else {
+        game.sound.mute = true;
+      }
+    }, this);
+  }
 }
