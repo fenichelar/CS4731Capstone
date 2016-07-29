@@ -22,7 +22,7 @@ namespace Game {
       this.fireSound = game.add.audio("fighter_fire");
 
       this.firingArc = Math.PI / 6;
-      this.firingRange = 450;
+      this.firingRange = 600;
     }
 
     public getType(): IShipSubclass {

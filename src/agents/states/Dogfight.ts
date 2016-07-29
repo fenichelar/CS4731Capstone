@@ -14,12 +14,19 @@ namespace Game {
       return shipDistMinusRadius(agent, target) <= Dogfight.DOGFIGHT_RANGE;
     }
     public update(agent: Ship): State {
-      // select a new target when necessary
+      // if the target is not in fighting range, look for a target that is
+      if (shipDist(agent, agent.target) > Dogfight.DOGFIGHT_RANGE) {
+        let alternateTarget: Ship = agent.selectTargetFrom(Battle.CurrentBattle.allShips);
+        if (Dogfight.inDogfightRange(agent, alternateTarget)) {
+          agent.target = alternateTarget;
+        }
+      }
+      // and switch to idle when necessary
       if (!agent.target || agent.target.health <= 0) {
         return new Idle();
       }
       // otherwise we want to try to stay behind towards the target.
-      let offset: number = Math.max(agent.target.sprite.width, agent.target.sprite.height) * 3.0;
+      let offset: number = Math.max(agent.target.sprite.width, agent.target.sprite.height) * 4.0;
       let thrustAmount: number = agent.maxThrustSpeed * .75;
       let currentAngle: number = agent.body.rotation;
       let targetAngle: number = agent.target.body.rotation;

@@ -14,7 +14,7 @@ namespace Game {
       if (!agent.target || agent.target.health <= 0) {
         return new Idle();
       }
-      // if the target is not in fighting range, look for a target th is
+      // if the target is not in fighting range, look for a target that is
       if (shipDist(agent, agent.target) > Dogfight.DOGFIGHT_RANGE) {
         let alternateTarget: Ship = agent.selectTargetFrom(Battle.CurrentBattle.allShips);
         if (Dogfight.inDogfightRange(agent, alternateTarget)) {
