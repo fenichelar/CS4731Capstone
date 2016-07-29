@@ -147,13 +147,13 @@ namespace Game {
       });
 
       if (!enemiesAlive) {
-        this.addEndingText("You won!", this.game.world.centerX, this.game.world.centerY - 60);
+        this.addEndingText("You won!", this.game.world.centerX, this.game.world.centerY - 100);
       } else if (!alliesAlive) {
-        this.addEndingText("You lost!", this.game.world.centerX, this.game.world.centerY - 60);
+        this.addEndingText("You lost!", this.game.world.centerX, this.game.world.centerY - 100);
       }
 
       if (!enemiesAlive || !alliesAlive) {
-        this.addEndingText("Click to play again.", this.game.world.centerX, this.game.world.centerY + 60);
+        this.addEndingText("Click to play again.", this.game.world.centerX, this.game.world.centerY + 100);
         this.started = false;
         return;
       }
