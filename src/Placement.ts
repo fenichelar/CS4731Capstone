@@ -34,6 +34,7 @@ namespace Game {
     private resourcesAvailable: number;
     private resourcesText: Phaser.Text;
     private keyCodes: Array<Phaser.Key>;
+    private shouldUpdate: boolean = false;
 
     preload(): void {
       PhysicsObject.clearObjects();
@@ -165,7 +166,7 @@ namespace Game {
         this.game.input.keyboard.addKey(Phaser.Keyboard.THREE)
       ];
 
-
+      this.shouldUpdate = true;
       /*
       graphics.destroy();
       resourcesText.destroy();
@@ -186,6 +187,9 @@ namespace Game {
     }
 
     update(): void {
+      if (!this.shouldUpdate) {
+        return;
+      }
       this.resourcesText.setText("Resources Remaining: " + this.resourcesAvailable);
       let mouseX: number = this.game.input.mousePointer.x;
       let mouseY: number = this.game.input.mousePointer.y;
