@@ -7,7 +7,7 @@
 
 namespace Game {
   export class Fighter extends Ship {
-    public static FIGHTER_BASE_HEALTH: number = 10;
+    public static FIGHTER_BASE_HEALTH: number = 15;
     public static FIGHTER_MASS: number = 50;
     public static FIGHTER_TURN_SPEED: number = 160;
     public static FIGHTER_THRUST_SPEED: number = Fighter.FIGHTER_MASS * 350;
@@ -18,7 +18,7 @@ namespace Game {
       this.body.mass = Fighter.FIGHTER_MASS;
       this.maxTurnSpeed = Fighter.FIGHTER_TURN_SPEED;
       this.maxThrustSpeed = Fighter.FIGHTER_THRUST_SPEED;
-      this.roundHealth *= .75;
+      this.roundHealth *= .4;
       // pew pew
       this.fireSound = game.add.audio("fighter_fire");
 
