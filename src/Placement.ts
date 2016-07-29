@@ -26,9 +26,9 @@ namespace Game {
     static Mode: Mode = Mode.eve;
     static FLEET_BOUNDS_PADDING: number = 50;
     static CurrentBattle: Battle = null;
-    public enemies: Array<Game.Ship> = new Array<Ship>();
-    public allies: Array<Game.Ship> = new Array<Ship>();
-    public allShips: Array<Game.Ship>;
+    public enemies: Array<Game.Ship> = null;
+    public allies: Array<Game.Ship> = null;
+    public allShips: Array<Game.Ship> = null;
 
     private fleetGenerator: FleetCompGenerator;
     private enemiesParams: IFleetCompParams;
@@ -45,6 +45,9 @@ namespace Game {
 
     preload(): void {
       PhysicsObject.clearObjects();
+      this.enemies = new Array<Ship>();
+      this.allies = new Array<Ship>();
+      this.allShips = new Array<Ship>();
 
       this.graphics = this.game.add.graphics(0, 0);
 
