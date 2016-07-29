@@ -163,6 +163,8 @@ namespace Game {
 
       let resourcesAvailable: number;
 
+      this.graphics.destroy();
+
       if (this.enemiesResourcesAvailable) {
         x = this.enemiesParams.minX;
         y = this.enemiesParams.minY;
@@ -181,7 +183,6 @@ namespace Game {
         for (let text of this.costText) {
           text.destroy();
         }
-        this.graphics.destroy();
         this.allShips = this.allies.concat(this.enemies);
         this.game.state.start("Battle", false, false, this.allShips);
         return;
