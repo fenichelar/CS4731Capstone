@@ -1,5 +1,5 @@
 {
-  "name": "capstone",
+  "name": "too-many-lasers",
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fenichelar/CS4731Capstone.git"
+    "url": "git+https://github.com/fenichelar/Too-Many-Lasers.git"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/fenichelar/CS4731Capstone/issues"
+    "url": "https://github.com/fenichelar/Too-Many-Lasers/issues"
   },
-  "homepage": "https://capstone.fenichelar.com/",
+  "homepage": "https://lasers.fenichelar.com",
   "dependencies": {
     "csslint": "^0.10.0",
     "htmlhint": "^0.9.13",
